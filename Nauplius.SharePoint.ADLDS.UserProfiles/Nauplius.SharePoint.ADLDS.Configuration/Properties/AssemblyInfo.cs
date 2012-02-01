@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Nauplius.SharePoint.ADLDS.UserProfiles")]
+[assembly: AssemblyTitle("Nauplius.SharePoint.ADLDS.Configuration")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Nauplius.SharePoint.ADLDS.UserProfiles")]
-[assembly: AssemblyCopyright("Copyright © Nauplius 2012")]
+[assembly: AssemblyProduct("Nauplius.SharePoint.ADLDS.Configuration")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1f6165e3-40c5-4846-8f4a-063a6ec1b780")]
+[assembly: Guid("991bc92a-ea4a-49c0-9e32-b554ad51a8ea")]
 
 // Version information for an assembly consists of the following four values:
 //
