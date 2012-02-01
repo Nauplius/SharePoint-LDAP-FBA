@@ -171,7 +171,7 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                 if (partition.useSSL)
                 {
                     path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
-                    de.AuthenticationType = AuthenticationTypes.SecureSocketsLayer;
+                    de.AuthenticationType = AuthenticationTypes.Secure | AuthenticationTypes.SecureSocketsLayer;
                 }
                 else
                 {
