@@ -157,7 +157,7 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             }
             catch { }
 
-            timer = new System.Threading.Timer(new TimerCallback(Main), null, 60000, timerInterval);
+            timer = new System.Threading.Timer(new TimerCallback(Main), null, 0, timerInterval);
         }
 
         private void Main(object obj)
@@ -165,20 +165,23 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             PartitionsSection config = (PartitionsSection)ConfigurationManager.GetSection("partitionsSection");
             foreach (Partition partition in config.Partitions)
             {
+                DirectoryEntry de = new DirectoryEntry();
+
                 string path;
                 if (partition.useSSL)
                 {
-                    path = "LDAPS://" + partition.server + ":" + partition.port + "/" + partition.dn;
+                    path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
+                    de.AuthenticationType = AuthenticationTypes.SecureSocketsLayer;
                 }
                 else
                 {
                     path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
+                    de.AuthenticationType = AuthenticationTypes.Secure;
                 }
 
                 Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
 
-                DirectoryEntry de = new DirectoryEntry();
-                de.AuthenticationType = AuthenticationTypes.Secure;
+
 
                 try
                 {
