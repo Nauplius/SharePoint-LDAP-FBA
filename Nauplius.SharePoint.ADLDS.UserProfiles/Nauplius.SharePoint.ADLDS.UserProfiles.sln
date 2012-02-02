@@ -5,9 +5,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauplius.SharePoint.ADLDS.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauplius.SharePoint.ADLDS.Configuration", "Nauplius.SharePoint.ADLDS.Configuration\Nauplius.SharePoint.ADLDS.Configuration.csproj", "{EECF76B1-461B-4D13-A2FF-E0A61AB7633B}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Nauplius.SharePoint.ADLDS.UserProfiles.Wix", "Nauplius.SharePoint.ADLDS.UserProfiles.Wix\Nauplius.SharePoint.ADLDS.UserProfiles.Wix.wixproj", "{1BA61C64-E18B-4150-8A3B-95904990CFF7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B6D1804E-1B5A-46FC-81D1-5EDCD13F7D7A} = {B6D1804E-1B5A-46FC-81D1-5EDCD13F7D7A}
+		{EECF76B1-461B-4D13-A2FF-E0A61AB7633B} = {EECF76B1-461B-4D13-A2FF-E0A61AB7633B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs03
 		SccLocalPath0 = .
@@ -17,6 +23,9 @@ Global
 		SccProjectUniqueName2 = Nauplius.SharePoint.ADLDS.Configuration\\Nauplius.SharePoint.ADLDS.Configuration.csproj
 		SccProjectName2 = Nauplius.SharePoint.ADLDS.Configuration
 		SccLocalPath2 = Nauplius.SharePoint.ADLDS.Configuration
+		SccProjectUniqueName3 = Nauplius.SharePoint.ADLDS.UserProfiles.Wix\\Nauplius.SharePoint.ADLDS.UserProfiles.Wix.wixproj
+		SccProjectName3 = Nauplius.SharePoint.ADLDS.UserProfiles.Wix
+		SccLocalPath3 = Nauplius.SharePoint.ADLDS.UserProfiles.Wix
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +56,16 @@ Global
 		{EECF76B1-461B-4D13-A2FF-E0A61AB7633B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{EECF76B1-461B-4D13-A2FF-E0A61AB7633B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EECF76B1-461B-4D13-A2FF-E0A61AB7633B}.Release|x86.ActiveCfg = Release|Any CPU
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Debug|x86.ActiveCfg = Debug|x86
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Debug|x86.Build.0 = Debug|x86
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Release|Any CPU.ActiveCfg = Release|x86
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Release|Mixed Platforms.Build.0 = Release|x86
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Release|x86.ActiveCfg = Release|x86
+		{1BA61C64-E18B-4150-8A3B-95904990CFF7}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

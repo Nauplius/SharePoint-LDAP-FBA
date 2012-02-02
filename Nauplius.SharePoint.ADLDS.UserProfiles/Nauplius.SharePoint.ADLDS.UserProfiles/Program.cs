@@ -10,6 +10,7 @@ using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Diagnostics;
 
 using Microsoft.Office.Server.UserProfiles;
 using Microsoft.SharePoint.Taxonomy;
@@ -53,7 +54,6 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                         SPFormsAuthenticationProvider formsProvider = provider as SPFormsAuthenticationProvider;
 
                         string claimIdentifier = ConfigurationManager.AppSettings.Get("ClaimsIdentifier");
-                        //site.AllowUnsafeUpdates = true;
                         SPServiceContext serviceContext = SPServiceContext.GetContext(site);
 
                         UserProfileManager uPM = new UserProfileManager(serviceContext);
@@ -94,13 +94,31 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                 try
                                 {
                                     newProfile.Commit();
-                                    Console.WriteLine("Created new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                    de2.Properties[loginAttribute].Value.ToString());
+
+                                    if (!Environment.UserInteractive)
+                                    {
+                                        Logging.WriteEventLog(200, "Created new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Created new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString());
+                                    }
+
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine("Failed to create new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
+                                    if (!Environment.UserInteractive)
+                                    {
+                                        Logging.WriteEventLog(400, "Failed to create new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Failed to create new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
+                                    }
                                 }
                             }
                             else if (uPM.UserExists(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
@@ -127,13 +145,30 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                 try
                                 {
                                     updateProfile.Commit();
-                                    Console.WriteLine("Updated profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                        de2.Properties[loginAttribute].Value.ToString());
+
+                                    if (!Environment.UserInteractive)
+                                    {
+                                        Logging.WriteEventLog(201, "Updated profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Updated profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString());
+                                    }
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine("Failed to update profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                        de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
+                                    if (!Environment.UserInteractive)
+                                    {
+                                        Logging.WriteEventLog(401, "Failed to update profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Failed to update profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
+                                    }
                                 }
                             }
                         });
@@ -150,6 +185,8 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
 
         public void Timer()
         {
+            Logging.CreateSource();
+
             int timerInterval = 300000;
             try
             {
@@ -179,25 +216,36 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                     de.AuthenticationType = AuthenticationTypes.Secure;
                 }
 
-                Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
-
-
+                if (Environment.UserInteractive)
+                {
+                    Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
+                }
 
                 try
                 {
                     de.Path = path;
                     de.RefreshCache();
-                    Console.WriteLine("Bound to {0}", path);
+                    if (Environment.UserInteractive)
+                    {
+                        Console.WriteLine("Bound to {0}", path);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
+                    if (!Environment.UserInteractive)
+                    {
+                        Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
+                    }
                 }
 
                 DirectorySearcher ds = new DirectorySearcher(de);
                 ds.SearchRoot = de;
                 ds.SearchScope = SearchScope.Subtree;
-                ds.Filter = "(&(objectClass=user))";
+                ds.Filter = ConfigurationManager.AppSettings["LDAPObjectFilter"];
 
                 Console.WriteLine("Searching for users...");
 
@@ -205,7 +253,11 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
 
                 if (results.Count > 0)
                 {
-                    Console.WriteLine("Found {0} users.", results.Count);
+                    if (Environment.UserInteractive)
+                    {
+                        Console.WriteLine("Found {0} users.", results.Count);
+                    }
+
                     Create(results,partition.logonAttribute, partition.webApplication);
                 }
             }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="ac3e4ef9-395f-4805-bb17-d934d1d64351" 
+					 Name="Nauplius.SharePoint.ADLDS.UserProfiles" 
+					 Language="1033" 
+					 Version="1.0.0.0" 
+					 Manufacturer="Nauplius" 
+					 UpgradeCode="76d13273-a523-44e3-a28a-d14a811a55d0">
+		<Package InstallerVersion="200" Compressed="yes" Manufacturer="Nauplius" />
+
+		<Media Id="1" Cabinet="Nauplius.SharePoint.ADLDS.UserProfiles.cab" EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="MANUFACTUREDIR" Name="Nauplius">
+					<Directory Id="INSTALLLOCATION" Name="Nauplius.SharePoint.ADLDS.UserProfiles">
+						<Component Id="ProductComponent" Guid="40800423-de35-4dbf-ae39-1e11865e534f">
+							<File Id="Nauplius.SharePoint.ADLDS.UserProfiles.exe" Name="Nauplius.SharePoint.ADLDS.UserProfiles.exe"
+										Source="..\Nauplius.SharePoint.ADLDS.UserProfiles\bin\Debug\Nauplius.SharePoint.ADLDS.UserProfiles.exe" Vital="yes" DiskId="1"></File>
+							<File Id="Nauplius.SharePoint.ADLDS.UserProfiles.exe.config" Name="Nauplius.SharePoint.ADLDS.UserProfiles.exe.config"
+										Source="..\Nauplius.SharePoint.ADLDS.UserProfiles\bin\Debug\Nauplius.SharePoint.ADLDS.UserProfiles.exe.config" Vital="yes" DiskId="1"></File>
+							<File Id="Nauplius.SharePoint.ADLDS.Configuration.dll" Name="Nauplius.SharePoint.ADLDS.Configuration.dll"
+										Source="..\Nauplius.SharePoint.ADLDS.UserProfiles\bin\Debug\Nauplius.SharePoint.ADLDS.Configuration.dll" Vital="yes" DiskId="1"></File>
+							<ServiceInstall Id="ServiceInstaller"
+															Type="ownProcess"
+															Vital="yes"
+															Name="Nauplius.SharePoint.ADLDS.UserProfiles"
+															DisplayName="Nauplius.SharePoint.ADLDS.UserProfiles"
+															Description="Imports AD LDS/ADAM Users into the SharePoint User Profile Application"
+															Start="auto"
+															Account=""
+															ErrorControl="normal"
+															Interactive="no">
+							</ServiceInstall>
+							<ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="Nauplius.SharePoint.ADLDS.UserProfiles"></ServiceControl>
+						</Component>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+		<Feature Id="ProductFeature" Title="Nauplius.SharePoint.ADLDS.UserProfiles.Wix" Level="1">
+			<ComponentRef Id="ProductComponent" />
+		</Feature>
+	</Product>
+</Wix>

@@ -9,43 +9,43 @@ using System.Text;
 
 namespace Nauplius.SharePoint.ADLDS.UserProfiles
 {
-    partial class ImportService : ServiceBase
-    {
-        static void Main()
-        {
-            if (!Environment.UserInteractive)
-            {
-                ServiceBase[] ServicesToRun;
-                ServicesToRun = new ServiceBase[] 
+	partial class ImportService : ServiceBase
+	{
+		static void Main()
+		{
+			if (!Environment.UserInteractive)
+			{
+				ServiceBase[] ServicesToRun;
+				ServicesToRun = new ServiceBase[] 
 				{ 
 					new ImportService() 
 				};
 
-                ServiceBase.Run(ServicesToRun);
-            }
-            else
-            {
-                ImportService svc = new ImportService();
-                Console.WriteLine("Running Nauplius.SharePoint.ADLDS.UserImport in test mode.");
-                Console.WriteLine("Press any key to quit...");
+				ServiceBase.Run(ServicesToRun);
+			}
+			else
+			{
+				ImportService svc = new ImportService();
+				Console.WriteLine("Running Nauplius.SharePoint.ADLDS.UserProfiles in test mode.");
+				Console.WriteLine("Press any key to quit...");
 
-                svc.OnStart(null);
+				svc.OnStart(null);
 
-                Console.ReadKey();
+				Console.ReadKey();
 
-                svc.OnStop();
-            }
-        }
+				svc.OnStop();
+			}
+		}
 
-        public ImportService()
-        {
-            InitializeComponent();
-        }
+		public ImportService()
+		{
+			InitializeComponent();
+		}
 
-        protected override void OnStart(string[] args)
-        {
-            Program p = new Program();
-            p.Timer();
-        }
-    }
+		protected override void OnStart(string[] args)
+		{
+			Program p = new Program();
+			p.Timer();
+		}
+	}
 }

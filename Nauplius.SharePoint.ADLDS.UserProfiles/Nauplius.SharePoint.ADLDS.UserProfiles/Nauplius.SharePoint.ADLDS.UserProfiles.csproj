@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logging.cs" />
     <Compile Include="Nauplius.SharePoint.ADLDS.UserProfile.Import.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -79,7 +80,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nauplius.SharePoint.ADLDS.Configuration\Nauplius.SharePoint.ADLDS.Configuration.csproj">
