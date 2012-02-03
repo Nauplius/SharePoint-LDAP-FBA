@@ -43,6 +43,16 @@
             <externalTypeMoniker name="/d0ed9acb-0435-4532-afdd-b5115bc4d562/String" />
           </type>
         </attributeProperty>
+        <attributeProperty name="connectionUsername" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="connectionUsername" isReadOnly="false">
+          <type>
+            <externalTypeMoniker name="/d0ed9acb-0435-4532-afdd-b5115bc4d562/String" />
+          </type>
+        </attributeProperty>
+        <attributeProperty name="connectionPassword" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="connectionPassword" isReadOnly="false">
+          <type>
+            <externalTypeMoniker name="/d0ed9acb-0435-4532-afdd-b5115bc4d562/String" />
+          </type>
+        </attributeProperty>
       </attributeProperties>
     </configurationElement>
     <configurationSection name="PartitionsSection" codeGenOptions="Singleton, XmlnsProperty" xmlSectionName="partitionsSection">

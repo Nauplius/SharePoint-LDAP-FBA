@@ -42,6 +42,16 @@
 				<xs:documentation>The logonAttribute.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="connectionUsername" use="optional" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The connectionUsername.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="connectionPassword" use="optional" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The connectionPassword.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="Nauplius.SharePoint.ADLDS.UserProfiles.PartitionsSectionCT">
 		<xs:sequence>

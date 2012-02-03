@@ -184,6 +184,58 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             }
         }
         #endregion
+        
+        #region connectionUsername Property
+        /// <summary>
+        /// The XML name of the <see cref="connectionUsername"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string connectionUsernamePropertyName = "connectionUsername";
+        
+        /// <summary>
+        /// Gets or sets the connectionUsername.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The connectionUsername.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::Nauplius.SharePoint.ADLDS.UserProfiles.Partition.connectionUsernamePropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
+        public string connectionUsername
+        {
+            get
+            {
+                return ((string)(base[global::Nauplius.SharePoint.ADLDS.UserProfiles.Partition.connectionUsernamePropertyName]));
+            }
+            set
+            {
+                base[global::Nauplius.SharePoint.ADLDS.UserProfiles.Partition.connectionUsernamePropertyName] = value;
+            }
+        }
+        #endregion
+        
+        #region connectionPassword Property
+        /// <summary>
+        /// The XML name of the <see cref="connectionPassword"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string connectionPasswordPropertyName = "connectionPassword";
+        
+        /// <summary>
+        /// Gets or sets the connectionPassword.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The connectionPassword.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::Nauplius.SharePoint.ADLDS.UserProfiles.Partition.connectionPasswordPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
+        public string connectionPassword
+        {
+            get
+            {
+                return ((string)(base[global::Nauplius.SharePoint.ADLDS.UserProfiles.Partition.connectionPasswordPropertyName]));
+            }
+            set
+            {
+                base[global::Nauplius.SharePoint.ADLDS.UserProfiles.Partition.connectionPasswordPropertyName] = value;
+            }
+        }
+        #endregion
     }
 }
 namespace Nauplius.SharePoint.ADLDS.UserProfiles

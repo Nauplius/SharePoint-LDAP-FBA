@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Security.Principal;
+using System.Security;
 using System.Text;
 using System.Web;
 using System.DirectoryServices;
@@ -225,43 +226,69 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             PartitionsSection config = (PartitionsSection)ConfigurationManager.GetSection("partitionsSection");
             foreach (Partition partition in config.Partitions)
             {
-                DirectoryEntry de = new DirectoryEntry();
+                DirectoryEntry de = new DirectoryEntry("LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn);
 
-                string path;
-                if (partition.useSSL)
-                {
-                    path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
-                    de.AuthenticationType = AuthenticationTypes.Secure | AuthenticationTypes.SecureSocketsLayer;
-                }
-                else
-                {
-                    path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
-                    de.AuthenticationType = AuthenticationTypes.Secure;
-                }
+                de.Username = (partition.connectionUsername == null) ? String.Empty : partition.connectionUsername;
+                de.Password = (partition.connectionPassword == null) ? String.Empty : partition.connectionPassword;
 
-                if (Environment.UserInteractive)
+                if (String.IsNullOrEmpty(de.Username))
                 {
-                    Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
+                    if (partition.useSSL)
+                    {     
+                        de.AuthenticationType = AuthenticationTypes.Secure | AuthenticationTypes.SecureSocketsLayer;
+                        Console.WriteLine("Binding to {0} with user {1} over SSL.", de.Path, WindowsIdentity.GetCurrent().Name);
+                    }
+                    else
+                    {
+                        de.AuthenticationType = AuthenticationTypes.Secure;
+                        Console.WriteLine("Binding to {0} with user {1}.", de.Path, WindowsIdentity.GetCurrent().Name);
+                    }
+                }
+                else if (!String.IsNullOrEmpty(de.Username))
+                {
+                    if (partition.useSSL)
+                    {
+                        de.AuthenticationType = AuthenticationTypes.None | AuthenticationTypes.SecureSocketsLayer;
+                    }
+                    else
+                    {
+                        de.AuthenticationType = AuthenticationTypes.None;
+
+                        if (!Environment.UserInteractive)
+                        {
+                            Logging.WriteEventLog(406, "Warning: binding to " + de.Path + " with an insecure connection.  Consider using SSL or clearing the " +
+                                "connectionUsername and connectionPassword attributes in the Nauplius.SharePoint.ADLDS.UserProfiles.exe.config " +
+                                "to use Windows Authentication.", EventLogEntryType.Warning);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Warning: binding to " + de.Path + " with an insecure connection.  Consider using SSL or clearing the " +
+                                "connectionUsername and connectionPassword attributes in the Nauplius.SharePoint.ADLDS.UserProfiles.exe.config " +
+                                "to use Windows Authentication.");
+                        }
+                    }
                 }
 
                 try
                 {
-                    de.Path = path;
                     de.RefreshCache();
                     if (Environment.UserInteractive)
                     {
-                        Console.WriteLine("Bound to {0}", path);
+                        Console.WriteLine("Bound to {0}", de.Path);
                     }
                 }
                 catch (Exception ex)
                 {
                     if (!Environment.UserInteractive)
                     {
-                        Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error);
+                        Logging.WriteEventLog(404, "Failed to bind to " + de.Path + Environment.NewLine + ex.Message, EventLogEntryType.Error);
+                        Environment.Exit(1);
                     }
                     else
                     {
-                        Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
+                        Console.WriteLine("Failed to bind to {0}" + Environment.NewLine + ex.Message, de.Path);
+                        Console.ReadKey();
+                        Environment.Exit(1);
                     }
                 }
 
