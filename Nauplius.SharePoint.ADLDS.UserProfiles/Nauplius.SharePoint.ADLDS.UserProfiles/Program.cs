@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Security.Principal;
-using System.Security;
 using System.Text;
 using System.Web;
 using System.DirectoryServices;
@@ -65,117 +64,120 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
 
                             SPSecurity.RunWithElevatedPrivileges(delegate()
                             {
-                                if (!uPM.UserExists(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                    de2.Properties[loginAttribute].Value.ToString()))
+                                if (de2.Properties[loginAttribute].Value != null)
                                 {
-                                    PreferredName = (de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value.ToString();
-                                    WorkEmail = (de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value.ToString();
-                                    WorkPhone = (de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value.ToString();
-                                    Department = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
-                                    Title = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["Title"]].Value.ToString();
-                                    Office = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
-                                    WebSite = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
-
-                                    DistinguishedName = de2.Properties["distinguishedName"].Value.ToString();
-
-                                    UserProfile newProfile = uPM.CreateUserProfile(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                        de2.Properties[loginAttribute].Value.ToString(), PreferredName);
-                                    
-                                    newProfile[PropertyConstants.WorkEmail].Add(WorkEmail);
-                                    newProfile[PropertyConstants.WorkPhone].Add(WorkPhone);
-                                    newProfile[PropertyConstants.Department].Add(Department);
-                                    newProfile[PropertyConstants.Title].Add(Title);
-                                    newProfile[PropertyConstants.DistinguishedName].Add(DistinguishedName);
-                                    newProfile[PropertyConstants.Office].Add(Office);
-                                    newProfile[PropertyConstants.WebSite].Add(WebSite);
-
-                                    try
-                                    {
-                                        newProfile.Commit();
-
-                                        if (!Environment.UserInteractive)
-                                        {
-                                            Logging.WriteEventLog(200, "Created new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information);
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Created new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                de2.Properties[loginAttribute].Value.ToString());
-                                        }
-
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        if (!Environment.UserInteractive)
-                                        {
-                                            Logging.WriteEventLog(400, "Failed to create new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error);
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Failed to create new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
-                                        }
-                                    }
-                                }
-                                else if (uPM.UserExists(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                    if (!uPM.UserExists(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
                                     de2.Properties[loginAttribute].Value.ToString()))
-                                {
-                                    UserProfile updateProfile = uPM.GetUserProfile(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                        de2.Properties[loginAttribute].Value.ToString());
-
-                                    updateProfile["PreferredName"].Value = (de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value.ToString();
-                                    updateProfile["WorkEmail"].Value = (de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value.ToString();
-                                    updateProfile["WorkPhone"].Value = (de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value.ToString();
-                                    updateProfile["Department"].Value = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
-                                    updateProfile["Title"].Value = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["Title"]].Value.ToString();
-                                    updateProfile["Office"].Value = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
-                                    updateProfile["WebSite"].Value = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
-                                        de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
-
-                                    try
                                     {
-                                        updateProfile.Commit();
+                                        PreferredName = (de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value.ToString();
+                                        WorkEmail = (de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value.ToString();
+                                        WorkPhone = (de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value.ToString();
+                                        Department = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
+                                        Title = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Title"]].Value.ToString();
+                                        Office = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
+                                        WebSite = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
 
-                                        if (!Environment.UserInteractive)
+                                        DistinguishedName = de2.Properties["distinguishedName"].Value.ToString();
+
+                                        UserProfile newProfile = uPM.CreateUserProfile(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString(), PreferredName);
+
+                                        newProfile[PropertyConstants.WorkEmail].Add(WorkEmail);
+                                        newProfile[PropertyConstants.WorkPhone].Add(WorkPhone);
+                                        newProfile[PropertyConstants.Department].Add(Department);
+                                        newProfile[PropertyConstants.Title].Add(Title);
+                                        newProfile[PropertyConstants.DistinguishedName].Add(DistinguishedName);
+                                        newProfile[PropertyConstants.Office].Add(Office);
+                                        newProfile[PropertyConstants.WebSite].Add(WebSite);
+
+                                        try
                                         {
-                                            Logging.WriteEventLog(201, "Updated profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information);
+                                            newProfile.Commit();
+
+                                            if (!Environment.UserInteractive)
+                                            {
+                                                Logging.WriteEventLog(200, "Created new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                                    de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information);
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Created new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                                    de2.Properties[loginAttribute].Value.ToString());
+                                            }
+
                                         }
-                                        else
+                                        catch (Exception ex)
                                         {
-                                            Console.WriteLine("Updated profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                de2.Properties[loginAttribute].Value.ToString());
+                                            if (!Environment.UserInteractive)
+                                            {
+                                                Logging.WriteEventLog(400, "Failed to create new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error);
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Failed to create new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
+                                            }
                                         }
                                     }
-                                    catch (Exception ex)
+                                    else if (uPM.UserExists(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                        de2.Properties[loginAttribute].Value.ToString()))
                                     {
-                                        if (!Environment.UserInteractive)
+                                        UserProfile updateProfile = uPM.GetUserProfile(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString());
+
+                                        updateProfile["PreferredName"].Value = (de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value.ToString();
+                                        updateProfile["WorkEmail"].Value = (de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value.ToString();
+                                        updateProfile["WorkPhone"].Value = (de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value.ToString();
+                                        updateProfile["Department"].Value = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
+                                        updateProfile["Title"].Value = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Title"]].Value.ToString();
+                                        updateProfile["Office"].Value = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
+                                        updateProfile["WebSite"].Value = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
+
+                                        try
                                         {
-                                            Logging.WriteEventLog(401, "Failed to update profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error);
+                                            updateProfile.Commit();
+
+                                            if (!Environment.UserInteractive)
+                                            {
+                                                Logging.WriteEventLog(201, "Updated profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                                    de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information);
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Updated profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                                    de2.Properties[loginAttribute].Value.ToString());
+                                            }
                                         }
-                                        else
+                                        catch (Exception ex)
                                         {
-                                            Console.WriteLine("Failed to update profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
+                                            if (!Environment.UserInteractive)
+                                            {
+                                                Logging.WriteEventLog(401, "Failed to update profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error);
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Failed to update profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
+                                            }
                                         }
                                     }
-                                }
+                                }                               
                             });
                         }
                     }
@@ -226,69 +228,42 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             PartitionsSection config = (PartitionsSection)ConfigurationManager.GetSection("partitionsSection");
             foreach (Partition partition in config.Partitions)
             {
-                DirectoryEntry de = new DirectoryEntry("LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn);
+                DirectoryEntry de = new DirectoryEntry();
 
-                de.Username = (partition.connectionUsername == null) ? String.Empty : partition.connectionUsername;
-                de.Password = (partition.connectionPassword == null) ? String.Empty : partition.connectionPassword;
+                string path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
 
-                if (String.IsNullOrEmpty(de.Username))
+                if (partition.useSSL)
                 {
-                    if (partition.useSSL)
-                    {     
-                        de.AuthenticationType = AuthenticationTypes.Secure | AuthenticationTypes.SecureSocketsLayer;
-                        Console.WriteLine("Binding to {0} with user {1} over SSL.", de.Path, WindowsIdentity.GetCurrent().Name);
-                    }
-                    else
-                    {
-                        de.AuthenticationType = AuthenticationTypes.Secure;
-                        Console.WriteLine("Binding to {0} with user {1}.", de.Path, WindowsIdentity.GetCurrent().Name);
-                    }
+                    de.AuthenticationType = AuthenticationTypes.Secure | AuthenticationTypes.SecureSocketsLayer;
                 }
-                else if (!String.IsNullOrEmpty(de.Username))
+                else
                 {
-                    if (partition.useSSL)
-                    {
-                        de.AuthenticationType = AuthenticationTypes.None | AuthenticationTypes.SecureSocketsLayer;
-                    }
-                    else
-                    {
-                        de.AuthenticationType = AuthenticationTypes.None;
+                    de.AuthenticationType = AuthenticationTypes.Secure;
+                }
 
-                        if (!Environment.UserInteractive)
-                        {
-                            Logging.WriteEventLog(406, "Warning: binding to " + de.Path + " with an insecure connection.  Consider using SSL or clearing the " +
-                                "connectionUsername and connectionPassword attributes in the Nauplius.SharePoint.ADLDS.UserProfiles.exe.config " +
-                                "to use Windows Authentication.", EventLogEntryType.Warning);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Warning: binding to " + de.Path + " with an insecure connection.  Consider using SSL or clearing the " +
-                                "connectionUsername and connectionPassword attributes in the Nauplius.SharePoint.ADLDS.UserProfiles.exe.config " +
-                                "to use Windows Authentication.");
-                        }
-                    }
+                if (Environment.UserInteractive)
+                {
+                    Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
                 }
 
                 try
                 {
+                    de.Path = path;
                     de.RefreshCache();
                     if (Environment.UserInteractive)
                     {
-                        Console.WriteLine("Bound to {0}", de.Path);
+                        Console.WriteLine("Bound to {0}", path);
                     }
                 }
                 catch (Exception ex)
                 {
                     if (!Environment.UserInteractive)
                     {
-                        Logging.WriteEventLog(404, "Failed to bind to " + de.Path + Environment.NewLine + ex.Message, EventLogEntryType.Error);
-                        Environment.Exit(1);
+                        Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error);
                     }
                     else
                     {
-                        Console.WriteLine("Failed to bind to {0}" + Environment.NewLine + ex.Message, de.Path);
-                        Console.ReadKey();
-                        Environment.Exit(1);
+                        Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
                     }
                 }
 
