@@ -28,11 +28,10 @@
 															DisplayName="Nauplius.SharePoint.ADLDS.UserProfiles"
 															Description="Imports AD LDS/ADAM Users into the SharePoint User Profile Application"
 															Start="auto"
-															Account=""
 															ErrorControl="normal"
 															Interactive="no">
 							</ServiceInstall>
-							<ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="Nauplius.SharePoint.ADLDS.UserProfiles"></ServiceControl>
+							<ServiceControl Id="StartService" Stop="both" Remove="uninstall" Name="Nauplius.SharePoint.ADLDS.UserProfiles"></ServiceControl>
 						</Component>
 					</Directory>
 				</Directory>
