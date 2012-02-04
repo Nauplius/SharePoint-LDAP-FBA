@@ -14,14 +14,16 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
     class Program
     {
         public static string AccountName { get; set; }
-        public static string PreferredName { get; set; }
-        public static string WorkPhone { get; set; }
         public static string Department { get; set; }
-        public static string Title { get; set; }
         public static string DistinguishedName { get; set; }
-        public static string WorkEmail { get; set; }
+        public static string FirstName { get; set; }
+        public static string LastName { get; set; }
         public static string Office { get; set; }
+        public static string PreferredName { get; set; }
+        public static string Title { get; set; }
         public static string WebSite { get; set; }
+        public static string WorkEmail { get; set; }
+        public static string WorkPhone { get; set; }
 
         System.Threading.Timer timer;
 
@@ -56,34 +58,39 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                     if (!uPM.UserExists(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
                                     de2.Properties[loginAttribute].Value.ToString()))
                                     {
+                                        Department = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
+                                        DistinguishedName = de2.Properties["distinguishedName"].Value.ToString();
+                                        FirstName = (de2.Properties[ConfigurationManager.AppSettings["FirstName"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["FirstName"]].Value.ToString();
+                                        LastName = (de2.Properties[ConfigurationManager.AppSettings["LastName"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["LastName"]].Value.ToString();
+                                        Office = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
                                         PreferredName = (de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value == null) ? String.Empty :
                                             de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value.ToString();
+                                        Title = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Title"]].Value.ToString();
+                                        WebSite = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
                                         WorkEmail = (de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value == null) ? String.Empty :
                                             de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value.ToString();
                                         WorkPhone = (de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value == null) ? String.Empty :
                                             de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value.ToString();
-                                        Department = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
-                                        Title = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Title"]].Value.ToString();
-                                        Office = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
-                                        WebSite = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
-
-                                        DistinguishedName = de2.Properties["distinguishedName"].Value.ToString();
 
                                         UserProfile newProfile = uPM.CreateUserProfile(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
                                             de2.Properties[loginAttribute].Value.ToString(), PreferredName);
 
+                                        newProfile[PropertyConstants.Department].Add(Department);
+                                        newProfile[PropertyConstants.DistinguishedName].Add(DistinguishedName);
+                                        newProfile[PropertyConstants.FirstName].Add(FirstName);
+                                        newProfile[PropertyConstants.LastName].Add(LastName);
+                                        newProfile[PropertyConstants.Office].Add(Office);
+                                        newProfile[PropertyConstants.Title].Add(Title);
+                                        newProfile[PropertyConstants.WebSite].Add(WebSite);
                                         newProfile[PropertyConstants.WorkEmail].Add(WorkEmail);
                                         newProfile[PropertyConstants.WorkPhone].Add(WorkPhone);
-                                        newProfile[PropertyConstants.Department].Add(Department);
-                                        newProfile[PropertyConstants.Title].Add(Title);
-                                        newProfile[PropertyConstants.DistinguishedName].Add(DistinguishedName);
-                                        newProfile[PropertyConstants.Office].Add(Office);
-                                        newProfile[PropertyConstants.WebSite].Add(WebSite);
-
+                                        
                                         try
                                         {
                                             newProfile.Commit();
@@ -120,21 +127,25 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                         UserProfile updateProfile = uPM.GetUserProfile(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
                                             de2.Properties[loginAttribute].Value.ToString());
 
+                                        updateProfile["Department"].Value = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
+                                        updateProfile["FirstName"].Value = (de2.Properties[ConfigurationManager.AppSettings["FirstName"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["FirstName"]].Value.ToString();
+                                        updateProfile["LastName"].Value = (de2.Properties[ConfigurationManager.AppSettings["LastName"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["LastName"]].Value.ToString();
+                                        updateProfile["Office"].Value = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
                                         updateProfile["PreferredName"].Value = (de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value == null) ? String.Empty :
                                             de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value.ToString();
+                                        updateProfile["Title"].Value = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["Title"]].Value.ToString();
+                                        updateProfile["WebSite"].Value = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
+                                            de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
                                         updateProfile["WorkEmail"].Value = (de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value == null) ? String.Empty :
                                             de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value.ToString();
                                         updateProfile["WorkPhone"].Value = (de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value == null) ? String.Empty :
                                             de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value.ToString();
-                                        updateProfile["Department"].Value = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
-                                        updateProfile["Title"].Value = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Title"]].Value.ToString();
-                                        updateProfile["Office"].Value = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
-                                        updateProfile["WebSite"].Value = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
-                                        
+
                                         try
                                         {
                                             updateProfile.Commit();

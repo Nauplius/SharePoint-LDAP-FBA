@@ -501,3 +501,385 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
         #endregion
     }
 }
+namespace Nauplius.SharePoint.ADLDS.UserProfiles
+{
+    
+    
+    /// <summary>
+    /// The AttributesSection Configuration Section.
+    /// </summary>
+    public partial class AttributesSection : global::System.Configuration.ConfigurationSection
+    {
+        
+        #region Singleton Instance
+        /// <summary>
+        /// The XML name of the AttributesSection Configuration Section.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string AttributesSectionSectionName = "attributesSection";
+        
+        /// <summary>
+        /// Gets the AttributesSection instance.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public static global::Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSection Instance
+        {
+            get
+            {
+                return ((global::Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSection)(global::System.Configuration.ConfigurationManager.GetSection(global::Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSection.AttributesSectionSectionName)));
+            }
+        }
+        #endregion
+        
+        #region Xmlns Property
+        /// <summary>
+        /// The XML name of the <see cref="Xmlns"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string XmlnsPropertyName = "xmlns";
+        
+        /// <summary>
+        /// Gets the XML namespace of this Configuration Section.
+        /// </summary>
+        /// <remarks>
+        /// This property makes sure that if the configuration file contains the XML namespace,
+        /// the parser doesn't throw an exception because it encounters the unknown "xmlns" attribute.
+        /// </remarks>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSection.XmlnsPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
+        public string Xmlns
+        {
+            get
+            {
+                return ((string)(base[global::Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSection.XmlnsPropertyName]));
+            }
+        }
+        #endregion
+        
+        #region IsReadOnly override
+        /// <summary>
+        /// Gets a value indicating whether the element is read-only.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public override bool IsReadOnly()
+        {
+            return false;
+        }
+        #endregion
+        
+        #region Attributes Property
+        /// <summary>
+        /// The XML name of the <see cref="Attributes"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string AttributesPropertyName = "attributes";
+        
+        /// <summary>
+        /// Gets or sets the Attributes.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The Attributes.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSection.AttributesPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
+        public global::Nauplius.SharePoint.ADLDS.UserProfiles.Attributes Attributes
+        {
+            get
+            {
+                return ((global::Nauplius.SharePoint.ADLDS.UserProfiles.Attributes)(base[global::Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSection.AttributesPropertyName]));
+            }
+            set
+            {
+                base[global::Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSection.AttributesPropertyName] = value;
+            }
+        }
+        #endregion
+    }
+}
+namespace Nauplius.SharePoint.ADLDS.UserProfiles
+{
+    
+    
+    /// <summary>
+    /// A collection of Attribute instances.
+    /// </summary>
+    [global::System.Configuration.ConfigurationCollectionAttribute(typeof(global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute), CollectionType=global::System.Configuration.ConfigurationElementCollectionType.BasicMapAlternate, AddItemName=global::Nauplius.SharePoint.ADLDS.UserProfiles.Attributes.AttributePropertyName)]
+    public partial class Attributes : global::System.Configuration.ConfigurationElementCollection
+    {
+        
+        #region Constants
+        /// <summary>
+        /// The XML name of the individual <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> instances in this collection.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string AttributePropertyName = "attribute";
+        #endregion
+        
+        #region Overrides
+        /// <summary>
+        /// Gets the type of the <see cref="global::System.Configuration.ConfigurationElementCollection"/>.
+        /// </summary>
+        /// <returns>The <see cref="global::System.Configuration.ConfigurationElementCollectionType"/> of this collection.</returns>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public override global::System.Configuration.ConfigurationElementCollectionType CollectionType
+        {
+            get
+            {
+                return global::System.Configuration.ConfigurationElementCollectionType.BasicMapAlternate;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the name used to identify this collection of elements
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        protected override string ElementName
+        {
+            get
+            {
+                return global::Nauplius.SharePoint.ADLDS.UserProfiles.Attributes.AttributePropertyName;
+            }
+        }
+        
+        /// <summary>
+        /// Indicates whether the specified <see cref="global::System.Configuration.ConfigurationElement"/> exists in the <see cref="global::System.Configuration.ConfigurationElementCollection"/>.
+        /// </summary>
+        /// <param name="elementName">The name of the element to verify.</param>
+        /// <returns>
+        /// <see langword="true"/> if the element exists in the collection; otherwise, <see langword="false"/>.
+        /// </returns>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        protected override bool IsElementName(string elementName)
+        {
+            return (elementName == global::Nauplius.SharePoint.ADLDS.UserProfiles.Attributes.AttributePropertyName);
+        }
+        
+        /// <summary>
+        /// Gets the element key for the specified configuration element.
+        /// </summary>
+        /// <param name="element">The <see cref="global::System.Configuration.ConfigurationElement"/> to return the key for.</param>
+        /// <returns>
+        /// An <see cref="object"/> that acts as the key for the specified <see cref="global::System.Configuration.ConfigurationElement"/>.
+        /// </returns>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        protected override object GetElementKey(global::System.Configuration.ConfigurationElement element)
+        {
+            return ((global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute)(element)).SPSAttribute;
+        }
+        
+        /// <summary>
+        /// Creates a new <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/>.
+        /// </summary>
+        /// <returns>
+        /// A new <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/>.
+        /// </returns>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        protected override global::System.Configuration.ConfigurationElement CreateNewElement()
+        {
+            return new global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute();
+        }
+        #endregion
+        
+        #region Indexer
+        /// <summary>
+        /// Gets the <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> to retrieve.</param>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute this[int index]
+        {
+            get
+            {
+                return ((global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute)(base.BaseGet(index)));
+            }
+        }
+        
+        /// <summary>
+        /// Gets the <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> with the specified key.
+        /// </summary>
+        /// <param name="sPSAttribute">The key of the <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> to retrieve.</param>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute this[object sPSAttribute]
+        {
+            get
+            {
+                return ((global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute)(base.BaseGet(sPSAttribute)));
+            }
+        }
+        #endregion
+        
+        #region Add
+        /// <summary>
+        /// Adds the specified <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> to the <see cref="global::System.Configuration.ConfigurationElementCollection"/>.
+        /// </summary>
+        /// <param name="attribute">The <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> to add.</param>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public void Add(global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute attribute)
+        {
+            base.BaseAdd(attribute);
+        }
+        #endregion
+        
+        #region Remove
+        /// <summary>
+        /// Removes the specified <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> from the <see cref="global::System.Configuration.ConfigurationElementCollection"/>.
+        /// </summary>
+        /// <param name="attribute">The <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> to remove.</param>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public void Remove(global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute attribute)
+        {
+            base.BaseRemove(this.GetElementKey(attribute));
+        }
+        #endregion
+        
+        #region GetItem
+        /// <summary>
+        /// Gets the <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> to retrieve.</param>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute GetItemAt(int index)
+        {
+            return ((global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute)(base.BaseGet(index)));
+        }
+        
+        /// <summary>
+        /// Gets the <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> with the specified key.
+        /// </summary>
+        /// <param name="sPSAttribute">The key of the <see cref="global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute"/> to retrieve.</param>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute GetItemByKey(string sPSAttribute)
+        {
+            return ((global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute)(base.BaseGet(((object)(sPSAttribute)))));
+        }
+        #endregion
+        
+        #region IsReadOnly override
+        /// <summary>
+        /// Gets a value indicating whether the element is read-only.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public override bool IsReadOnly()
+        {
+            return false;
+        }
+        #endregion
+    }
+}
+namespace Nauplius.SharePoint.ADLDS.UserProfiles
+{
+    
+    
+    /// <summary>
+    /// The Attribute Configuration Element.
+    /// </summary>
+    public partial class Attribute : global::System.Configuration.ConfigurationElement
+    {
+        
+        #region IsReadOnly override
+        /// <summary>
+        /// Gets a value indicating whether the element is read-only.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public override bool IsReadOnly()
+        {
+            return false;
+        }
+        #endregion
+        
+        #region SPSAttribute Property
+        /// <summary>
+        /// The XML name of the <see cref="SPSAttribute"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string SPSAttributePropertyName = "sPSAttribute";
+        
+        /// <summary>
+        /// Gets the SPSAttribute.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The SPSAttribute.")]
+        [global::System.ComponentModel.ReadOnlyAttribute(true)]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute.SPSAttributePropertyName, IsRequired=true, IsKey=true, IsDefaultCollection=false)]
+        public string SPSAttribute
+        {
+            get
+            {
+                return ((string)(base[global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute.SPSAttributePropertyName]));
+            }
+        }
+        #endregion
+        
+        #region LDAPAttribute Property
+        /// <summary>
+        /// The XML name of the <see cref="LDAPAttribute"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string LDAPAttributePropertyName = "lDAPAttribute";
+        
+        /// <summary>
+        /// Gets or sets the LDAPAttribute.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The LDAPAttribute.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute.LDAPAttributePropertyName, IsRequired=true, IsKey=false, IsDefaultCollection=false)]
+        public string LDAPAttribute
+        {
+            get
+            {
+                return ((string)(base[global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute.LDAPAttributePropertyName]));
+            }
+            set
+            {
+                base[global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute.LDAPAttributePropertyName] = value;
+            }
+        }
+        #endregion
+        
+        #region Direction Property
+        /// <summary>
+        /// The XML name of the <see cref="Direction"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string DirectionPropertyName = "direction";
+        
+        /// <summary>
+        /// Gets or sets the Direction.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The Direction.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute.DirectionPropertyName, IsRequired=true, IsKey=false, IsDefaultCollection=false)]
+        public global::Attributes.Flow Direction
+        {
+            get
+            {
+                return ((global::Attributes.Flow)(base[global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute.DirectionPropertyName]));
+            }
+            set
+            {
+                base[global::Nauplius.SharePoint.ADLDS.UserProfiles.Attribute.DirectionPropertyName] = value;
+            }
+        }
+        #endregion
+    }
+}
+namespace Attributes
+{
+    
+    
+    /// <summary>
+    /// Flow.
+    /// </summary>
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+    public enum Flow
+    {
+        
+        /// <summary>
+        /// Indicates the value should be exported to the Directory
+        /// </summary>
+        Export,
+        
+        /// <summary>
+        /// Indicates the value should be imported from the Directory. This is the default value.
+        /// </summary>
+        Import,
+    }
+}

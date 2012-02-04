@@ -9,6 +9,12 @@
     <externalType name="Double" namespace="System" />
     <externalType name="DateTime" namespace="System" />
     <externalType name="TimeSpan" namespace="System" />
+    <enumeratedType name="Flow" namespace="Attributes">
+      <literals>
+        <enumerationLiteral name="Export" documentation="Indicates the value should be exported to the Directory" />
+        <enumerationLiteral name="Import" documentation="Indicates the value should be imported from the Directory. This is the default value." />
+      </literals>
+    </enumeratedType>
   </typeDefinitions>
   <configurationElements>
     <configurationElement name="Partition">
@@ -69,6 +75,39 @@
         <configurationElementMoniker name="/d0ed9acb-0435-4532-afdd-b5115bc4d562/Partition" />
       </itemType>
     </configurationElementCollection>
+    <configurationSection name="AttributesSection" codeGenOptions="Singleton, XmlnsProperty" xmlSectionName="attributesSection">
+      <elementProperties>
+        <elementProperty name="Attributes" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="attributes" isReadOnly="false">
+          <type>
+            <configurationElementCollectionMoniker name="/d0ed9acb-0435-4532-afdd-b5115bc4d562/Attributes" />
+          </type>
+        </elementProperty>
+      </elementProperties>
+    </configurationSection>
+    <configurationElementCollection name="Attributes" xmlItemName="attribute" codeGenOptions="Indexer, AddMethod, RemoveMethod, GetItemMethods">
+      <itemType>
+        <configurationElementMoniker name="/d0ed9acb-0435-4532-afdd-b5115bc4d562/Attribute" />
+      </itemType>
+    </configurationElementCollection>
+    <configurationElement name="Attribute">
+      <attributeProperties>
+        <attributeProperty name="SPSAttribute" isRequired="true" isKey="true" isDefaultCollection="false" xmlName="sPSAttribute" isReadOnly="true">
+          <type>
+            <externalTypeMoniker name="/d0ed9acb-0435-4532-afdd-b5115bc4d562/String" />
+          </type>
+        </attributeProperty>
+        <attributeProperty name="LDAPAttribute" isRequired="true" isKey="false" isDefaultCollection="false" xmlName="lDAPAttribute" isReadOnly="false">
+          <type>
+            <externalTypeMoniker name="/d0ed9acb-0435-4532-afdd-b5115bc4d562/String" />
+          </type>
+        </attributeProperty>
+        <attributeProperty name="Direction" isRequired="true" isKey="false" isDefaultCollection="false" xmlName="direction" isReadOnly="false">
+          <type>
+            <enumeratedTypeMoniker name="/d0ed9acb-0435-4532-afdd-b5115bc4d562/Flow" />
+          </type>
+        </attributeProperty>
+      </attributeProperties>
+    </configurationElement>
   </configurationElements>
   <propertyValidators>
     <validators />

@@ -39,8 +39,8 @@
             // serviceInstaller1
             // 
             this.serviceInstaller1.Description = "Imports AD LDS/ADAM Users into the User Profile database";
-            this.serviceInstaller1.DisplayName = "Nauplius.SharePoint.ADLDS.UserProfile";
-            this.serviceInstaller1.ServiceName = "Nauplius.SharePoint.ADLDS.UserProfile";
+            this.serviceInstaller1.DisplayName = "Nauplius.SharePoint.ADLDS.UserProfiles";
+            this.serviceInstaller1.ServiceName = "Nauplius.SharePoint.ADLDS.UserProfiles";
             this.serviceInstaller1.ServicesDependedOn = new string[] {
         "SPTimerV4"};
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;

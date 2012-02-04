@@ -31,7 +31,7 @@
             // 
             // Nauplius
             // 
-            this.ServiceName = "Nauplius.SharePoint.ADLDS.UserProfile";
+            this.ServiceName = "Nauplius.SharePoint.ADLDS.UserProfiles";
 
         }
 

@@ -9,6 +9,7 @@
 -->
 <xs:schema xmlns:tns="Nauplius.SharePoint.ADLDS.UserProfiles" elementFormDefault="qualified" targetNamespace="Nauplius.SharePoint.ADLDS.UserProfiles" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="partitionsSection" type="tns:Nauplius.SharePoint.ADLDS.UserProfiles.PartitionsSectionCT" />
+	<xs:element name="attributesSection" type="tns:Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSectionCT" />
 	<xs:complexType name="Nauplius.SharePoint.ADLDS.UserProfiles.PartitionCT">
 		<xs:sequence>
 		</xs:sequence>
@@ -71,4 +72,58 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:complexType name="Nauplius.SharePoint.ADLDS.UserProfiles.AttributesSectionCT">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="attributes" type="tns:Nauplius.SharePoint.ADLDS.UserProfiles.AttributesCT">
+				<xs:annotation>
+					<xs:documentation>The Attributes.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Nauplius.SharePoint.ADLDS.UserProfiles.AttributesCT">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="attribute" type="tns:Nauplius.SharePoint.ADLDS.UserProfiles.AttributeCT">
+				<xs:annotation>
+					<xs:documentation>The Attribute Configuration Element.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Nauplius.SharePoint.ADLDS.UserProfiles.AttributeCT">
+		<xs:sequence>
+		</xs:sequence>
+		<xs:attribute name="sPSAttribute" use="required" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The SPSAttribute.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lDAPAttribute" use="required" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The LDAPAttribute.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="direction" use="required" type="tns:Flow">
+			<xs:annotation>
+				<xs:documentation>The Direction.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="Flow">
+		<xs:annotation>
+			<xs:documentation>Flow.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Export">
+				<xs:annotation>
+					<xs:documentation>Indicates the value should be exported to the Directory</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Import">
+				<xs:annotation>
+					<xs:documentation>Indicates the value should be imported from the Directory. This is the default value.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>
