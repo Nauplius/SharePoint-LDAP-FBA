@@ -16,11 +16,11 @@
 					<Directory Id="INSTALLLOCATION" Name="Nauplius.SharePoint.ADLDS.UserProfiles">
 						<Component Id="ProductComponent" Guid="40800423-de35-4dbf-ae39-1e11865e534f">
 							<File Id="Nauplius.SharePoint.ADLDS.UserProfiles.exe" Name="Nauplius.SharePoint.ADLDS.UserProfiles.exe"
-										Source="..\Nauplius.SharePoint.ADLDS.UserProfiles\bin\Debug\Nauplius.SharePoint.ADLDS.UserProfiles.exe" Vital="yes" DiskId="1"></File>
+										Source="..\Nauplius.SharePoint.ADLDS.UserProfiles\bin\x64\Release\Nauplius.SharePoint.ADLDS.UserProfiles.exe" Vital="yes" DiskId="1"></File>
 							<File Id="Nauplius.SharePoint.ADLDS.UserProfiles.exe.config" Name="Nauplius.SharePoint.ADLDS.UserProfiles.exe.config"
-										Source="..\Nauplius.SharePoint.ADLDS.UserProfiles\bin\Debug\Nauplius.SharePoint.ADLDS.UserProfiles.exe.config" Vital="yes" DiskId="1"></File>
+										Source="..\Nauplius.SharePoint.ADLDS.UserProfiles\bin\x64\Release\Nauplius.SharePoint.ADLDS.UserProfiles.exe.config" Vital="yes" DiskId="1"></File>
 							<File Id="Nauplius.SharePoint.ADLDS.Configuration.dll" Name="Nauplius.SharePoint.ADLDS.Configuration.dll"
-										Source="..\Nauplius.SharePoint.ADLDS.UserProfiles\bin\Debug\Nauplius.SharePoint.ADLDS.Configuration.dll" Vital="yes" DiskId="1"></File>
+										Source="..\Nauplius.SharePoint.ADLDS.UserProfiles\bin\x64\Release\Nauplius.SharePoint.ADLDS.Configuration.dll" Vital="yes" DiskId="1"></File>
 							<ServiceInstall Id="ServiceInstaller"
 															Type="ownProcess"
 															Vital="yes"
