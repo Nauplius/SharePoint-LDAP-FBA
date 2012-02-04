@@ -1,24 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Web;
-using System.DirectoryServices;
-using System.DirectoryServices.AccountManagement;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Diagnostics;
+using System.DirectoryServices;
+using System.Security.Principal;
+using System.Threading;
 
 using Microsoft.Office.Server.UserProfiles;
-using Microsoft.SharePoint.Taxonomy;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
-using Microsoft.Office.Server.Administration;
-using Microsoft.SharePoint.WebControls;
-using Microsoft.SharePoint.Portal.WebControls;
 
 namespace Nauplius.SharePoint.ADLDS.UserProfiles
 {
@@ -48,7 +37,6 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                     site = new SPSite(siteUrl);
 
                     SPWebApplication wa = SPWebApplication.Lookup(new Uri(siteUrl));
-
                     SPIisSettings iisSettings = wa.GetIisSettingsWithFallback(SPUrlZone.Default);
 
                     foreach (SPAuthenticationProvider provider in iisSettings.ClaimsAuthenticationProviders)
@@ -59,7 +47,6 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
 
                             string claimIdentifier = ConfigurationManager.AppSettings.Get("ClaimsIdentifier");
                             SPServiceContext serviceContext = SPServiceContext.GetContext(site);
-
                             UserProfileManager uPM = new UserProfileManager(serviceContext);
 
                             SPSecurity.RunWithElevatedPrivileges(delegate()
@@ -147,7 +134,7 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                             de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
                                         updateProfile["WebSite"].Value = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
                                             de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
-
+                                        
                                         try
                                         {
                                             updateProfile.Commit();
@@ -260,10 +247,14 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                     if (!Environment.UserInteractive)
                     {
                         Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error);
+                        Environment.Exit(1);
                     }
                     else
                     {
                         Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
+                        Console.WriteLine("Press any key to exit...");
+                        Console.ReadKey();
+                        Environment.Exit(1);
                     }
                 }
 
