@@ -10,6 +10,9 @@
 
 		<Media Id="1" Cabinet="Nauplius.SharePoint.ADLDS.UserProfiles.cab" EmbedCab="yes" />
 
+		<Property Id="SERVICE_USERNAME" Hidden="yes"/>
+		<Property Id="SERVICE_PASSWORD" Hidden="yes" />
+
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="MANUFACTUREDIR" Name="Nauplius">
@@ -29,7 +32,9 @@
 															Description="Imports AD LDS/ADAM Users into the SharePoint User Profile Application"
 															Start="auto"
 															ErrorControl="normal"
-															Interactive="no">
+															Interactive="no"
+															Account="[SERVICE_USERNAME]"
+															Password="[SERVICE_PASSWORD]">
 							</ServiceInstall>
 							<ServiceControl Id="StartService" Stop="both" Remove="uninstall" Name="Nauplius.SharePoint.ADLDS.UserProfiles"></ServiceControl>
 						</Component>
@@ -40,5 +45,34 @@
 		<Feature Id="ProductFeature" Title="Nauplius.SharePoint.ADLDS.UserProfiles.Wix" Level="1">
 			<ComponentRef Id="ProductComponent" />
 		</Feature>
+		<Property Id="SERVICE_LOGON_BROWSE" Value="1" />
+		<Property Id="SERVICE_REQUIRE_ADMIN" Value="1" />
+		<Property Id="IMPERSONATE_PASSWORD" Hidden="yes" />
+		
+		<UI>
+
+			<!-- CommonU UI Dialogs-->
+			<DialogRef Id="ServiceCredDlg" />
+			<DialogRef Id="GenericErrorDlg" />
+
+			<!-- UIExtension Dialogs-->
+			<DialogRef Id="WelcomeDlg"/>
+			<DialogRef Id="VerifyReadyDlg"/>
+
+			<DialogRef Id="ErrorDlg" />
+			<DialogRef Id="FatalError" />
+			<DialogRef Id="FilesInUse" />
+			<DialogRef Id="UserExit" />
+
+
+			<Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="ServiceCredDlg">NOT Installed</Publish>
+
+			<Publish Dialog="ServiceCredDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">NOT Installed</Publish>
+			<Publish Dialog="ServiceCredDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">NOT Installed</Publish>
+			<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ServiceCredDlg">NOT Installed</Publish>
+
+			<Publish Dialog="ExitDialog" Control="Back" Event="EndDialog" Value="ServiceCredDlg">1</Publish>
+			<Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+		</UI>
 	</Product>
 </Wix>
