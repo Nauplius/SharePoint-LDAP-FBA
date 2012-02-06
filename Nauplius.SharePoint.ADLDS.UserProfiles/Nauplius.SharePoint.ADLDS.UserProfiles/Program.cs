@@ -361,7 +361,10 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             {
                 SearchResultCollection results = LdapConnect(partition, null);
                 Create(results, partition.logonAttribute, partition.webApplication, partition);
-                Delete(results, partition.logonAttribute, partition.webApplication, partition);
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["DeleteProfiles"]))
+                {
+                    Delete(results, partition.logonAttribute, partition.webApplication, partition);
+                }
             }
         }
 
