@@ -29,7 +29,6 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
 
         public static void Create(SearchResultCollection users, string loginAttribute, string siteUrl, Partition partition)
         {
-
             foreach (SearchResult user in users)
             {
                 DirectoryEntry de2 = user.GetDirectoryEntry();
@@ -202,9 +201,143 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             }
         }
 
-        public static void Delete()
+        public static void Delete(SearchResultCollection users, string loginAttribute, string siteUrl, Partition partition)
         {
-            //ToDo: find user in AD LDS based on DN, delete profile if DN not found
+                SPSite site = null;
+
+                try
+                {
+                    site = new SPSite(siteUrl);
+
+                    SPWebApplication wa = SPWebApplication.Lookup(new Uri(siteUrl));
+                    SPIisSettings iisSettings = wa.GetIisSettingsWithFallback(SPUrlZone.Default);
+
+                    foreach (SPAuthenticationProvider provider in iisSettings.ClaimsAuthenticationProviders)
+                    {
+                        if (provider.GetType() == typeof(SPFormsAuthenticationProvider))
+                        {
+                            SPFormsAuthenticationProvider formsProvider = provider as SPFormsAuthenticationProvider;
+
+                            string claimIdentifier = ConfigurationManager.AppSettings.Get("ClaimsIdentifier");
+                            SPServiceContext serviceContext = SPServiceContext.GetContext(site);
+                            UserProfileManager uPM = new UserProfileManager(serviceContext);
+
+                            SPSecurity.RunWithElevatedPrivileges(delegate()
+                            {
+                                string search = claimIdentifier + "|" + formsProvider.MembershipProvider + "|";
+                                ProfileBase[] uPAResults = uPM.Search(search);
+
+                                foreach (ProfileBase profile in uPAResults)
+                                {
+                                    UserProfile uP = (UserProfile)profile;
+
+                                    // Temporary code
+                                    DirectoryEntry de = new DirectoryEntry();
+                                    string path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
+
+                                    if (partition.useSSL)
+                                    {
+                                        de.AuthenticationType = AuthenticationTypes.Secure | AuthenticationTypes.SecureSocketsLayer;
+                                    }
+                                    else
+                                    {
+                                        de.AuthenticationType = AuthenticationTypes.Secure;
+                                    }
+
+                                    if (Environment.UserInteractive)
+                                    {
+                                        Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
+                                    }
+
+                                    try
+                                    {
+                                        de.Path = path;
+                                        de.RefreshCache();
+                                        if (Environment.UserInteractive)
+                                        {
+                                            Console.WriteLine("Bound to {0}", path);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        if (!Environment.UserInteractive)
+                                        {
+                                            Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error);
+                                            Environment.Exit(1);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
+                                            Console.WriteLine("Press any key to exit...");
+                                            Console.ReadKey();
+                                            Environment.Exit(1);
+                                        }
+                                    }
+
+                                    DirectorySearcher ds = new DirectorySearcher(de);
+                                    ds.SearchRoot = de;
+                                    ds.SearchScope = SearchScope.Subtree;
+                                    ds.Filter = "(&(distinguishedName=" + uP[PropertyConstants.DistinguishedName].Value.ToString() + "))";
+
+                                    try
+                                    {
+                                        SearchResult result = ds.FindOne();
+                                        if (result == null)
+                                        {
+                                            uPM.RemoveProfile(profile);
+                                            if (!Environment.UserInteractive)
+                                            {
+                                                Logging.WriteEventLog(202, "Removed Profile for deleted user " + 
+                                                    uP[PropertyConstants.DistinguishedName].Value.ToString(),
+                                                    EventLogEntryType.Information);
+                                            }
+                                            else if (Environment.UserInteractive)
+                                            {
+                                                Console.WriteLine("Removing Profile for deleted user " + 
+                                                    uP[PropertyConstants.DistinguishedName].Value.ToString());
+                                            }
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        if (!Environment.UserInteractive)
+                                        {
+                                            Logging.WriteEventLog(402, "Error attempting to remove Profile for deleted user " + 
+                                                uP[PropertyConstants.DistinguishedName].Value.ToString() + Environment.NewLine +
+                                                ex.Message,
+                                                EventLogEntryType.Error);
+                                        }
+                                        else if (Environment.UserInteractive)
+                                        {
+                                            Console.WriteLine("Error attempting to remove Profile for deleted user " + 
+                                                uP[PropertyConstants.DistinguishedName].Value.ToString() +
+                                                Environment.NewLine + ex.Message);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (!Environment.UserInteractive)
+                    {
+                        Logging.WriteEventLog(405, "Unable to create SPSite object for Url " + siteUrl + Environment.NewLine +
+                            ex.Message, EventLogEntryType.Error);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Unable to create SPSite object for Url " + siteUrl + Environment.NewLine + ex.Message);
+                    }
+                }
+                finally
+                {
+                    if (site != null)
+                    {
+                        site.Dispose();
+                    }
+                }
         }
 
         public void Timer()
@@ -226,70 +359,79 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             PartitionsSection config = (PartitionsSection)ConfigurationManager.GetSection("partitionsSection");
             foreach (Partition partition in config.Partitions)
             {
-                DirectoryEntry de = new DirectoryEntry();
+                SearchResultCollection results = LdapConnect(partition, null);
+                Create(results, partition.logonAttribute, partition.webApplication, partition);
+                Delete(results, partition.logonAttribute, partition.webApplication, partition);
+            }
+        }
 
-                string path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
+        private SearchResultCollection LdapConnect(Partition partition, ProfileBase profile)
+        {
+            DirectoryEntry de = new DirectoryEntry();
 
-                if (partition.useSSL)
+            string path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
+
+            if (partition.useSSL)
+            {
+                de.AuthenticationType = AuthenticationTypes.Secure | AuthenticationTypes.SecureSocketsLayer;
+            }
+            else
+            {
+                de.AuthenticationType = AuthenticationTypes.Secure;
+            }
+
+            if (Environment.UserInteractive)
+            {
+                Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
+            }
+
+            try
+            {
+                de.Path = path;
+                de.RefreshCache();
+                if (Environment.UserInteractive)
                 {
-                    de.AuthenticationType = AuthenticationTypes.Secure | AuthenticationTypes.SecureSocketsLayer;
+                    Console.WriteLine("Bound to {0}", path);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!Environment.UserInteractive)
+                {
+                    Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error);
+                    Environment.Exit(1);
                 }
                 else
                 {
-                    de.AuthenticationType = AuthenticationTypes.Secure;
-                }
-
-                if (Environment.UserInteractive)
-                {
-                    Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
-                }
-
-                try
-                {
-                    de.Path = path;
-                    de.RefreshCache();
-                    if (Environment.UserInteractive)
-                    {
-                        Console.WriteLine("Bound to {0}", path);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (!Environment.UserInteractive)
-                    {
-                        Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error);
-                        Environment.Exit(1);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
-                        Console.WriteLine("Press any key to exit...");
-                        Console.ReadKey();
-                        Environment.Exit(1);
-                    }
-                }
-
-                DirectorySearcher ds = new DirectorySearcher(de);
-                ds.SearchRoot = de;
-                ds.SearchScope = SearchScope.Subtree;
-                ds.Filter = ConfigurationManager.AppSettings["LDAPObjectFilter"];
-
-                Console.WriteLine("Searching for users...");
-
-                SearchResultCollection results = ds.FindAll();
-
-                if (results.Count > 0)
-                {
-                    if (Environment.UserInteractive)
-                    {
-                        Console.WriteLine("Found {0} users.", results.Count);
-                    }
-
-                    ds.Dispose();
-
-                    Create(results,partition.logonAttribute, partition.webApplication, partition);
+                    Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                    Environment.Exit(1);
                 }
             }
+
+            DirectorySearcher ds = new DirectorySearcher(de);
+            ds.SearchRoot = de;
+            ds.SearchScope = SearchScope.Subtree;
+            ds.Filter = ConfigurationManager.AppSettings["LDAPObjectFilter"];
+
+            Console.WriteLine("Searching for users...");
+
+            SearchResultCollection results = ds.FindAll();
+
+            if (results.Count > 0)
+            {
+                if (Environment.UserInteractive)
+                {
+                    Console.WriteLine("Found {0} users.", results.Count);
+                }
+
+                ds.Dispose();
+                return results;
+            }
+
+            ds.Dispose();
+            return null;
         }
     }
 }

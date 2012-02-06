@@ -34,8 +34,6 @@
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CustInstallDir.wxs" />
-    <Compile Include="CustInstallDirDlg.wxs" />
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,42 +58,31 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
- <PropertyGroup>
-   <WindowsSDK>$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows@CurrentInstallFolder)</WindowsSDK>
- </PropertyGroup>
- <PropertyGroup Condition="$(WindowsSDK) == ''">
-   <WindowsSDK>$(registry:HKEY_CURRENT_USER\SOFTWARE\Microsoft\Microsoft SDKs\Windows@CurrentInstallFolder)</WindowsSDK>
- </PropertyGroup>
-
- <PropertyGroup>
-   <mt_exe>$(WindowsSDK)bin\mt.exe</mt_exe>
- </PropertyGroup>
-
- <ItemGroup>
-   <BootstrapperFile Include="Microsoft.Windows.Installer.3.1" >
-     <ProductName>Windows Installer 3.1</ProductName>
-   </BootstrapperFile>
-  <!--  more BootstrapperFile items -->
- </ItemGroup>
- <Target Name="Bootstrapper"
-         Inputs="$(OutDir)$(TargetFileName)"
-         Outputs="$(OutDir)\Setup.exe"
-         Condition=" '$(OutputType)'=='package' " >
-   <GenerateBootstrapper ApplicationName="Nauplius.SharePoint.ADLDS.UserProfiles"
-                         ApplicationFile="$(TargetFileName)"
-                         BootstrapperItems="@(BootstrapperFile)"
-                         ComponentsLocation="Relative"
-                         OutputPath="$(OutputPath)"
-                         Culture="en-US"
-                         Path="$(WindowsSDK)\Bootstrapper" />
- </Target>
- <Target Name="PatchSetupExe" DependsOnTargets="Bootstrapper">
-   <Exec Command='"$(mt_exe)" -manifest setup.manifest -outputresource:$(OutDir)\Setup.exe;#1' IgnoreExitCode='false' />
- </Target>
-<!--
+  <PropertyGroup>
+    <WindowsSDK>$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows@CurrentInstallFolder)</WindowsSDK>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(WindowsSDK) == ''">
+    <WindowsSDK>$(registry:HKEY_CURRENT_USER\SOFTWARE\Microsoft\Microsoft SDKs\Windows@CurrentInstallFolder)</WindowsSDK>
+  </PropertyGroup>
+  <PropertyGroup>
+    <mt_exe>$(WindowsSDK)bin\mt.exe</mt_exe>
+  </PropertyGroup>
+  <ItemGroup>
+    <BootstrapperFile Include="Microsoft.Windows.Installer.3.1">
+      <ProductName>Windows Installer 3.1</ProductName>
+    </BootstrapperFile>
+    <!--  more BootstrapperFile items -->
+  </ItemGroup>
+  <Target Name="Bootstrapper" Inputs="$(OutDir)$(TargetFileName)" Outputs="$(OutDir)\Setup.exe" Condition=" '$(OutputType)'=='package' ">
+    <GenerateBootstrapper ApplicationName="Nauplius.SharePoint.ADLDS.UserProfiles" ApplicationFile="$(TargetFileName)" BootstrapperItems="@(BootstrapperFile)" ComponentsLocation="Relative" OutputPath="$(OutputPath)" Culture="en-US" Path="$(WindowsSDK)\Bootstrapper" />
+  </Target>
+  <Target Name="PatchSetupExe" DependsOnTargets="Bootstrapper">
+    <Exec Command="&quot;$(mt_exe)&quot; -manifest setup.manifest -outputresource:$(OutDir)\Setup.exe;#1" IgnoreExitCode="false" />
+  </Target>
+  <!--
  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets" />
 -->
- <PropertyGroup>
-   <BuildDependsOn>$(BuildDependsOn);Bootstrapper;PatchSetupExe</BuildDependsOn>
- </PropertyGroup>
+  <PropertyGroup>
+    <BuildDependsOn>$(BuildDependsOn);Bootstrapper;PatchSetupExe</BuildDependsOn>
+  </PropertyGroup>
 </Project>
