@@ -94,10 +94,10 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                         {
                                             newProfile.Commit();
 
-                                            if (!Environment.UserInteractive)
+                                            if (Environment.UserInteractive)
                                             {
                                                 Logging.WriteEventLog(200, "Created new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                    de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information);
+                                                    de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information, Logging.LogLevel.Informational);
                                             }
                                             else
                                             {
@@ -111,7 +111,8 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                             if (!Environment.UserInteractive)
                                             {
                                                 Logging.WriteEventLog(400, "Failed to create new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error);
+                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error,
+                                                    Logging.LogLevel.Error);
                                             }
                                             else
                                             {
@@ -152,7 +153,7 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                             if (!Environment.UserInteractive)
                                             {
                                                 Logging.WriteEventLog(201, "Updated profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                    de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information);
+                                                    de2.Properties[loginAttribute].Value.ToString(), EventLogEntryType.Information, Logging.LogLevel.Informational);
                                             }
                                             else
                                             {
@@ -165,7 +166,8 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                             if (!Environment.UserInteractive)
                                             {
                                                 Logging.WriteEventLog(401, "Failed to update profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error);
+                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message, EventLogEntryType.Error,
+                                                    Logging.LogLevel.Informational);
                                             }
                                             else
                                             {
@@ -184,7 +186,7 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                     if (!Environment.UserInteractive)
                     {
                         Logging.WriteEventLog(405, "Unable to create SPSite object for Url " + siteUrl + Environment.NewLine +
-                            ex.Message, EventLogEntryType.Error);
+                            ex.Message, EventLogEntryType.Error, Logging.LogLevel.Error);
                     }
                     else
                     {
@@ -230,50 +232,8 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                 foreach (ProfileBase profile in uPAResults)
                                 {
                                     UserProfile uP = (UserProfile)profile;
-
-                                    // Temporary code
-                                    DirectoryEntry de = new DirectoryEntry();
-                                    string path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
-
-                                    if (partition.useSSL)
-                                    {
-                                        de.AuthenticationType = AuthenticationTypes.Secure | AuthenticationTypes.SecureSocketsLayer;
-                                    }
-                                    else
-                                    {
-                                        de.AuthenticationType = AuthenticationTypes.Secure;
-                                    }
-
-                                    if (Environment.UserInteractive)
-                                    {
-                                        Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
-                                    }
-
-                                    try
-                                    {
-                                        de.Path = path;
-                                        de.RefreshCache();
-                                        if (Environment.UserInteractive)
-                                        {
-                                            Console.WriteLine("Bound to {0}", path);
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        if (!Environment.UserInteractive)
-                                        {
-                                            Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error);
-                                            Environment.Exit(1);
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
-                                            Console.WriteLine("Press any key to exit...");
-                                            Console.ReadKey();
-                                            Environment.Exit(1);
-                                        }
-                                    }
-
+                                    DirectoryEntry de = DirEntry(partition);
+                                    
                                     DirectorySearcher ds = new DirectorySearcher(de);
                                     ds.SearchRoot = de;
                                     ds.SearchScope = SearchScope.Subtree;
@@ -289,7 +249,7 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                             {
                                                 Logging.WriteEventLog(202, "Removed Profile for deleted user " + 
                                                     uP[PropertyConstants.DistinguishedName].Value.ToString(),
-                                                    EventLogEntryType.Information);
+                                                    EventLogEntryType.Information, Logging.LogLevel.Informational);
                                             }
                                             else if (Environment.UserInteractive)
                                             {
@@ -305,7 +265,7 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                                             Logging.WriteEventLog(402, "Error attempting to remove Profile for deleted user " + 
                                                 uP[PropertyConstants.DistinguishedName].Value.ToString() + Environment.NewLine +
                                                 ex.Message,
-                                                EventLogEntryType.Error);
+                                                EventLogEntryType.Error, Logging.LogLevel.Error);
                                         }
                                         else if (Environment.UserInteractive)
                                         {
@@ -324,7 +284,7 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                     if (!Environment.UserInteractive)
                     {
                         Logging.WriteEventLog(405, "Unable to create SPSite object for Url " + siteUrl + Environment.NewLine +
-                            ex.Message, EventLogEntryType.Error);
+                            ex.Message, EventLogEntryType.Error, Logging.LogLevel.Error);
                     }
                     else
                     {
@@ -359,8 +319,11 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             PartitionsSection config = (PartitionsSection)ConfigurationManager.GetSection("partitionsSection");
             foreach (Partition partition in config.Partitions)
             {
-                SearchResultCollection results = LdapConnect(partition, null);
+                DirectoryEntry de = DirEntry(partition);
+                SearchResultCollection results = ResultCollection(de);
+
                 Create(results, partition.logonAttribute, partition.webApplication, partition);
+
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["DeleteProfiles"]))
                 {
                     Delete(results, partition.logonAttribute, partition.webApplication, partition);
@@ -368,10 +331,35 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             }
         }
 
-        private SearchResultCollection LdapConnect(Partition partition, ProfileBase profile)
+        private SearchResultCollection ResultCollection(DirectoryEntry de)
+        {
+            DirectorySearcher ds = new DirectorySearcher(de);
+            ds.SearchRoot = de;
+            ds.SearchScope = SearchScope.Subtree;
+            ds.Filter = ConfigurationManager.AppSettings["LDAPObjectFilter"];
+
+            Console.WriteLine("Searching for users...");
+
+            SearchResultCollection results = ds.FindAll();
+
+            if (results.Count > 0)
+            {
+                if (Environment.UserInteractive)
+                {
+                    Console.WriteLine("Found {0} users.", results.Count);
+                }
+
+                ds.Dispose();
+                return results;
+            }
+
+            ds.Dispose();
+            return null;
+        }
+
+        private static DirectoryEntry DirEntry(Partition partition)
         {
             DirectoryEntry de = new DirectoryEntry();
-
             string path = "LDAP://" + partition.server + ":" + partition.port + "/" + partition.dn;
 
             if (partition.useSSL)
@@ -401,7 +389,8 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
             {
                 if (!Environment.UserInteractive)
                 {
-                    Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error);
+                    Logging.WriteEventLog(404, "Failed to bind to " + path + " with error " + ex.Message, EventLogEntryType.Error,
+                        Logging.LogLevel.Error);
                     Environment.Exit(1);
                 }
                 else
@@ -413,28 +402,7 @@ namespace Nauplius.SharePoint.ADLDS.UserProfiles
                 }
             }
 
-            DirectorySearcher ds = new DirectorySearcher(de);
-            ds.SearchRoot = de;
-            ds.SearchScope = SearchScope.Subtree;
-            ds.Filter = ConfigurationManager.AppSettings["LDAPObjectFilter"];
-
-            Console.WriteLine("Searching for users...");
-
-            SearchResultCollection results = ds.FindAll();
-
-            if (results.Count > 0)
-            {
-                if (Environment.UserInteractive)
-                {
-                    Console.WriteLine("Found {0} users.", results.Count);
-                }
-
-                ds.Dispose();
-                return results;
-            }
-
-            ds.Dispose();
-            return null;
+            return de;
         }
     }
 }
