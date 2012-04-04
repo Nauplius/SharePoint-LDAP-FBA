@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<List xmlns:ows="Microsoft SharePoint" Title="Nauplius.ADLDS.UserProfiles - Global Settings" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/Nauplius.ADLDS.UserProfiles-GlobalValuesListDefinition" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/">
+  <MetaData>
+    <ContentTypes>
+      <ContentType ID="0x010081c4b4162aa14fd6901c40d8f5b2b06b" Name="Nauplius.ADLDS.UserProfiles - ADLDSGlobalValueContentType" Group="Custom Content Types" Description="Global Default Values for AD LDS/ADAM User Profile Import" Inherits="FALSE" Version="0">
+        <FieldRefs>
+          <FieldRef ID="{BA9B2EE1-FD01-4B7F-89B1-DE4DBF425834}" Name="GlobalDefault" DisplayName="Global Values" Required="TRUE" />
+          <!--<FieldRef ID="{094CED60-F0F1-4B8D-8181-301D02160BE1}" Name="GlobalDefaultLinkToItem" DisplayName="Global Default (Link To Item)" />-->
+          <FieldRef ID="{A07A904B-2979-4818-9BB6-A4B4B0E80EDE}" Name="ImportTimer" Required="FALSE" />
+          <FieldRef ID="{E4150F5B-E1BD-4953-B253-31AA7BBE247A}" Name="ClaimsIdentifier" Required="TRUE"/>
+          <FieldRef ID="{5EA0D55C-0347-4FCC-9342-DE69878B4A4A}" Name="LDAPFilter" Required="TRUE"/>
+          <FieldRef ID="{578BB35E-0D54-4A8F-B99C-C5E1D7D21045}" Name="DeleteProfiles" Required="TRUE" />
+          <FieldRef ID="{2A29A2DD-4AA3-4691-AA16-18C2F510AC03}" Name="Department" Required="FALSE" />
+          <FieldRef ID="{59D4AF0B-19C9-4C35-9A50-4E59E3F40DA1}" Name="FirstName" Required="FALSE" />
+          <FieldRef ID="{DF46DF75-A7F0-46BE-8B0B-7F2C04D8F548}" Name="LastName" Required="FALSE" />
+          <FieldRef ID="{E0F20BAC-AEAD-4CC5-8847-4F3C8FB36D7D}" Name="Office" Required="FALSE" />
+          <FieldRef ID="{24097D01-7048-46A1-ABB9-4ADFAAE8E3E8}" Name="PreferredName" Required="FALSE" />
+          <FieldRef ID="{B8D2011C-7794-4913-8C6B-2B952B5659BB}" Name="UserTitle" Required="FALSE" />
+          <FieldRef ID="{478D27E4-09D8-4403-8FFF-04E2B11270BE}" Name="WebSite" Required="FALSE" />
+          <FieldRef ID="{42029E05-3D0F-43B2-8FAE-BA9BDD8F1E80}" Name="WorkEmail" Required="FALSE" />
+          <FieldRef ID="{7D046CDF-7165-4094-93ED-D6C4CEFA2BE6}" Name="WorkPhone" Required="FALSE" />
+          <RemoveFieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" Required="FALSE" Hidden="TRUE" />
+        </FieldRefs>
+      </ContentType>
+    </ContentTypes>
+    <Fields>
+      <Field ID="{ba9b2ee1-fd01-4b7f-89b1-de4dbf425834}" Type="Text" Name="GlobalDefault" 
+             DisplayName="Global Values" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" 
+             ShowInNewForm="TRUE" Indexed="TRUE" EnforceUniqueValues="TRUE" Group="ADLDSGlobalValues">
+    <Default>GlobalDefaultValues</Default>
+      </Field>
+<!--
+      <Field ID="{094CED60-F0F1-4B8D-8181-301D02160BE1}" Type="Computed" Name="GlobalDefaultLinkToItem" LinkToItem="TRUE" ReadOnly="TRUE" Dir="" 
+             DisplayNameSrcField="GlobalDefault" DisplayName="Global Default (Link To Item)" 
+             ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE"
+             SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="LinkToItemGlobalDefault">
+        <DisplayPattern>
+          <HTML><![CDATA[<a href="]]></HTML>
+          <URL />
+          <HTML><![CDATA[" ONCLICK="GoToLink(this);return false;" target="_self">]]></HTML>
+          <Column HTMLEncode="TRUE" Name="GlobalDefault" />
+          <HTML><![CDATA[</a>]]></HTML>
+        </DisplayPattern>
+      </Field>
+      -->
+      <Field ID="{a07a904b-2979-4818-9bb6-a4b4b0e80ede}" Type="Integer" Name="ImportTimer" DisplayName="Import Timer" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Min="1" Max="99" Percentage="FALSE" Decimals="0" Group="ADLDSGlobalValues">
+    <Default>30</Default>
+  </Field>
+      <Field ID="{e4150f5b-e1bd-4953-b253-31aa7bbe247a}" Type="Text" Name="ClaimsIdentifier" DisplayName="Claims Identifier" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>i:0#.f</Default>
+  </Field>
+      <Field ID="{5ea0d55c-0347-4fcc-9342-de69878b4a4a}" Type="Text" Name="LDAPFilter" DisplayName="LDAP Filter" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>(&amp;(objectClass=user))</Default>
+  </Field>
+      <Field ID="{578bb35e-0d54-4a8f-b99c-c5e1d7d21045}" Type="Boolean" Name="DeleteProfiles" DisplayName="Delete Profiles" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>0</Default>
+  </Field>
+      <Field ID="{2a29a2dd-4aa3-4691-aa16-18c2f510ac03}" Type="Text" Name="Department" DisplayName="Department" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>department</Default>
+  </Field>
+      <Field ID="{59d4af0b-19c9-4c35-9a50-4e59e3f40da1}" Type="Text" Name="FirstName" DisplayName="FirstName" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>givenName</Default>
+  </Field>
+      <Field ID="{df46df75-a7f0-46be-8b0b-7f2c04d8f548}" Type="Text" Name="LastName" DisplayName="LastName" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>sn</Default>
+  </Field>
+      <Field ID="{e0f20bac-aead-4cc5-8847-4f3c8fb36d7d}" Type="Text" Name="Office" DisplayName="Office" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>physicalDeliveryOfficeName</Default>
+  </Field>
+      <Field ID="{24097d01-7048-46a1-abb9-4adfaae8e3e8}" Type="Text" Name="PreferredName" DisplayName="PreferredName" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>displayName</Default>
+  </Field>
+      <Field ID="{b8d2011c-7794-4913-8c6b-2b952b5659bb}" Type="Text" Name="UserTitle" DisplayName="User's Title" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>title</Default>
+  </Field>
+      <Field ID="{478d27e4-09d8-4403-8fff-04e2b11270be}" Type="Text" Name="WebSite" DisplayName="WebSite" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>wWWHomePage</Default>
+  </Field>
+      <Field ID="{42029e05-3d0f-43b2-8fae-ba9bdd8f1e80}" Type="Text" Name="WorkEmail" DisplayName="WorkEmail" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>mail</Default>
+  </Field>
+      <Field ID="{7d046cdf-7165-4094-93ed-d6c4cefa2be6}" Type="Text" Name="WorkPhone" DisplayName="WorkPhone" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
+    <Default>telephoneNumber</Default>
+  </Field>
+    </Fields>
+    <Views>
+      <View BaseViewID="0" Type="HTML" MobileView="TRUE" TabularView="FALSE">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          <FieldRef Name="GlobalDefault" DisplayName="Global Values">
+          </FieldRef>
+        </ViewFields>
+        <Query>
+          <OrderBy>
+            <FieldRef Name="Modified" Ascending="FALSE">
+            </FieldRef>
+          </OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="AddNewAnnouncement" Location="Resource(wss,addnewitem)" />
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_ONET_HOME)" />
+        </ParameterBindings>
+      </View>
+      <View BaseViewID="1" Type="HTML" WebPartZoneID="Main" DisplayName="$Resources:core,objectiv_schema_mwsidcamlidC24;" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" SetupPath="pages\viewpage.aspx" ImageUrl="/_layouts/images/generic.png" Url="AllItems.aspx">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          <FieldRef Name="GlobalDefault" DisplayName="Global Values"></FieldRef>
+<!--          <FieldRef Name="GlobalDefaultLinkToItem"></FieldRef> -->
+        </ViewFields>
+        <Query>
+          <OrderBy>
+            <FieldRef Name="ID">
+            </FieldRef>
+          </OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_DEFAULT)" />
+        </ParameterBindings>
+      </View>
+    </Views>
+    <Forms>
+      <Form Type="DisplayForm" Url="DispForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="EditForm" Url="EditForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="NewForm" Url="NewForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+    </Forms>
+  </MetaData>
+</List>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction Id="6BDA1408-6F3C-4DD7-A28B-5C9D65D2A6B7" GroupId="ServiceApplications"
+      Location="Microsoft.SharePoint.Administration.Applications"
+      Sequence="10"
+      Title="ADLDSInstances" Description="">
+    <UrlAction Url="_admin/Nauplius/ADLDSInstances.aspx" />
+  </CustomAction>
+</Elements>

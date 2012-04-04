@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <!-- Parent ContentType: Item (0x01) -->
+  <ContentType ID="0x010052943430b5e940a780e0f618f7b7c36f"
+               Name="Nauplius.ADLDS.UserProfiles - ADLDSPerWebApplicationContentType"
+               Group="Custom Content Types"
+               Description="My Content Type"
+               Inherits="FALSE"
+               Version="0">
+    <FieldRefs>
+      <FieldRef ID="{EE590E8D-6009-4548-83FE-D95629C3B0B1}" Name="WebApplicationUrl"/>
+      <FieldRef ID="{2284D486-D162-4093-A1C8-B360FFD8540A}" Name="ADLDSServer"/>
+      <FieldRef ID="{30D92E3D-2296-4525-B0CF-830FE538DC62}" Name="ADLDSPort"/>
+      <FieldRef ID="{EAC0DE21-F13A-4AAC-BD21-DB5D47D05E67}" Name="ADLDSDN"/>
+      <FieldRef ID="{92F690D3-0356-486D-B687-B4B8D97AB705}" Name="ADLDSUseSSL"/>
+      <FieldRef ID="{532044C0-E408-4729-A4D7-8E1E80B39670}" Name="ADLDSLoginAttrib"/>
+      <RemoveFieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" Required="FALSE" Hidden="TRUE"/>
+    </FieldRefs>
+  </ContentType>
+</Elements>

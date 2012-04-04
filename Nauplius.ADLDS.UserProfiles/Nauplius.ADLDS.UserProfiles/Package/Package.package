@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="17874437-b9b9-4990-989d-a89d3223f767" solutionId="17874437-b9b9-4990-989d-a89d3223f767" resetWebServer="false" name="Nauplius.ADLDS.UserProfiles" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="35e9f7a6-726d-4506-bb3d-7151638e6771" />
+    <featureReference itemId="e95602ad-cd2c-4ad5-8801-183f27b0641b" />
+  </features>
+  <projectItems>
+    <projectItemReference itemId="b8b0d6c5-d7f9-42d6-98f3-2e60223fdbc6" />
+  </projectItems>
+</package>

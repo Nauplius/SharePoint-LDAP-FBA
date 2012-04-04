@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <!-- Parent ContentType: Item (0x01) -->
+  <ContentType ID="0x010081c4b4162aa14fd6901c40d8f5b2b06b"
+               Name="Nauplius.ADLDS.UserProfiles - ADLDSGlobalValueContentType"
+               Group="Custom Content Types"
+               Description="AD LDS Global Values"
+               Inherits="FALSE"
+               Version="0">
+    <FieldRefs>
+      <FieldRef ID="{BA9B2EE1-FD01-4B7F-89B1-DE4DBF425834}" Name="GlobalDefault" DisplayName="Global Values" Required="TRUE"/>
+      <FieldRef ID="{094CED60-F0F1-4B8D-8181-301D02160BE1}" Name="GlobalDefaultLinkToItem" DisplayName="Global Default (Link To Item)" />
+      <FieldRef ID="{A07A904B-2979-4818-9BB6-A4B4B0E80EDE}" Name="ImportTimer" Required="FALSE"/>
+      <FieldRef ID="{E4150F5B-E1BD-4953-B253-31AA7BBE247A}" Name="ClaimsIdentifier" Required="TRUE"/>
+      <FieldRef ID="{5EA0D55C-0347-4FCC-9342-DE69878B4A4A}" Name="LDAPFilter" Required="TRUE"/>
+      <FieldRef ID="{578BB35E-0D54-4A8F-B99C-C5E1D7D21045}" Name="DeleteProfiles" Required="TRUE"/>
+      <FieldRef ID="{2A29A2DD-4AA3-4691-AA16-18C2F510AC03}" Name="Department" Required="FALSE"/>
+      <FieldRef ID="{59D4AF0B-19C9-4C35-9A50-4E59E3F40DA1}" Name="FirstName" Required="FALSE"/>
+      <FieldRef ID="{DF46DF75-A7F0-46BE-8B0B-7F2C04D8F548}" Name="LastName" Required="FALSE"/>
+      <FieldRef ID="{E0F20BAC-AEAD-4CC5-8847-4F3C8FB36D7D}" Name="Office" Required="FALSE"/>
+      <FieldRef ID="{24097D01-7048-46A1-ABB9-4ADFAAE8E3E8}" Name="PreferredName" Required="FALSE"/>
+      <FieldRef ID="{B8D2011C-7794-4913-8C6B-2B952B5659BB}" Name="Title" Required="FALSE"/>
+      <FieldRef ID="{478D27E4-09D8-4403-8FFF-04E2B11270BE}" Name="WebSite" Required="FALSE"/>
+      <FieldRef ID="{42029E05-3D0F-43B2-8FAE-BA9BDD8F1E80}" Name="WorkEmail" Required="FALSE"/>
+      <FieldRef ID="{7D046CDF-7165-4094-93ED-D6C4CEFA2BE6}" Name="WorkPhone" Required="FALSE"/>
+      <RemoveFieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" Required="FALSE" Hidden="TRUE"/>
+    </FieldRefs>
+  </ContentType>
+</Elements>

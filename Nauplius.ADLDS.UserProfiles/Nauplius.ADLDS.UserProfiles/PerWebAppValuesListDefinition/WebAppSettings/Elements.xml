@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <ListInstance Title="Nauplius.ADLDS.UserProfiles - WebAppSettings"
+                OnQuickLaunch="FALSE"
+                TemplateType="10001"
+                Url="Lists/Nauplius.ADLDS.UserProfiles-WebAppSettings"
+                Description="AD LDS User Profile Import Web Application Settings">
+  </ListInstance>
+</Elements>
