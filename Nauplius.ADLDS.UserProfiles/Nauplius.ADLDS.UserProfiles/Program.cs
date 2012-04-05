@@ -19,32 +19,44 @@ namespace Nauplius.ADLDS.UserProfiles
     class ADLDSImportJob : SPJobDefinition
     {
         const string tJobName = "Nauplius ADLDS User Profile Import";
-        public static string AccountName;
-        public static string Department;
-        public static string DistinguishedName;
-        public static string FirstName;
-        public static string LastName;
-        public static string Office;
-        public static string PreferredName;
-        public static string UserTitle;
-        public static string WebSite;
-        public static string WorkEmail;
-        public static string WorkPhone;
+        public static string AccountNameAttrib;
+        public static string DepartmentAttrib;
+        public static string DistinguishedNameAttrib;
+        public static string FirstNameAttrib;
+        public static string LastNameAttrib;
+        public static string OfficeAttrib;
+        public static string PreferredNameAttrib;
+        public static string UserTitleAttrib;
+        public static string WebSiteAttrib;
+        public static string WorkEmailAttrib;
+        public static string WorkPhoneAttrib;
         public static string LDAPFilter;
         public static string ClaimsIdentifier;
+        public static SPWebApplication WebApplication;
         public static string ServerName;
         public static int PortNumber;
         public static bool UseSSL;
         public static bool DeleteProfiles;
         public static string LoginAttribute;
+        public static string AccountName { get; set; }
+        public static string Department { get; set; }
+        public static string DistinguishedName { get; set; }
+        public static string FirstName { get; set; }
+        public static string LastName { get; set; }
+        public static string Office { get; set; }
+        public static string PreferredName { get; set; }
+        public static string UserTitle { get; set; }
+        public static string WebSite { get; set; }
+        public static string WorkEmail { get; set; }
+        public static string WorkPhone { get; set; }
 
         public ADLDSImportJob() : base() {}
 
-        public ADLDSImportJob(String name, SPWebApplication webApp, SPServer server, SPJobLockType lockType)
-            : base(name, webApp, server, lockType) { }
+        public ADLDSImportJob(String name, SPWebApplication adminWebApplication, SPServer server, SPJobLockType lockType)
+            : base(name, adminWebApplication, server, lockType) { }
 
-        public ADLDSImportJob(String name, SPWebApplication webApp)
-            : base(name, webApp, null, SPJobLockType.Job)
+        public ADLDSImportJob(String name, SPWebApplication adminWebApplication)
+            : base(name, adminWebApplication, null, SPJobLockType.Job)
         {
             this.Title = tJobName;
         }
@@ -68,15 +80,15 @@ namespace Nauplius.ADLDS.UserProfiles
                                     ClaimsIdentifier = item["ClaimsIdentifier"].ToString();
                                     LDAPFilter = item["LDAPFilter"].ToString();
                                     DeleteProfiles = (bool)item["DeleteProfiles"];
-                                    Department = item["Department"].ToString();
-                                    FirstName = item["FirstName"].ToString();
-                                    LastName = item["LastName"].ToString();
-                                    Office = item["Office"].ToString();
-                                    PreferredName = item["PreferredName"].ToString();
-                                    UserTitle = item["UserTitle"].ToString();
-                                    WebSite = item["WebSite"].ToString();
-                                    WorkEmail = item["WorkEmail"].ToString();
-                                    WorkPhone = item["WorkPhone"].ToString();
+                                    DepartmentAttrib = item["Department"].ToString();
+                                    FirstNameAttrib = item["FirstName"].ToString();
+                                    LastNameAttrib = item["LastName"].ToString();
+                                    OfficeAttrib = item["Office"].ToString();
+                                    PreferredNameAttrib = item["PreferredName"].ToString();
+                                    UserTitleAttrib = item["UserTitle"].ToString();
+                                    WebSiteAttrib = item["WebSite"].ToString();
+                                    WorkEmailAttrib = item["WorkEmail"].ToString();
+                                    WorkPhoneAttrib = item["WorkPhone"].ToString();
                                 }
                             }
                         }
@@ -89,20 +101,21 @@ namespace Nauplius.ADLDS.UserProfiles
                         {
                             foreach (SPListItem item in list.Items)
                             {
+                                WebApplication = (SPWebApplication)item["WebApplicationUrl"];
                                 ServerName = item["ADLDSServer"].ToString();
                                 PortNumber = (int)item["ADLDSPort"];
-                                DistinguishedName = item["ADLDSDN"].ToString();
+                                DistinguishedNameAttrib = item["ADLDSDN"].ToString();
                                 UseSSL = (bool)item["ADLDSUseSSL"];
                                 LoginAttribute = item["ADLDSLoginAttrib"].ToString();
 
-                                DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedName);
+                                DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedNameAttrib);
                                 SearchResultCollection results = ResultCollection(de);
 
-                                Create(results, partition.logonAttribute, partition.webApplication, partition);
+                                Create(results, LoginAttribute, WebApplication, ServerName, PortNumber);
 
-                                if (Convert.ToBoolean(ConfigurationManager.AppSettings["DeleteProfiles"]))
+                                if (Convert.ToBoolean(DeleteProfiles))
                                 {
-                                    Delete(results, partition.logonAttribute, partition.webApplication, partition);
+                                    Delete(results, LoginAttribute, WebApplication, ServerName, PortNumber);
                                 }
                             }
                         }
@@ -182,7 +195,7 @@ namespace Nauplius.ADLDS.UserProfiles
             return null;
         }
 
-        public static void Create(SearchResultCollection users, string loginAttribute, string siteUrl, Partition partition)
+        public static void Create(SearchResultCollection users, string loginAttribute, SPWebApplication webApplication, string serverName, int portNumber)
         {
             foreach (SearchResult user in users)
             {
@@ -190,10 +203,10 @@ namespace Nauplius.ADLDS.UserProfiles
                 SPSite site = null;
                 try
                 {
-                    site = new SPSite(siteUrl);
+                    //site = new SPSite(siteUrl);
 
-                    SPWebApplication wa = SPWebApplication.Lookup(new Uri(siteUrl));
-                    SPIisSettings iisSettings = wa.GetIisSettingsWithFallback(SPUrlZone.Default);
+                    //SPWebApplication wa = SPWebApplication.Lookup(new Uri(siteUrl));
+                    SPIisSettings iisSettings = webApplication.GetIisSettingsWithFallback(SPUrlZone.Default);
 
                     foreach (SPAuthenticationProvider provider in iisSettings.ClaimsAuthenticationProviders)
                     {
@@ -201,7 +214,7 @@ namespace Nauplius.ADLDS.UserProfiles
                         {
                             SPFormsAuthenticationProvider formsProvider = provider as SPFormsAuthenticationProvider;
 
-                            string claimIdentifier = ConfigurationManager.AppSettings.Get("ClaimsIdentifier");
+                           // string claimIdentifier = ConfigurationManager.AppSettings.Get("ClaimsIdentifier");
                             SPServiceContext serviceContext = SPServiceContext.GetContext(site);
                             UserProfileManager uPM = new UserProfileManager(serviceContext);
 
@@ -209,117 +222,80 @@ namespace Nauplius.ADLDS.UserProfiles
                             {
                                 if (de2.Properties[loginAttribute].Value != null)
                                 {
-                                    if (!uPM.UserExists(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                    if (!uPM.UserExists(ClaimsIdentifier + "|" + formsProvider.MembershipProvider + "|" +
                                     de2.Properties[loginAttribute].Value.ToString()))
                                     {
-                                        Department = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
-                                        DistinguishedName = de2.Properties["distinguishedName"].Value.ToString();
-                                        FirstName = (de2.Properties[ConfigurationManager.AppSettings["FirstName"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["FirstName"]].Value.ToString();
-                                        LastName = (de2.Properties[ConfigurationManager.AppSettings["LastName"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["LastName"]].Value.ToString();
-                                        Office = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
-                                        PreferredName = (de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value.ToString();
-                                        Title = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["UserTitle"]].Value.ToString();
-                                        WebSite = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
-                                        WorkEmail = (de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value.ToString();
-                                        WorkPhone = (de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value.ToString();
+                                        Department = (de2.Properties[DepartmentAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[DepartmentAttrib].Value.ToString();
+                                        DistinguishedName = de2.Properties[DistinguishedNameAttrib].Value.ToString();
+                                        FirstName = (de2.Properties[FirstNameAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[FirstNameAttrib].Value.ToString();
+                                        LastName = (de2.Properties[LastNameAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[LastNameAttrib].Value.ToString();
+                                        Office = (de2.Properties[OfficeAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[OfficeAttrib].Value.ToString();
+                                        PreferredName = (de2.Properties[PreferredNameAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[PreferredNameAttrib].Value.ToString();
+                                        UserTitle = (de2.Properties[UserTitleAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[UserTitleAttrib].Value.ToString();
+                                        WebSite = (de2.Properties[WebSiteAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[WebSiteAttrib].Value.ToString();
+                                        WorkEmail = (de2.Properties[WorkEmailAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[WorkEmailAttrib].Value.ToString();
+                                        WorkPhone = (de2.Properties[WorkPhoneAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[WorkPhoneAttrib].Value.ToString();
 
-                                        UserProfile newProfile = uPM.CreateUserProfile(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                            de2.Properties[loginAttribute].Value.ToString(), PreferredName);
+                                        UserProfile newProfile = uPM.CreateUserProfile(ClaimsIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                            de2.Properties[loginAttribute].Value.ToString(), PreferredNameAttrib);
 
-                                        newProfile[PropertyConstants.Department].Add(Department);
-                                        newProfile[PropertyConstants.DistinguishedName].Add(DistinguishedName);
-                                        newProfile[PropertyConstants.FirstName].Add(FirstName);
-                                        newProfile[PropertyConstants.LastName].Add(LastName);
-                                        newProfile[PropertyConstants.Office].Add(Office);
-                                        newProfile[PropertyConstants.Title].Add(UserTitle);
-                                        newProfile[PropertyConstants.WebSite].Add(WebSite);
-                                        newProfile[PropertyConstants.WorkEmail].Add(WorkEmail);
-                                        newProfile[PropertyConstants.WorkPhone].Add(WorkPhone);
+                                        newProfile[PropertyConstants.Department].Add(DepartmentAttrib);
+                                        newProfile[PropertyConstants.DistinguishedName].Add(DistinguishedNameAttrib);
+                                        newProfile[PropertyConstants.FirstName].Add(FirstNameAttrib);
+                                        newProfile[PropertyConstants.LastName].Add(LastNameAttrib);
+                                        newProfile[PropertyConstants.Office].Add(OfficeAttrib);
+                                        newProfile[PropertyConstants.Title].Add(UserTitleAttrib);
+                                        newProfile[PropertyConstants.WebSite].Add(WebSiteAttrib);
+                                        newProfile[PropertyConstants.WorkEmail].Add(WorkEmailAttrib);
+                                        newProfile[PropertyConstants.WorkPhone].Add(WorkPhoneAttrib);
 
                                         try
                                         {
                                             newProfile.Commit();
-
-                                            if (Environment.UserInteractive)
-                                            {
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine("Created new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                    de2.Properties[loginAttribute].Value.ToString());
-                                            }
-
                                         }
                                         catch (Exception ex)
-                                        {
-                                            if (!Environment.UserInteractive)
-                                            {
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine("Failed to create new profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
-                                            }
-                                        }
+                                        { }
                                     }
-                                    else if (uPM.UserExists(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                    else if (uPM.UserExists(ClaimsIdentifier + "|" + formsProvider.MembershipProvider + "|" +
                                         de2.Properties[loginAttribute].Value.ToString()))
                                     {
-                                        UserProfile updateProfile = uPM.GetUserProfile(claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
+                                        UserProfile updateProfile = uPM.GetUserProfile(ClaimsIdentifier + "|" + formsProvider.MembershipProvider + "|" +
                                             de2.Properties[loginAttribute].Value.ToString());
 
-                                        updateProfile["Department"].Value = (de2.Properties[ConfigurationManager.AppSettings["Department"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Department"]].Value.ToString();
-                                        updateProfile["FirstName"].Value = (de2.Properties[ConfigurationManager.AppSettings["FirstName"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["FirstName"]].Value.ToString();
-                                        updateProfile["LastName"].Value = (de2.Properties[ConfigurationManager.AppSettings["LastName"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["LastName"]].Value.ToString();
-                                        updateProfile["Office"].Value = (de2.Properties[ConfigurationManager.AppSettings["Office"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Office"]].Value.ToString();
-                                        updateProfile["PreferredName"].Value = (de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["PreferredName"]].Value.ToString();
-                                        updateProfile["Title"].Value = (de2.Properties[ConfigurationManager.AppSettings["Title"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["Title"]].Value.ToString();
-                                        updateProfile["WebSite"].Value = (de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["WebSite"]].Value.ToString();
-                                        updateProfile["WorkEmail"].Value = (de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["WorkEmail"]].Value.ToString();
-                                        updateProfile["WorkPhone"].Value = (de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value == null) ? String.Empty :
-                                            de2.Properties[ConfigurationManager.AppSettings["WorkPhone"]].Value.ToString();
+                                        updateProfile[PropertyConstants.Department].Value = (de2.Properties[DepartmentAttrib] == null) ? String.Empty :
+                                            de2.Properties[DepartmentAttrib].Value.ToString();
+                                        updateProfile[PropertyConstants.FirstName].Value = (de2.Properties[FirstNameAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[FirstNameAttrib].Value.ToString();
+                                        updateProfile[PropertyConstants.LastName].Value = (de2.Properties[LastNameAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[LastNameAttrib].Value.ToString();
+                                        updateProfile[PropertyConstants.Office].Value = (de2.Properties[OfficeAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[OfficeAttrib].Value.ToString();
+                                        updateProfile[PropertyConstants.PreferredName].Value = (de2.Properties[PreferredNameAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[PreferredNameAttrib].Value.ToString();
+                                        updateProfile[PropertyConstants.Title].Value = (de2.Properties[UserTitleAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[UserTitleAttrib].Value.ToString();
+                                        updateProfile[PropertyConstants.WebSite].Value = (de2.Properties[WebSiteAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[WebSiteAttrib].Value.ToString();
+                                        updateProfile[PropertyConstants.WorkEmail].Value = (de2.Properties[WorkEmailAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[WorkEmailAttrib].Value.ToString();
+                                        updateProfile[PropertyConstants.WorkPhone].Value = (de2.Properties[WorkPhoneAttrib].Value == null) ? String.Empty :
+                                            de2.Properties[WorkPhoneAttrib].Value.ToString();
 
                                         try
                                         {
                                             updateProfile.Commit();
-
-                                            if (!Environment.UserInteractive)
-                                            {
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine("Updated profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                    de2.Properties[loginAttribute].Value.ToString());
-                                            }
                                         }
                                         catch (Exception ex)
-                                        {
-                                            if (!Environment.UserInteractive)
-                                            {
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine("Failed to update profile for " + claimIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                                    de2.Properties[loginAttribute].Value.ToString() + Environment.NewLine + ex.Message);
-                                            }
-                                        }
+                                        { }
                                     }
                                 }
                             });
@@ -327,15 +303,8 @@ namespace Nauplius.ADLDS.UserProfiles
                     }
                 }
                 catch (Exception ex)
-                {
-                    if (!Environment.UserInteractive)
-                    {
-                    }
-                    else
-                    {
-                        Console.WriteLine("Unable to create SPSite object for Url " + siteUrl + Environment.NewLine + ex.Message);
-                    }
-                }
+                { }
+
                 finally
                 {
                     if (site != null)
@@ -346,16 +315,16 @@ namespace Nauplius.ADLDS.UserProfiles
             }
         }
 
-        public static void Delete(SearchResultCollection users, string loginAttribute, string siteUrl, Partition partition)
+        public static void Delete(SearchResultCollection users, string loginAttribute, SPWebApplication webApplication, string serverName, int portNumber)
         {
             SPSite site = null;
 
             try
             {
-                site = new SPSite(siteUrl);
+                //site = new SPSite(siteUrl);
 
-                SPWebApplication wa = SPWebApplication.Lookup(new Uri(siteUrl));
-                SPIisSettings iisSettings = wa.GetIisSettingsWithFallback(SPUrlZone.Default);
+               // SPWebApplication wa = SPWebApplication.Lookup(new Uri(siteUrl));
+                SPIisSettings iisSettings = webApplication.GetIisSettingsWithFallback(SPUrlZone.Default);
 
                 foreach (SPAuthenticationProvider provider in iisSettings.ClaimsAuthenticationProviders)
                 {
@@ -363,19 +332,19 @@ namespace Nauplius.ADLDS.UserProfiles
                     {
                         SPFormsAuthenticationProvider formsProvider = provider as SPFormsAuthenticationProvider;
 
-                        string claimIdentifier = ConfigurationManager.AppSettings.Get("ClaimsIdentifier");
+                        //string claimIdentifier = ConfigurationManager.AppSettings.Get("ClaimsIdentifier");
                         SPServiceContext serviceContext = SPServiceContext.GetContext(site);
                         UserProfileManager uPM = new UserProfileManager(serviceContext);
 
                         SPSecurity.RunWithElevatedPrivileges(delegate()
                         {
-                            string search = claimIdentifier + "|" + formsProvider.MembershipProvider + "|";
+                            string search = ClaimsIdentifier + "|" + formsProvider.MembershipProvider + "|";
                             ProfileBase[] uPAResults = uPM.Search(search);
 
                             foreach (ProfileBase profile in uPAResults)
                             {
                                 UserProfile uP = (UserProfile)profile;
-                                DirectoryEntry de = DirEntry(partition);
+                                DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedNameAttrib);
 
                                 DirectorySearcher ds = new DirectorySearcher(de);
                                 ds.SearchRoot = de;
@@ -388,43 +357,18 @@ namespace Nauplius.ADLDS.UserProfiles
                                     if (result == null)
                                     {
                                         uPM.RemoveProfile(profile);
-                                        if (!Environment.UserInteractive)
-                                        {
-                                        }
-                                        else if (Environment.UserInteractive)
-                                        {
-                                            Console.WriteLine("Removing Profile for deleted user " +
-                                                uP[PropertyConstants.DistinguishedName].Value.ToString());
-                                        }
                                     }
                                 }
                                 catch (Exception ex)
-                                {
-                                    if (!Environment.UserInteractive)
-                                    {
-                                    }
-                                    else if (Environment.UserInteractive)
-                                    {
-                                        Console.WriteLine("Error attempting to remove Profile for deleted user " +
-                                            uP[PropertyConstants.DistinguishedName].Value.ToString() +
-                                            Environment.NewLine + ex.Message);
-                                    }
-                                }
+                                { }
                             }
                         });
                     }
                 }
             }
             catch (Exception ex)
-            {
-                if (!Environment.UserInteractive)
-                {
-                }
-                else
-                {
-                    Console.WriteLine("Unable to create SPSite object for Url " + siteUrl + Environment.NewLine + ex.Message);
-                }
-            }
+            { }
+
             finally
             {
                 if (site != null)

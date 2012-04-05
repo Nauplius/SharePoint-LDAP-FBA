@@ -23,9 +23,9 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
 
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
-            SPSite site = (SPSite)properties.Feature.Parent;
-
-            foreach (SPJobDefinition job in site.WebApplication.JobDefinitions)
+            SPAdministrationWebApplication adminWebApplication = properties.Feature.Parent as SPAdministrationWebApplication;
+            
+            foreach (SPJobDefinition job in adminWebApplication.JobDefinitions)
             {
                 if (job.Name == tJobName)
                 {
@@ -33,7 +33,7 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
                 }
             }
 
-            Nauplius.ADLDS.UserProfiles.ADLDSImportJob newTimerJob = new Nauplius.ADLDS.UserProfiles.ADLDSImportJob(tJobName, site.WebApplication);
+            Nauplius.ADLDS.UserProfiles.ADLDSImportJob newTimerJob = new Nauplius.ADLDS.UserProfiles.ADLDSImportJob(tJobName, adminWebApplication);
 
             SPHourlySchedule jobSchedule = new SPHourlySchedule();
             jobSchedule.BeginMinute = 0;

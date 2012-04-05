@@ -73,7 +73,6 @@
     <Compile Include="Features\TimerJobFeature\TimerJobFeature.EventReceiver.cs">
       <DependentUpon>TimerJobFeature.feature</DependentUpon>
     </Compile>
-    <Compile Include="Logging.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
