@@ -33,8 +33,8 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
                 }
             }
 
-            //if (((SPWebApplication)properties.Feature.Parent).IsAdministrationWebApplication)
-            //{ 
+            if (((SPWebApplication)properties.Feature.Parent).IsAdministrationWebApplication)
+            {
                 Nauplius.ADLDS.UserProfiles.ADLDSImportJob newTimerJob = new Nauplius.ADLDS.UserProfiles.ADLDSImportJob(tJobName, adminWebApplication);
 
                 SPHourlySchedule jobSchedule = new SPHourlySchedule();
@@ -42,10 +42,9 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
                 jobSchedule.EndMinute = 59;
                 newTimerJob.Schedule = jobSchedule;
                 newTimerJob.Update();
-                
-            //}
-        }
 
+            }
+        }
 
         // Uncomment the method below to handle the event raised before a feature is deactivated.
 

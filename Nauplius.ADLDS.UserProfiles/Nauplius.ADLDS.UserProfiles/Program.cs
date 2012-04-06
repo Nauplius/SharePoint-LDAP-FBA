@@ -115,7 +115,7 @@ namespace Nauplius.ADLDS.UserProfiles
 
                                 Create(results, LoginAttribute, WebApplication, ServerName, PortNumber);
 
-                                if (Convert.ToBoolean(DeleteProfiles))
+                                if (DeleteProfiles)
                                 {
                                     Delete(results, LoginAttribute, WebApplication, ServerName, PortNumber);
                                 }
@@ -140,34 +140,13 @@ namespace Nauplius.ADLDS.UserProfiles
                 de.AuthenticationType = AuthenticationTypes.Secure;
             }
 
-            if (Environment.UserInteractive)
-            {
-                Console.WriteLine("Binding to {0} with user {1}", path, WindowsIdentity.GetCurrent().Name);
-            }
-
             try
             {
                 de.Path = path;
                 de.RefreshCache();
-                if (Environment.UserInteractive)
-                {
-                    Console.WriteLine("Bound to {0}", path);
-                }
             }
             catch (Exception ex)
-            {
-                if (!Environment.UserInteractive)
-                {
-                    Environment.Exit(1);
-                }
-                else
-                {
-                    Console.WriteLine("Failed to bind to {0} with error: " + ex.Message, path);
-                    Console.WriteLine("Press any key to exit...");
-                    Console.ReadKey();
-                    Environment.Exit(1);
-                }
-            }
+            {  }
             return de;
         }
 
@@ -178,17 +157,10 @@ namespace Nauplius.ADLDS.UserProfiles
             ds.SearchScope = SearchScope.Subtree;
             ds.Filter = LDAPFilter;
 
-            //Console.WriteLine("Searching for users...");
-
             SearchResultCollection results = ds.FindAll();
 
             if (results.Count > 0)
             {
-                if (Environment.UserInteractive)
-                {
-                    Console.WriteLine("Found {0} users.", results.Count);
-                }
-
                 ds.Dispose();
                 return results;
             }
@@ -207,7 +179,6 @@ namespace Nauplius.ADLDS.UserProfiles
                 {
                     site = new SPSite(WebApplication.GetResponseUri(SPUrlZone.Default).AbsoluteUri);
 
-                    //SPWebApplication wa = SPWebApplication.Lookup(new Uri(siteUrl));
                     SPIisSettings iisSettings = webApplication.GetIisSettingsWithFallback(SPUrlZone.Default);
 
                     foreach (SPAuthenticationProvider provider in iisSettings.ClaimsAuthenticationProviders)
@@ -215,8 +186,6 @@ namespace Nauplius.ADLDS.UserProfiles
                         if (provider.GetType() == typeof(SPFormsAuthenticationProvider))
                         {
                             SPFormsAuthenticationProvider formsProvider = provider as SPFormsAuthenticationProvider;
-
-                           // string claimIdentifier = ConfigurationManager.AppSettings.Get("ClaimsIdentifier");
                             SPServiceContext serviceContext = SPServiceContext.GetContext(site);
                             UserProfileManager uPM = new UserProfileManager(serviceContext);
 
@@ -275,6 +244,7 @@ namespace Nauplius.ADLDS.UserProfiles
 
                                         updateProfile[PropertyConstants.Department].Value = (de2.Properties[DepartmentAttrib].Value == null) ? String.Empty :
                                             de2.Properties[DepartmentAttrib].Value.ToString();
+                                        updateProfile[PropertyConstants.DistinguishedName].Value = de2.Properties[DistinguishedNameAttrib].Value.ToString();
                                         updateProfile[PropertyConstants.FirstName].Value = (de2.Properties[FirstNameAttrib].Value == null) ? String.Empty :
                                             de2.Properties[FirstNameAttrib].Value.ToString();
                                         updateProfile[PropertyConstants.LastName].Value = (de2.Properties[LastNameAttrib].Value == null) ? String.Empty :
@@ -323,9 +293,8 @@ namespace Nauplius.ADLDS.UserProfiles
 
             try
             {
-                //site = new SPSite(siteUrl);
+                site = new SPSite(WebApplication.GetResponseUri(SPUrlZone.Default).AbsoluteUri);
 
-               // SPWebApplication wa = SPWebApplication.Lookup(new Uri(siteUrl));
                 SPIisSettings iisSettings = webApplication.GetIisSettingsWithFallback(SPUrlZone.Default);
 
                 foreach (SPAuthenticationProvider provider in iisSettings.ClaimsAuthenticationProviders)
@@ -334,7 +303,6 @@ namespace Nauplius.ADLDS.UserProfiles
                     {
                         SPFormsAuthenticationProvider formsProvider = provider as SPFormsAuthenticationProvider;
 
-                        //string claimIdentifier = ConfigurationManager.AppSettings.Get("ClaimsIdentifier");
                         SPServiceContext serviceContext = SPServiceContext.GetContext(site);
                         UserProfileManager uPM = new UserProfileManager(serviceContext);
 
@@ -346,7 +314,7 @@ namespace Nauplius.ADLDS.UserProfiles
                             foreach (ProfileBase profile in uPAResults)
                             {
                                 UserProfile uP = (UserProfile)profile;
-                                DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedNameAttrib);
+                                DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedNameRoot);
 
                                 DirectorySearcher ds = new DirectorySearcher(de);
                                 ds.SearchRoot = de;
