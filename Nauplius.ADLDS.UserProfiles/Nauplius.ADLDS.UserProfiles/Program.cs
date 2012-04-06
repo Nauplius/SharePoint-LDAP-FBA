@@ -21,7 +21,8 @@ namespace Nauplius.ADLDS.UserProfiles
         const string tJobName = "Nauplius ADLDS User Profile Import";
         public static string AccountNameAttrib;
         public static string DepartmentAttrib;
-        public static string DistinguishedNameAttrib;
+        public static string DistinguishedNameAttrib = "distinguishedName";
+        public static string DistinguishedNameRoot;
         public static string FirstNameAttrib;
         public static string LastNameAttrib;
         public static string OfficeAttrib;
@@ -61,10 +62,11 @@ namespace Nauplius.ADLDS.UserProfiles
             this.Title = tJobName;
         }
 
+
         public override void Execute(Guid targetInstanceId)
         {
             SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
-            using (SPSite siteCollection = new SPSite(adminWebApp.Id))
+            using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
             {
                 using (SPWeb site = siteCollection.OpenWeb())
                 {
@@ -95,20 +97,20 @@ namespace Nauplius.ADLDS.UserProfiles
                     }
 
                     SPList list2 = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - WebAppSettings");
-                    if (list != null)
+                    if (list2 != null)
                     {
-                        if (list.ItemCount >= 1)
+                        if (list2.ItemCount >= 1)
                         {
-                            foreach (SPListItem item in list.Items)
+                            foreach (SPListItem item in list2.Items)
                             {
-                                WebApplication = (SPWebApplication)item["WebApplicationUrl"];
+                                WebApplication = SPWebApplication.Lookup(new Uri(item["WebApplicationUrl"].ToString()));
                                 ServerName = item["ADLDSServer"].ToString();
                                 PortNumber = (int)item["ADLDSPort"];
-                                DistinguishedNameAttrib = item["ADLDSDN"].ToString();
+                                DistinguishedNameRoot = item["ADLDSDN"].ToString();
                                 UseSSL = (bool)item["ADLDSUseSSL"];
                                 LoginAttribute = item["ADLDSLoginAttrib"].ToString();
 
-                                DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedNameAttrib);
+                                DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedNameRoot);
                                 SearchResultCollection results = ResultCollection(de);
 
                                 Create(results, LoginAttribute, WebApplication, ServerName, PortNumber);
@@ -203,7 +205,7 @@ namespace Nauplius.ADLDS.UserProfiles
                 SPSite site = null;
                 try
                 {
-                    //site = new SPSite(siteUrl);
+                    site = new SPSite(WebApplication.GetResponseUri(SPUrlZone.Default).AbsoluteUri);
 
                     //SPWebApplication wa = SPWebApplication.Lookup(new Uri(siteUrl));
                     SPIisSettings iisSettings = webApplication.GetIisSettingsWithFallback(SPUrlZone.Default);
@@ -246,17 +248,17 @@ namespace Nauplius.ADLDS.UserProfiles
                                             de2.Properties[WorkPhoneAttrib].Value.ToString();
 
                                         UserProfile newProfile = uPM.CreateUserProfile(ClaimsIdentifier + "|" + formsProvider.MembershipProvider + "|" +
-                                            de2.Properties[loginAttribute].Value.ToString(), PreferredNameAttrib);
+                                            de2.Properties[loginAttribute].Value.ToString(), PreferredName);
 
-                                        newProfile[PropertyConstants.Department].Add(DepartmentAttrib);
-                                        newProfile[PropertyConstants.DistinguishedName].Add(DistinguishedNameAttrib);
-                                        newProfile[PropertyConstants.FirstName].Add(FirstNameAttrib);
-                                        newProfile[PropertyConstants.LastName].Add(LastNameAttrib);
-                                        newProfile[PropertyConstants.Office].Add(OfficeAttrib);
-                                        newProfile[PropertyConstants.Title].Add(UserTitleAttrib);
-                                        newProfile[PropertyConstants.WebSite].Add(WebSiteAttrib);
-                                        newProfile[PropertyConstants.WorkEmail].Add(WorkEmailAttrib);
-                                        newProfile[PropertyConstants.WorkPhone].Add(WorkPhoneAttrib);
+                                        newProfile[PropertyConstants.Department].Add(Department);
+                                        newProfile[PropertyConstants.DistinguishedName].Add(DistinguishedName);
+                                        newProfile[PropertyConstants.FirstName].Add(FirstName);
+                                        newProfile[PropertyConstants.LastName].Add(LastName);
+                                        newProfile[PropertyConstants.Office].Add(Office);
+                                        newProfile[PropertyConstants.Title].Add(UserTitle);
+                                        newProfile[PropertyConstants.WebSite].Add(WebSite);
+                                        newProfile[PropertyConstants.WorkEmail].Add(WorkEmail);
+                                        newProfile[PropertyConstants.WorkPhone].Add(WorkPhone);
 
                                         try
                                         {
@@ -271,7 +273,7 @@ namespace Nauplius.ADLDS.UserProfiles
                                         UserProfile updateProfile = uPM.GetUserProfile(ClaimsIdentifier + "|" + formsProvider.MembershipProvider + "|" +
                                             de2.Properties[loginAttribute].Value.ToString());
 
-                                        updateProfile[PropertyConstants.Department].Value = (de2.Properties[DepartmentAttrib] == null) ? String.Empty :
+                                        updateProfile[PropertyConstants.Department].Value = (de2.Properties[DepartmentAttrib].Value == null) ? String.Empty :
                                             de2.Properties[DepartmentAttrib].Value.ToString();
                                         updateProfile[PropertyConstants.FirstName].Value = (de2.Properties[FirstNameAttrib].Value == null) ? String.Empty :
                                             de2.Properties[FirstNameAttrib].Value.ToString();

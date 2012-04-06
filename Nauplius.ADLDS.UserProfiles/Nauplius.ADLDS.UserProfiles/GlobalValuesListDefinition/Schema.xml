@@ -50,7 +50,7 @@
     <Default>i:0#.f</Default>
   </Field>
       <Field ID="{5ea0d55c-0347-4fcc-9342-de69878b4a4a}" Type="Text" Name="LDAPFilter" DisplayName="LDAP Filter" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
-    <Default>(&amp;(objectClass=user))</Default>
+    <Default><![CDATA[(&(objectClass=user))]]></Default>
   </Field>
       <Field ID="{578bb35e-0d54-4a8f-b99c-c5e1d7d21045}" Type="Boolean" Name="DeleteProfiles" DisplayName="Delete Profiles" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSGlobalValues">
     <Default>0</Default>

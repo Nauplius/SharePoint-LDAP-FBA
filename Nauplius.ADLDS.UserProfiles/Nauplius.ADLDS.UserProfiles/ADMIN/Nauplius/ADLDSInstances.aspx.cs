@@ -213,7 +213,7 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles
                                 SPListItem newItem = list.Items.Add();
                                 newItem["GlobalDefault"] = "GlobalDefaultValues";
                                 newItem["ClaimsIdentifier"] = "i:0#.f";
-                                newItem["LDAPFilter"] = "(&amp;(objectClass=user))";
+                                newItem["LDAPFilter"] = "(&(objectClass=user))";
                                 newItem["DeleteProfiles"] = 0;
                                 newItem["Department"] = "department";
                                 newItem["FirstName"] = "givenName";

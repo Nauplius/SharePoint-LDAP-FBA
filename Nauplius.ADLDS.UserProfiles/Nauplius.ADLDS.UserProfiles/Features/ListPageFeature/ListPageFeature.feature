@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<feature xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="2d529479-47b9-4fdf-8be6-05d91ae8e7fe" featureId="2d529479-47b9-4fdf-8be6-05d91ae8e7fe" imageUrl="" solutionId="00000000-0000-0000-0000-000000000000" title="Nauplius.ADLDS.UserProfiles Feature" version="" deploymentPath="$SharePoint.Project.FileNameWithoutExtension$_$SharePoint.Feature.FileNameWithoutExtension$" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/FeatureModel">
+<feature xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="2d529479-47b9-4fdf-8be6-05d91ae8e7fe" activateOnDefault="false" featureId="2d529479-47b9-4fdf-8be6-05d91ae8e7fe" imageUrl="" solutionId="00000000-0000-0000-0000-000000000000" title="Nauplius.ADLDS.UserProfiles List Feature" version="" autoActivateInCentralAdmin="true" deploymentPath="$SharePoint.Project.FileNameWithoutExtension$_$SharePoint.Feature.FileNameWithoutExtension$" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/FeatureModel">
   <projectItems>
-    <projectItemReference itemId="52cccc36-9cef-49f6-924f-bed9f37f4539" />
     <projectItemReference itemId="aa5e1630-746c-4a1e-9364-08d23d1f8deb" />
     <projectItemReference itemId="da4b662f-dc38-4606-920c-e88482bed47c" />
     <projectItemReference itemId="90b4a222-dff9-4006-84d0-9d60622bc213" />

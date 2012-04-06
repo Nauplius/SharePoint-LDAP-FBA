@@ -1,0 +1,14 @@
+﻿﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+	<CustomActionGroup Id="820FDE62-62F6-403F-8F85-8C6F85BCF1B7"
+							 Title="Nauplius AD LDS User Profiles"
+				 Location="Microsoft.SharePoint.Administration.Applications"
+				 Sequence="120" />
+	<CustomAction Id="31819CDA-676A-450F-88E5-064F5A7FEA27"
+						 Title="Configure AD LDS Profile Import"
+			 Sequence="10"
+			 GroupId="820FDE62-62F6-403F-8F85-8C6F85BCF1B7"
+			 Location="Microsoft.SharePoint.Administration.Applications">
+		<UrlAction Url="/_admin/Nauplius/ADLDSInstances.aspx" />
+	</CustomAction>
+</Elements>

@@ -18,6 +18,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <ActiveDeploymentConfiguration>No Activation</ActiveDeploymentConfiguration>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -86,9 +87,6 @@
     <None Include="ADMIN\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b8b0d6c5-d7f9-42d6-98f3-2e60223fdbc6}</SharePointProjectItemId>
     </None>
-    <None Include="CentralAdminModule\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{52cccc36-9cef-49f6-924f-bed9f37f4539}</SharePointProjectItemId>
-    </None>
     <None Include="Features\TimerJobFeature\TimerJobFeature.feature">
       <FeatureId>{e95602ad-cd2c-4ad5-8801-183f27b0641b}</FeatureId>
     </None>
@@ -105,6 +103,9 @@
       <SharePointProjectItemId>{aa5e1630-746c-4a1e-9364-08d23d1f8deb}</SharePointProjectItemId>
     </None>
     <None Include="key.snk" />
+    <None Include="NaupliusCustomActionGroup\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{6ebdf500-ea06-4c66-b5b2-3b6bd938cb79}</SharePointProjectItemId>
+    </None>
     <None Include="PerWebAppValuesListDefinition\WebAppSettings\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{93c16e8c-0ed6-45be-b521-847160e6ef8b}</SharePointProjectItemId>
     </None>
@@ -129,10 +130,6 @@
     <Content Include="ADMIN\Nauplius\ADLDSInstances.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="CentralAdminModule\Elements.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="CentralAdminModule\Sample.txt" />
     <Content Include="Features\TimerJobFeature\TimerJobFeature.Template.xml">
       <DependentUpon>TimerJobFeature.feature</DependentUpon>
     </Content>
@@ -147,6 +144,7 @@
     <Content Include="GlobalValues\Elements.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="NaupliusCustomActionGroup\Elements.xml" />
     <Content Include="PerWebAppValuesListDefinition\Elements.xml" />
     <Content Include="PerWebAppValuesListDefinition\WebAppSettings\Elements.xml" />
     <Content Include="PerWebAppValuesListDefinition\Schema.xml" />

@@ -23,7 +23,7 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
 
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
-            SPAdministrationWebApplication adminWebApplication = properties.Feature.Parent as SPAdministrationWebApplication;
+            SPWebApplication adminWebApplication = properties.Feature.Parent as SPWebApplication;
             
             foreach (SPJobDefinition job in adminWebApplication.JobDefinitions)
             {
@@ -33,14 +33,17 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
                 }
             }
 
-            Nauplius.ADLDS.UserProfiles.ADLDSImportJob newTimerJob = new Nauplius.ADLDS.UserProfiles.ADLDSImportJob(tJobName, adminWebApplication);
+            //if (((SPWebApplication)properties.Feature.Parent).IsAdministrationWebApplication)
+            //{ 
+                Nauplius.ADLDS.UserProfiles.ADLDSImportJob newTimerJob = new Nauplius.ADLDS.UserProfiles.ADLDSImportJob(tJobName, adminWebApplication);
 
-            SPHourlySchedule jobSchedule = new SPHourlySchedule();
-            jobSchedule.BeginMinute = 0;
-            jobSchedule.EndMinute = 59;
-            newTimerJob.IsDisabled = true;
-            newTimerJob.Update();
-
+                SPHourlySchedule jobSchedule = new SPHourlySchedule();
+                jobSchedule.BeginMinute = 0;
+                jobSchedule.EndMinute = 59;
+                newTimerJob.Schedule = jobSchedule;
+                newTimerJob.Update();
+                
+            //}
         }
 
 
@@ -48,9 +51,9 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
 
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
-            SPSite site = (SPSite)properties.Feature.Parent;
+            SPWebApplication adminWebApplication = properties.Feature.Parent as SPWebApplication;
 
-            foreach (SPJobDefinition job in site.WebApplication.JobDefinitions)
+            foreach (SPJobDefinition job in adminWebApplication.JobDefinitions)
             {
                 if (job.Name == tJobName)
                 {
