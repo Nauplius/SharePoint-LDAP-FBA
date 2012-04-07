@@ -28,15 +28,15 @@
    </colgroup>
    <tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection1" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection1" runat="server"
 				Title="Claims Identifier"
 				Description="Enter the Claims identifier prefix for AD LDS/ADAM users.">
 				<template_inputformcontrols>
-					<wssuc:InputFormControl runat="server" LabelText="Claims identifier:" ExampleText="i:0#f" LabelAssociatedControlId="tBCI">
+					<wssuc:InputFormControl runat="server" LabelText="Claims identifier:" ExampleText="i:0#.f" LabelAssociatedControlId="tBCI">
 						<Template_Control>                   
 							<div class="ms-authoringcontrols">
 								<SharePoint:InputFormTextBox runat="server" ID="tBCI" Width="60%" />
-                                <SharePoint:InputFormRequiredFieldValidator runat="server" ID="tBCIReqField" ErrorMessage="Claims identifier required." 
+								<SharePoint:InputFormRequiredFieldValidator runat="server" ID="tBCIReqField" ErrorMessage="Claims identifier required." 
 									SetFocusOnError="true" ControlToValidate="tBCI" />                     
 							</div>
 						</Template_Control>
@@ -47,15 +47,15 @@
 	</tr>
    <tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection2" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection2" runat="server"
 				Title="LDAP Filter"
 				Description="Enter the LDAP filter.">
 				<template_inputformcontrols>
-					<wssuc:InputFormControl runat="server" LabelText="LDAP filter:" ExampleText="(&(objectClass=users))" LabelAssociatedControlId="tBLF">
+					<wssuc:InputFormControl runat="server" LabelText="LDAP filter:" ExampleText="(&(objectClass=user))" LabelAssociatedControlId="tBLF">
 						<Template_Control>                   
 							<div class="ms-authoringcontrols">
 								<SharePoint:InputFormTextBox runat="server" ID="tBLF" Width="60%" />
-                                <SharePoint:InputFormRequiredFieldValidator runat="server" ID="tBLFReqField" ErrorMessage="An LDAP filter required." 
+								<SharePoint:InputFormRequiredFieldValidator runat="server" ID="tBLFReqField" ErrorMessage="An LDAP filter required." 
 									SetFocusOnError="true" ControlToValidate="tBLF" />                     
 							</div>
 						</Template_Control>
@@ -66,7 +66,7 @@
 	</tr>
    <tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection3" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection3" runat="server"
 				Title="Delete Profiles"
 				Description="Deletes User Profiles when the user is not found in AD LDS/ADAM.">
 				<template_inputformcontrols>
@@ -83,7 +83,7 @@
 	</tr>
    <tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection4" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection4" runat="server"
 				Title="Department Attribute Field"
 				Description="The field associated with Department.">
 				<template_inputformcontrols>
@@ -99,7 +99,7 @@
 		</td>
 	</tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection5" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection5" runat="server"
 				Title="FirstName Attribute Field"
 				Description="The field associated with FirstName.">
 				<template_inputformcontrols>
@@ -115,7 +115,7 @@
 		</td>
 	</tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection6" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection6" runat="server"
 				Title="LastName Attribute Field"
 				Description="The field associated with LastName.">
 				<template_inputformcontrols>
@@ -131,14 +131,14 @@
 		</td>
 	</tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection6" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection7" runat="server"
 				Title="Office Attribute Field"
 				Description="The field associated with Office.">
 				<template_inputformcontrols>
-					<wssuc:InputFormControl runat="server" LabelText="Office:" ExampleText="physicalDeliveryOffice" LabelAssociatedControlId="tBLN">
+					<wssuc:InputFormControl runat="server" LabelText="Office:" ExampleText="physicalDeliveryOfficeName" LabelAssociatedControlId="tBOff">
 						<Template_Control>                   
 							<div class="ms-authoringcontrols">
-								<SharePoint:InputFormTextBox runat="server" ID="tBLN" Width="60%" />              
+								<SharePoint:InputFormTextBox runat="server" ID="tBOff" Width="60%" />              
 							</div>
 						</Template_Control>
 					</wssuc:InputFormControl>
@@ -147,7 +147,7 @@
 		</td>
 	</tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection7" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection8" runat="server"
 				Title="PreferredName Attribute Field"
 				Description="The field associated with PreferredName.">
 				<template_inputformcontrols>
@@ -163,7 +163,7 @@
 		</td>
 	</tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection8" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection9" runat="server"
 				Title="Title Attribute Field"
 				Description="The field associated with Title.">
 				<template_inputformcontrols>
@@ -179,7 +179,7 @@
 		</td>
 	</tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection9" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection10" runat="server"
 				Title="WebSite Attribute Field"
 				Description="The field associated with WebSite.">
 				<template_inputformcontrols>
@@ -194,9 +194,9 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
-    <tr>
+	<tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection10" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection11" runat="server"
 				Title="WorkEmail Attribute Field"
 				Description="The field associated with WorkEmail.">
 				<template_inputformcontrols>
@@ -211,9 +211,9 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
-    <tr>
+	<tr>
 	  <td>
-            <wssuc:InputFormSection ID="InputFormSection11" runat="server"
+			<wssuc:InputFormSection ID="InputFormSection12" runat="server"
 				Title="WorkPhone Attribute Field"
 				Description="The field associated with WorkPhone.">
 				<template_inputformcontrols>
@@ -228,8 +228,13 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
+	<wssuc:ButtonSection runat="server" TopButtons="true" BottomSpacing="5" ShowSectionLine="false" ShowStandardCancelButton="false">
+		<Template_Buttons>
+			<asp:Button UseSubmitBehavior="false" runat="server" class="ms-ButtonHeightWidth" OnClick="btnSave_OnSave" Text="<%$Resources:wss,multipages_okbutton_text%>" id="btnSaveBottom" accesskey="<%$Resources:wss,okbutton_accesskey%>" />
+			<asp:Button UseSubmitBehavior="false" runat="server" class="ms-ButtonHeightWidth" OnClick="btnCancel" Text="<%$Resources:wss,multipages_cancelbutton_text%>" id="btnCancelBottom" accesskey="<%$Resources:wss,cancelbutton_accesskey%>" CausesValidation="false"/>
+		</Template_Buttons>
+	</wssuc:ButtonSection>
 </table>
-<asp:Button ID="btnUpdate" runat="server" Text="Update" OnClick="btnUpdate_OnUpdate" />
 </asp:Content>
 
 <asp:Content ID="PageTitle" ContentPlaceHolderID="PlaceHolderPageTitle" runat="server">

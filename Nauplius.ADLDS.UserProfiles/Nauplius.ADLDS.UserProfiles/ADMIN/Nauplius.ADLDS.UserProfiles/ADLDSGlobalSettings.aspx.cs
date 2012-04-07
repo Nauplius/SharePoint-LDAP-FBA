@@ -14,9 +14,15 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles
             }
         }
 
-        protected void btnUpdate_OnUpdate(object sender, EventArgs e)
+        protected void btnSave_OnSave(object sender, EventArgs e)
         {
             UpdateGlobalSettings();
+            Response.Redirect("../../applications.aspx");
+        }
+
+        protected void btnCancel(object sender, EventArgs e)
+        {
+            Response.Redirect("../../applications.aspx");
         }
 
         protected void UpdateGlobalSettings()

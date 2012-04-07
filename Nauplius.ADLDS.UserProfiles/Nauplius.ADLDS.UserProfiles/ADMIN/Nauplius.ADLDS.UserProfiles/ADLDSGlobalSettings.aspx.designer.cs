@@ -157,24 +157,6 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBLN;
         
         /// <summary>
-        /// InputFormSection6 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UserControl InputFormSection6;
-        
-        /// <summary>
-        /// tBLN control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBLN;
-        
-        /// <summary>
         /// InputFormSection7 control.
         /// </summary>
         /// <remarks>
@@ -184,13 +166,13 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         protected global::System.Web.UI.UserControl InputFormSection7;
         
         /// <summary>
-        /// tBPN control.
+        /// tBOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBPN;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBOff;
         
         /// <summary>
         /// InputFormSection8 control.
@@ -202,13 +184,13 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         protected global::System.Web.UI.UserControl InputFormSection8;
         
         /// <summary>
-        /// tBTitle control.
+        /// tBPN control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBTitle;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBPN;
         
         /// <summary>
         /// InputFormSection9 control.
@@ -220,13 +202,13 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         protected global::System.Web.UI.UserControl InputFormSection9;
         
         /// <summary>
-        /// tBWS control.
+        /// tBTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBWS;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBTitle;
         
         /// <summary>
         /// InputFormSection10 control.
@@ -238,13 +220,13 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         protected global::System.Web.UI.UserControl InputFormSection10;
         
         /// <summary>
-        /// tBWE control.
+        /// tBWS control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBWE;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBWS;
         
         /// <summary>
         /// InputFormSection11 control.
@@ -256,6 +238,24 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         protected global::System.Web.UI.UserControl InputFormSection11;
         
         /// <summary>
+        /// tBWE control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBWE;
+        
+        /// <summary>
+        /// InputFormSection12 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection12;
+        
+        /// <summary>
         /// tBWP control.
         /// </summary>
         /// <remarks>
@@ -265,12 +265,21 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBWP;
         
         /// <summary>
-        /// btnUpdate control.
+        /// btnSaveBottom control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpdate;
+        protected global::System.Web.UI.WebControls.Button btnSaveBottom;
+        
+        /// <summary>
+        /// btnCancelBottom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelBottom;
     }
 }
