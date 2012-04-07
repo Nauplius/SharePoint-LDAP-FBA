@@ -64,15 +64,22 @@
     <Reference Include="Microsoft.SharePoint.Security" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ADMIN\Nauplius\ADLDSInstances.aspx.cs">
-      <DependentUpon>ADLDSInstances.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ADMIN\Nauplius\ADLDSInstances.aspx.designer.cs">
-      <DependentUpon>ADLDSInstances.aspx.cs</DependentUpon>
-    </Compile>
     <Compile Include="Features\TimerJobFeature\TimerJobFeature.EventReceiver.cs">
       <DependentUpon>TimerJobFeature.feature</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSGlobalSettings.aspx.cs">
+      <DependentUpon>ADLDSGlobalSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSGlobalSettings.aspx.designer.cs">
+      <DependentUpon>ADLDSGlobalSettings.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx.cs">
+      <DependentUpon>ADLDSWebApplicationSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx.designer.cs">
+      <DependentUpon>ADLDSWebApplicationSettings.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -103,6 +110,9 @@
       <SharePointProjectItemId>{aa5e1630-746c-4a1e-9364-08d23d1f8deb}</SharePointProjectItemId>
     </None>
     <None Include="key.snk" />
+    <None Include="Layouts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{324ab137-207a-45b1-a649-742489affb7d}</SharePointProjectItemId>
+    </None>
     <None Include="NaupliusCustomActionGroup\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{6ebdf500-ea06-4c66-b5b2-3b6bd938cb79}</SharePointProjectItemId>
     </None>
@@ -127,9 +137,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="ADLDSPerWebApplicationContentType\Elements.xml" />
-    <Content Include="ADMIN\Nauplius\ADLDSInstances.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
     <Content Include="Features\TimerJobFeature\TimerJobFeature.Template.xml">
       <DependentUpon>TimerJobFeature.feature</DependentUpon>
     </Content>
@@ -144,11 +151,16 @@
     <Content Include="GlobalValues\Elements.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSGlobalSettings.aspx" />
+    <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx" />
     <Content Include="NaupliusCustomActionGroup\Elements.xml" />
     <Content Include="PerWebAppValuesListDefinition\Elements.xml" />
     <Content Include="PerWebAppValuesListDefinition\WebAppSettings\Elements.xml" />
     <Content Include="PerWebAppValuesListDefinition\Schema.xml" />
     <Content Include="PerWebValues\Elements.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Layouts\Nauplius.ADLDS.UserProfiles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" />
