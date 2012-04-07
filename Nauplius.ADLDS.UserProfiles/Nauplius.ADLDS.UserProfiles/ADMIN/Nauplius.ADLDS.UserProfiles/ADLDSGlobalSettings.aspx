@@ -12,6 +12,9 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
+<table>
+    <tr
+</table>
 Claims Identifier: <asp:TextBox ID="tBCI" runat="server" /><br />
 LDAP Filter: <asp:TextBox ID="tBLF" runat="server" /><br />
 Delete Profiles? <asp:CheckBox ID="cBDelProf" runat="server" /><br />

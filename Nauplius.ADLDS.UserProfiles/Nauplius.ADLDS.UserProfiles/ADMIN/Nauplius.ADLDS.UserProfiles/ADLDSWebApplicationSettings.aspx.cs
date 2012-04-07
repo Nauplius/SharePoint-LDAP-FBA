@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.UI.WebControls;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.WebControls;
@@ -19,10 +20,41 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles
 
         protected void btnSave_OnSave(object sender, EventArgs e)
         {
-            SPWebApplication selectedWebApp = ddlWebApp.CurrentItem;
-            SaveOrUpdateList(selectedWebApp);
+            if (Page.IsValid)
+            {
+                SPWebApplication selectedWebApp = ddlWebApp.CurrentItem;
+                SaveOrUpdateList(selectedWebApp);
+                Response.Redirect("../../applications.aspx");
+            }
+            else if (!Page.IsValid)
+            {
+                tBPortNoCustValidation.Visible = true;
+            }
         }
 
+        protected void btnCancel(object sender, EventArgs e)
+        {
+            Response.Redirect("../../applications.aspx");
+        }
+
+        protected void portValidation(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = false;
+
+            try
+            {
+                int val = Convert.ToInt32(e.Value);
+
+                if (val == 389 || val == 636 || (val >= 1024 && val <= 65535))
+                {
+                    e.IsValid = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                e.IsValid = false;
+            }
+        }
         protected void SaveOrUpdateList(SPWebApplication selectedWebApp)
         {
             using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))

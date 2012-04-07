@@ -110,9 +110,6 @@
       <SharePointProjectItemId>{aa5e1630-746c-4a1e-9364-08d23d1f8deb}</SharePointProjectItemId>
     </None>
     <None Include="key.snk" />
-    <None Include="Layouts\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{324ab137-207a-45b1-a649-742489affb7d}</SharePointProjectItemId>
-    </None>
     <None Include="NaupliusCustomActionGroup\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{6ebdf500-ea06-4c66-b5b2-3b6bd938cb79}</SharePointProjectItemId>
     </None>
@@ -151,17 +148,19 @@
     <Content Include="GlobalValues\Elements.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSGlobalSettings.aspx" />
-    <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx" />
+    <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSGlobalSettings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="NaupliusCustomActionGroup\Elements.xml" />
     <Content Include="PerWebAppValuesListDefinition\Elements.xml" />
     <Content Include="PerWebAppValuesListDefinition\WebAppSettings\Elements.xml" />
     <Content Include="PerWebAppValuesListDefinition\Schema.xml" />
     <Content Include="PerWebValues\Elements.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Layouts\Nauplius.ADLDS.UserProfiles\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" />
   <PropertyGroup>

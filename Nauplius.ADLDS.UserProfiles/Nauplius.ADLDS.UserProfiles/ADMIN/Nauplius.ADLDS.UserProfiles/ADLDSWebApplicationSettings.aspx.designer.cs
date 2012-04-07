@@ -13,6 +13,33 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
     public partial class ADLDSWebApplicationSettings {
         
         /// <summary>
+        /// btnSaveTop control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSaveTop;
+        
+        /// <summary>
+        /// btnCancelTop control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelTop;
+        
+        /// <summary>
+        /// InputFormSection1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection1;
+        
+        /// <summary>
         /// ddlWebApp control.
         /// </summary>
         /// <remarks>
@@ -22,13 +49,40 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         protected global::Microsoft.SharePoint.WebControls.WebApplicationSelector ddlWebApp;
         
         /// <summary>
+        /// InputFormSection2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection2;
+        
+        /// <summary>
         /// tBSN control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tBSN;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBSN;
+        
+        /// <summary>
+        /// tBSNReqField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.InputFormRequiredFieldValidator tBSNReqField;
+        
+        /// <summary>
+        /// InputFormSection3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection3;
         
         /// <summary>
         /// tBPrtNo control.
@@ -37,7 +91,34 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tBPrtNo;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBPrtNo;
+        
+        /// <summary>
+        /// tBPrtNoReqField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.InputFormRequiredFieldValidator tBPrtNoReqField;
+        
+        /// <summary>
+        /// tBPortNoCustValidation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.InputFormCustomValidator tBPortNoCustValidation;
+        
+        /// <summary>
+        /// InputFormSection4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection4;
         
         /// <summary>
         /// tBDNPath control.
@@ -46,7 +127,25 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tBDNPath;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBDNPath;
+        
+        /// <summary>
+        /// tBDNPathReqField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.InputFormRequiredFieldValidator tBDNPathReqField;
+        
+        /// <summary>
+        /// InputFormSection5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection5;
         
         /// <summary>
         /// cBUseSSL control.
@@ -55,7 +154,16 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox cBUseSSL;
+        protected global::Microsoft.SharePoint.WebControls.InputFormCheckBox cBUseSSL;
+        
+        /// <summary>
+        /// InputFormSection6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection6;
         
         /// <summary>
         /// tBLoginAttrib control.
@@ -64,15 +172,33 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tBLoginAttrib;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBLoginAttrib;
         
         /// <summary>
-        /// btnSave control.
+        /// tBLoginAttribReqField control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
+        protected global::Microsoft.SharePoint.WebControls.InputFormRequiredFieldValidator tBLoginAttribReqField;
+        
+        /// <summary>
+        /// btnSaveBottom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSaveBottom;
+        
+        /// <summary>
+        /// btnCancelBottom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelBottom;
     }
 }
