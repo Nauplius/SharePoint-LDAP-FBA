@@ -5,7 +5,7 @@ using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Security;
 
-namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
+namespace Nauplius.ADLDS.UserProfiles.Features.LoggingFeature
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -14,49 +14,51 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
     /// The GUID attached to this class may be used during packaging and should not be modified.
     /// </remarks>
 
-    [Guid("48312723-bcb8-45ab-8701-8800016a158a")]
-    public class TimerJobFeatureEventReceiver : SPFeatureReceiver
+    [Guid("f213eb5a-b819-46a3-a7f6-c3e1d20f3b47")]
+    public class LoggingFeatureEventReceiver : SPFeatureReceiver
     {
-        const string tJobName = "Nauplius ADLDS User Profile Import";
-
         // Uncomment the method below to handle the event raised after a feature has been activated.
 
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
-            SPWebApplication adminWebApplication = properties.Feature.Parent as SPWebApplication;
-            
-            foreach (SPJobDefinition job in adminWebApplication.JobDefinitions)
-            {
-                if (job.Name == tJobName)
-                {
-                    job.Delete();
-                }
-            }
-
-            if (((SPWebApplication)properties.Feature.Parent).IsAdministrationWebApplication)
-            {
-                Nauplius.ADLDS.UserProfiles.ADLDSImportJob newTimerJob = new Nauplius.ADLDS.UserProfiles.ADLDSImportJob(tJobName, adminWebApplication);
-
-                SPHourlySchedule jobSchedule = new SPHourlySchedule();
-                jobSchedule.BeginMinute = 0;
-                jobSchedule.EndMinute = 59;
-                newTimerJob.Schedule = jobSchedule;
-                newTimerJob.Update();
-
-            }
+            RegisterLogging(properties, true);
         }
+
 
         // Uncomment the method below to handle the event raised before a feature is deactivated.
 
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
-            SPWebApplication adminWebApplication = properties.Feature.Parent as SPWebApplication;
+            RegisterLogging(properties, false);
+        }
 
-            foreach (SPJobDefinition job in adminWebApplication.JobDefinitions)
+        static void RegisterLogging(SPFeatureReceiverProperties properties, bool register)
+        {
+            SPFarm farm = properties.Definition.Farm;
+
+            if (farm != null)
             {
-                if (job.Name == tJobName)
+                Logging log = Logging.Local;
+
+                if (register)
                 {
-                    job.Delete();
+                    if (log == null)
+                    {
+                        log = new Logging();
+                        log.Update();
+
+                        if (log.Status != SPObjectStatus.Online)
+                        {
+                            log.Provision();
+                        }
+                    }
+                }
+                else if (!register)
+                {
+                    if (log != null)
+                    {
+                        log.Delete();
+                    }
                 }
             }
         }

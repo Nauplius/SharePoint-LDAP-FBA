@@ -41,6 +41,7 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -66,6 +67,9 @@
     <Reference Include="Microsoft.SharePoint.Security" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\LoggingFeature\LoggingFeature.EventReceiver.cs">
+      <DependentUpon>LoggingFeature.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\TimerJobFeature\TimerJobFeature.EventReceiver.cs">
       <DependentUpon>TimerJobFeature.feature</DependentUpon>
     </Compile>
@@ -83,6 +87,7 @@
     <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx.designer.cs">
       <DependentUpon>ADLDSWebApplicationSettings.aspx.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logging.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -95,6 +100,9 @@
     </None>
     <None Include="ADMIN\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b8b0d6c5-d7f9-42d6-98f3-2e60223fdbc6}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\LoggingFeature\LoggingFeature.feature">
+      <FeatureId>{511866e8-25ee-479d-a786-be4e95934d68}</FeatureId>
     </None>
     <None Include="Features\TimerJobFeature\TimerJobFeature.feature">
       <FeatureId>{e95602ad-cd2c-4ad5-8801-183f27b0641b}</FeatureId>
@@ -137,6 +145,9 @@
     </Content>
     <Content Include="ADLDSPerWebApplicationContentType\Elements.xml" />
     <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\icon_32x32.png" />
+    <Content Include="Features\LoggingFeature\LoggingFeature.Template.xml">
+      <DependentUpon>LoggingFeature.feature</DependentUpon>
+    </Content>
     <Content Include="Features\TimerJobFeature\TimerJobFeature.Template.xml">
       <DependentUpon>TimerJobFeature.feature</DependentUpon>
     </Content>

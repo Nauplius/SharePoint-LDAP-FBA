@@ -65,6 +65,8 @@ namespace Nauplius.ADLDS.UserProfiles
 
         public override void Execute(Guid targetInstanceId)
         {
+            Logging.LogMessage(900, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Entering " + tJobName);
+
             SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
             using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
             {
@@ -111,15 +113,21 @@ namespace Nauplius.ADLDS.UserProfiles
                                 LoginAttribute = item["ADLDSLoginAttrib"].ToString();
 
                                 DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedNameRoot);
-                                SearchResultCollection results = ResultCollection(de);
 
-                                Create(results, LoginAttribute, WebApplication, ServerName, PortNumber);
-
-                                if (DeleteProfiles)
+                                if (de != null)
                                 {
-                                    Delete(results, LoginAttribute, WebApplication, ServerName, PortNumber);
+                                    SearchResultCollection results = ResultCollection(de);
+
+                                    Create(results, LoginAttribute, WebApplication, ServerName, PortNumber);
+
+                                    if (DeleteProfiles)
+                                    {
+                                        Delete(results, LoginAttribute, WebApplication, ServerName, PortNumber);
+                                    }
                                 }
                             }
+
+                            Logging.LogMessage(901, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Exiting " + tJobName);
                         }
                     }
                 }
@@ -130,6 +138,9 @@ namespace Nauplius.ADLDS.UserProfiles
         {
             DirectoryEntry de = new DirectoryEntry();
             string path = "LDAP://" + serverName + ":" + serverPort + "/" + distinguishedName;
+
+            Logging.LogMessage(220, Logging.LogCategories.LDAP, TraceSeverity.Verbose, "Binding to " +
+                path);
 
             if (UseSSL)
             {
@@ -144,9 +155,14 @@ namespace Nauplius.ADLDS.UserProfiles
             {
                 de.Path = path;
                 de.RefreshCache();
+                Logging.LogMessage(221, Logging.LogCategories.LDAP, TraceSeverity.Verbose, "Bound to " +
+                    path);
             }
             catch (Exception ex)
-            {  }
+            {
+                Logging.LogMessage(500, Logging.LogCategories.LDAP, TraceSeverity.Unexpected, ex.Message);
+                return null;
+            }
             return de;
         }
 
@@ -157,11 +173,14 @@ namespace Nauplius.ADLDS.UserProfiles
             ds.SearchScope = SearchScope.Subtree;
             ds.Filter = LDAPFilter;
 
+            Logging.LogMessage(222, Logging.LogCategories.LDAP, TraceSeverity.Verbose, "Searching for users.");
+
             SearchResultCollection results = ds.FindAll();
 
             if (results.Count > 0)
             {
                 ds.Dispose();
+                Logging.LogMessage(223, Logging.LogCategories.LDAP, TraceSeverity.Verbose, "Found " + results.Count + " users.");
                 return results;
             }
 
@@ -232,9 +251,14 @@ namespace Nauplius.ADLDS.UserProfiles
                                         try
                                         {
                                             newProfile.Commit();
+                                            Logging.LogMessage(210, Logging.LogCategories.Profiles, TraceSeverity.Verbose, "Created profile " +
+                                                DistinguishedName);
                                         }
                                         catch (Exception ex)
-                                        { }
+                                        {
+                                            Logging.LogMessage(510, Logging.LogCategories.Profiles, TraceSeverity.Unexpected, "Failed to create profile " +
+                                                DistinguishedName + " " + ex.Message);
+                                        }
                                     }
                                     else if (uPM.UserExists(ClaimsIdentifier + "|" + formsProvider.MembershipProvider + "|" +
                                         de2.Properties[loginAttribute].Value.ToString()))
@@ -265,9 +289,14 @@ namespace Nauplius.ADLDS.UserProfiles
                                         try
                                         {
                                             updateProfile.Commit();
+                                            Logging.LogMessage(211, Logging.LogCategories.Profiles, TraceSeverity.Verbose, "Updated profile " +
+                                               updateProfile[PropertyConstants.DistinguishedName].Value);
                                         }
                                         catch (Exception ex)
-                                        { }
+                                        {
+                                            Logging.LogMessage(511, Logging.LogCategories.Profiles, TraceSeverity.Unexpected, "Failed to update profile " +
+                                                updateProfile[PropertyConstants.DistinguishedName].Value + " " + ex.Message);
+                                        }
                                     }
                                 }
                             });
@@ -275,7 +304,9 @@ namespace Nauplius.ADLDS.UserProfiles
                     }
                 }
                 catch (Exception ex)
-                { }
+                { 
+                    Logging.LogMessage(502, Logging.LogCategories.Profiles, TraceSeverity.Unexpected, ex.Message);
+                }
 
                 finally
                 {
@@ -327,17 +358,26 @@ namespace Nauplius.ADLDS.UserProfiles
                                     if (result == null)
                                     {
                                         uPM.RemoveProfile(profile);
+                                        Logging.LogMessage(212, Logging.LogCategories.Profiles, TraceSeverity.Verbose, "Removed profile " +
+                                            uP[PropertyConstants.DistinguishedName].Value);
                                     }
                                 }
                                 catch (Exception ex)
-                                { }
+                                {
+                                    Logging.LogMessage(502, Logging.LogCategories.Profiles, 
+                                        TraceSeverity.Unexpected, 
+                                        "Failed to delete profile " + uP[PropertyConstants.DistinguishedName].Value + 
+                                        " " + ex.Message);
+                                }
                             }
                         });
                     }
                 }
             }
             catch (Exception ex)
-            { }
+            {
+                Logging.LogMessage(502, Logging.LogCategories.Profiles, TraceSeverity.Unexpected, ex.Message);
+            }
 
             finally
             {
