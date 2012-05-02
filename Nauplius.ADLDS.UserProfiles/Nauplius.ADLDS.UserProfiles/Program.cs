@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Configuration;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices;
+using System.Linq;
 using System.Security.Principal;
 
 using Microsoft.Office.Server.UserProfiles;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 
-using System.Xml.Linq;
-using System.Xml.XPath;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Nauplius.ADLDS.UserProfiles
@@ -170,6 +170,7 @@ namespace Nauplius.ADLDS.UserProfiles
         {
             DirectorySearcher ds = new DirectorySearcher(de);
             ds.SearchRoot = de;
+            ds.PageSize = 10000;
             ds.SearchScope = SearchScope.Subtree;
             ds.Filter = LDAPFilter;
 
@@ -185,6 +186,8 @@ namespace Nauplius.ADLDS.UserProfiles
             }
 
             ds.Dispose();
+            Logging.LogMessage(224, Logging.LogCategories.LDAP, TraceSeverity.Verbose, "Found 0 users.");
+
             return null;
         }
 
@@ -340,33 +343,33 @@ namespace Nauplius.ADLDS.UserProfiles
                         SPSecurity.RunWithElevatedPrivileges(delegate()
                         {
                             string search = ClaimsIdentifier + "|" + formsProvider.MembershipProvider + "|";
-                            ProfileBase[] uPAResults = uPM.Search(search);
 
-                            foreach (ProfileBase profile in uPAResults)
+                            List<UserProfile> uPAResults = uPM.Search(search).Cast<UserProfile>().ToList();
+                            List<SearchResult> usersList = users.Cast<SearchResult>().ToList();
+
+                            var query = usersList.Select(sr => sr.GetDirectoryEntry().Properties["distinguishedName"].Value.ToString());
+                           
+                            HashSet<string> paths = new HashSet<string>(query);
+
+                            var profiles = uPAResults.Select(profile => new
                             {
-                                UserProfile uP = (UserProfile)profile;
-                                DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedNameRoot);
+                                ShouldKeep = paths.Contains(profile[PropertyConstants.DistinguishedName].Value.ToString()),
+                                Profile = profile
+                            });
 
-                                DirectorySearcher ds = new DirectorySearcher(de);
-                                ds.SearchRoot = de;
-                                ds.SearchScope = SearchScope.Subtree;
-                                ds.Filter = "(&(distinguishedName=" + uP[PropertyConstants.DistinguishedName].Value.ToString() + "))";
-
+                            foreach (var profile in profiles.Where(result => !result.ShouldKeep))
+                            {
                                 try
                                 {
-                                    SearchResult result = ds.FindOne();
-                                    if (result == null)
-                                    {
-                                        uPM.RemoveProfile(profile);
-                                        Logging.LogMessage(212, Logging.LogCategories.Profiles, TraceSeverity.Verbose, "Removed profile " +
-                                            uP[PropertyConstants.DistinguishedName].Value);
-                                    }
+                                    uPM.RemoveProfile(profile.Profile);
+                                    Logging.LogMessage(212, Logging.LogCategories.Profiles, TraceSeverity.Verbose, "Removed profile " +
+                                        profile.Profile[PropertyConstants.DistinguishedName].Value);
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.LogMessage(502, Logging.LogCategories.Profiles, 
-                                        TraceSeverity.Unexpected, 
-                                        "Failed to delete profile " + uP[PropertyConstants.DistinguishedName].Value + 
+                                    Logging.LogMessage(502, Logging.LogCategories.Profiles,
+                                        TraceSeverity.Unexpected,
+                                        "Failed to delete profile " + profile.Profile[PropertyConstants.DistinguishedName].Value +
                                         " " + ex.Message);
                                 }
                             }

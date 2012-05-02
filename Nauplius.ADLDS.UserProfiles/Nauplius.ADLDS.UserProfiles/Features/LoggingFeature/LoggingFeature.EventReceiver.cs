@@ -17,19 +17,40 @@ namespace Nauplius.ADLDS.UserProfiles.Features.LoggingFeature
     [Guid("f213eb5a-b819-46a3-a7f6-c3e1d20f3b47")]
     public class LoggingFeatureEventReceiver : SPFeatureReceiver
     {
-        // Uncomment the method below to handle the event raised after a feature has been activated.
-
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
             RegisterLogging(properties, true);
+            /*
+            SPFarm farm = properties.Definition.Farm;
+
+            if (farm != null)
+            {
+                Logging log = Logging.Local;
+
+                try
+                {
+                    if (log != null)
+                    {
+                        log = new Logging();
+                        log.Update();
+
+                        if (log.Status != SPObjectStatus.Unprovisioning)
+                        {
+                            log.Unprovision();
+                            log.Delete();
+                            RegisterLogging(properties, true);
+                        }
+                    }
+                }
+                catch (Exception)
+                { }
+            }
+             */
         }
-
-
-        // Uncomment the method below to handle the event raised before a feature is deactivated.
-
+        
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
-            RegisterLogging(properties, false);
+           RegisterLogging(properties, false);
         }
 
         static void RegisterLogging(SPFeatureReceiverProperties properties, bool register)
@@ -45,7 +66,7 @@ namespace Nauplius.ADLDS.UserProfiles.Features.LoggingFeature
                     if (log == null)
                     {
                         log = new Logging();
-                        log.Update();
+                        // log.Update();
 
                         if (log.Status != SPObjectStatus.Online)
                         {
@@ -57,29 +78,14 @@ namespace Nauplius.ADLDS.UserProfiles.Features.LoggingFeature
                 {
                     if (log != null)
                     {
-                        log.Delete();
+                        if (log.Status != SPObjectStatus.Unprovisioning)
+                        {
+                            log.Unprovision();
+                            log.Delete();
+                        }
                     }
                 }
             }
         }
-
-        // Uncomment the method below to handle the event raised after a feature has been installed.
-
-        //public override void FeatureInstalled(SPFeatureReceiverProperties properties)
-        //{
-        //}
-
-
-        // Uncomment the method below to handle the event raised before a feature is uninstalled.
-
-        //public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
-        //{
-        //}
-
-        // Uncomment the method below to handle the event raised when a feature is upgrading.
-
-        //public override void FeatureUpgrading(SPFeatureReceiverProperties properties, string upgradeActionName, System.Collections.Generic.IDictionary<string, string> parameters)
-        //{
-        //}
     }
 }

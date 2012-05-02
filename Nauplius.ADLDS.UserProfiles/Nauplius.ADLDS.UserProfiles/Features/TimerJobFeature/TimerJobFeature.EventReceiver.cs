@@ -19,8 +19,6 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
     {
         const string tJobName = "Nauplius ADLDS User Profile Import";
 
-        // Uncomment the method below to handle the event raised after a feature has been activated.
-
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
             SPWebApplication adminWebApplication = properties.Feature.Parent as SPWebApplication;
@@ -46,8 +44,6 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
             }
         }
 
-        // Uncomment the method below to handle the event raised before a feature is deactivated.
-
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
             SPWebApplication adminWebApplication = properties.Feature.Parent as SPWebApplication;
@@ -61,23 +57,36 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
             }
         }
 
-        // Uncomment the method below to handle the event raised after a feature has been installed.
+        public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
+        {
+            SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
+            using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
+            {
+                using (SPWeb site = siteCollection.OpenWeb())
+                {
+                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
+                    if (list != null)
+                    {
+                        try
+                        {
+                            list.Delete();
+                        }
+                        catch (Exception)
+                        { }
+                    }
 
-        //public override void FeatureInstalled(SPFeatureReceiverProperties properties)
-        //{
-        //}
-
-
-        // Uncomment the method below to handle the event raised before a feature is uninstalled.
-
-        //public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
-        //{
-        //}
-
-        // Uncomment the method below to handle the event raised when a feature is upgrading.
-
-        //public override void FeatureUpgrading(SPFeatureReceiverProperties properties, string upgradeActionName, System.Collections.Generic.IDictionary<string, string> parameters)
-        //{
-        //}
+                    SPList list2 = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - WebAppSettings");
+                    if (list2 != null)
+                    {
+                        try
+                        {
+                            list2.Delete();
+                        }
+                        catch (Exception)
+                        { }
+                    }
+                }
+            }
+        }
     }
 }

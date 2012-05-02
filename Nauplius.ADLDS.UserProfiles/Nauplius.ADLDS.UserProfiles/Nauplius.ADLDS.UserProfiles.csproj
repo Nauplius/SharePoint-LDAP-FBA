@@ -67,12 +67,6 @@
     <Reference Include="Microsoft.SharePoint.Security" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\LoggingFeature\LoggingFeature.EventReceiver.cs">
-      <DependentUpon>LoggingFeature.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\TimerJobFeature\TimerJobFeature.EventReceiver.cs">
-      <DependentUpon>TimerJobFeature.feature</DependentUpon>
-    </Compile>
     <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSGlobalSettings.aspx.cs">
       <DependentUpon>ADLDSGlobalSettings.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -86,6 +80,14 @@
     </Compile>
     <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx.designer.cs">
       <DependentUpon>ADLDSWebApplicationSettings.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Features\LoggingFeature\LoggingFeature.EventReceiver.cs">
+      <DependentUpon>LoggingFeature.feature</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Features\TimerJobFeature\TimerJobFeature.EventReceiver.cs">
+      <DependentUpon>TimerJobFeature.feature</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Logging.cs" />
     <Compile Include="Program.cs" />
@@ -101,14 +103,14 @@
     <None Include="ADMIN\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b8b0d6c5-d7f9-42d6-98f3-2e60223fdbc6}</SharePointProjectItemId>
     </None>
-    <None Include="Features\LoggingFeature\LoggingFeature.feature">
-      <FeatureId>{511866e8-25ee-479d-a786-be4e95934d68}</FeatureId>
-    </None>
-    <None Include="Features\TimerJobFeature\TimerJobFeature.feature">
-      <FeatureId>{e95602ad-cd2c-4ad5-8801-183f27b0641b}</FeatureId>
-    </None>
     <None Include="Features\ListPageFeature\ListPageFeature.feature">
       <FeatureId>{35e9f7a6-726d-4506-bb3d-7151638e6771}</FeatureId>
+    </None>
+    <None Include="Features\LoggingFeature\LoggingFeature.feature">
+      <FeatureId>{978c271a-e752-49fa-8adb-1ff1d82cbb6b}</FeatureId>
+    </None>
+    <None Include="Features\TimerJobFeature\TimerJobFeature.feature">
+      <FeatureId>{fdc5811c-ac92-4968-a642-9ddf53cc460d}</FeatureId>
     </None>
     <None Include="GlobalValuesListDefinition\GlobalSettings\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b802b5db-a536-4008-a679-247a82edd12b}</SharePointProjectItemId>
@@ -145,14 +147,14 @@
     </Content>
     <Content Include="ADLDSPerWebApplicationContentType\Elements.xml" />
     <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\icon_32x32.png" />
+    <Content Include="Features\ListPageFeature\ListPageFeature.Template.xml">
+      <DependentUpon>ListPageFeature.feature</DependentUpon>
+    </Content>
     <Content Include="Features\LoggingFeature\LoggingFeature.Template.xml">
       <DependentUpon>LoggingFeature.feature</DependentUpon>
     </Content>
     <Content Include="Features\TimerJobFeature\TimerJobFeature.Template.xml">
       <DependentUpon>TimerJobFeature.feature</DependentUpon>
-    </Content>
-    <Content Include="Features\ListPageFeature\ListPageFeature.Template.xml">
-      <DependentUpon>ListPageFeature.feature</DependentUpon>
     </Content>
     <Content Include="GlobalValuesListDefinition\Elements.xml" />
     <Content Include="GlobalValuesListDefinition\GlobalSettings\Elements.xml" />
