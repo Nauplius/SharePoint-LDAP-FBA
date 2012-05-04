@@ -1,9 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="17874437-b9b9-4990-989d-a89d3223f767" solutionId="17874437-b9b9-4990-989d-a89d3223f767" resetWebServer="false" name="Nauplius.ADLDS.UserProfiles" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="17874437-b9b9-4990-989d-a89d3223f767" solutionId="17874437-b9b9-4990-989d-a89d3223f767" resetWebServer="true" title="Nauplius.ADLDS.UserProfiles" name="Nauplius.ADLDS.UserProfiles" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
   <features>
     <featureReference itemId="35e9f7a6-726d-4506-bb3d-7151638e6771" />
+    <featureReference itemId="978c271a-e752-49fa-8adb-1ff1d82cbb6b" />
+    <featureReference itemId="fdc5811c-ac92-4968-a642-9ddf53cc460d" />
   </features>
   <projectItems>
     <projectItemReference itemId="b8b0d6c5-d7f9-42d6-98f3-2e60223fdbc6" />
+    <projectItemReference itemId="aa5e1630-746c-4a1e-9364-08d23d1f8deb" />
+    <projectItemReference itemId="6ebdf500-ea06-4c66-b5b2-3b6bd938cb79" />
+    <projectItemReference itemId="da4b662f-dc38-4606-920c-e88482bed47c" />
   </projectItems>
 </package>
