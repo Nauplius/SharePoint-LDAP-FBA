@@ -5,7 +5,7 @@ using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Security;
 
-namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
+namespace NaupliusADLDSUPATimerJobFeature
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -15,7 +15,7 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
     /// </remarks>
 
     [Guid("48312723-bcb8-45ab-8701-8800016a158a")]
-    public class TimerJobFeatureEventReceiver : SPFeatureReceiver
+    public class Timer : SPFeatureReceiver
     {
         const string tJobName = "Nauplius ADLDS User Profile Import";
 
@@ -56,37 +56,11 @@ namespace Nauplius.ADLDS.UserProfiles.Features.TimerJobFeature
                 }
             }
         }
-
+/*
         public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
         {
-            SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
-            using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
-            {
-                using (SPWeb site = siteCollection.OpenWeb())
-                {
-                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
-                    if (list != null)
-                    {
-                        try
-                        {
-                            list.Delete();
-                        }
-                        catch (Exception)
-                        { }
-                    }
 
-                    SPList list2 = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - WebAppSettings");
-                    if (list2 != null)
-                    {
-                        try
-                        {
-                            list2.Delete();
-                        }
-                        catch (Exception)
-                        { }
-                    }
-                }
-            }
         }
+ */
     }
 }

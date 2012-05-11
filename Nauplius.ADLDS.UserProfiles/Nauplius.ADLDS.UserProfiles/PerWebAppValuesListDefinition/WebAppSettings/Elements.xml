@@ -2,7 +2,7 @@
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
   <ListInstance Title="Nauplius.ADLDS.UserProfiles - WebAppSettings"
                 OnQuickLaunch="FALSE"
-                TemplateType="10001"
+                TemplateType="55001"
                 Url="Lists/Nauplius.ADLDS.UserProfiles-WebAppSettings"
                 Description="AD LDS User Profile Import Web Application Settings">
   </ListInstance>

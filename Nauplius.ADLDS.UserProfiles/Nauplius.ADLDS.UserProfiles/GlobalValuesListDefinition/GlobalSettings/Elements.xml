@@ -2,7 +2,7 @@
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
   <ListInstance Title="Nauplius.ADLDS.UserProfiles - GlobalSettings"
                 OnQuickLaunch="FALSE"
-                TemplateType="10000"
+                TemplateType="55000"
                 Url="Lists/Nauplius.ADLDS.UserProfiles-GlobalSettings"
                 Description="AD LDS User Profile Import Global Settings">
   </ListInstance>

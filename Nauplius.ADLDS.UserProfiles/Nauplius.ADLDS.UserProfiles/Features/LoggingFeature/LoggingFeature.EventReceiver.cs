@@ -5,7 +5,9 @@ using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Security;
 
-namespace Nauplius.ADLDS.UserProfiles.Features.LoggingFeature
+using Nauplius.ADLDS.UserProfiles;
+
+namespace NaupliusADLDSUPALoggingFeature
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -15,42 +17,26 @@ namespace Nauplius.ADLDS.UserProfiles.Features.LoggingFeature
     /// </remarks>
 
     [Guid("f213eb5a-b819-46a3-a7f6-c3e1d20f3b47")]
-    public class LoggingFeatureEventReceiver : SPFeatureReceiver
+    public class ULSLog : SPFeatureReceiver
     {
+        public override void FeatureInstalled(SPFeatureReceiverProperties properties)
+        {
+            RegisterLogging(properties, true);
+        }
+
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
             RegisterLogging(properties, true);
-            /*
-            SPFarm farm = properties.Definition.Farm;
-
-            if (farm != null)
-            {
-                Logging log = Logging.Local;
-
-                try
-                {
-                    if (log != null)
-                    {
-                        log = new Logging();
-                        log.Update();
-
-                        if (log.Status != SPObjectStatus.Unprovisioning)
-                        {
-                            log.Unprovision();
-                            log.Delete();
-                            RegisterLogging(properties, true);
-                        }
-                    }
-                }
-                catch (Exception)
-                { }
-            }
-             */
         }
         
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
            RegisterLogging(properties, false);
+        }
+
+        public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
+        {
+            RegisterLogging(properties, false);
         }
 
         static void RegisterLogging(SPFeatureReceiverProperties properties, bool register)
@@ -66,7 +52,12 @@ namespace Nauplius.ADLDS.UserProfiles.Features.LoggingFeature
                     if (log == null)
                     {
                         log = new Logging();
-                        // log.Update();
+                        log.Update();
+
+                        if (log.Status != SPObjectStatus.Offline)
+                        {
+                            log.Status = SPObjectStatus.Offline;
+                        }
 
                         if (log.Status != SPObjectStatus.Online)
                         {
@@ -78,9 +69,14 @@ namespace Nauplius.ADLDS.UserProfiles.Features.LoggingFeature
                 {
                     if (log != null)
                     {
-                        if (log.Status != SPObjectStatus.Unprovisioning)
+                        try
                         {
                             log.Unprovision();
+                        }
+                        catch
+                        { }
+                        finally
+                        {
                             log.Delete();
                         }
                     }
