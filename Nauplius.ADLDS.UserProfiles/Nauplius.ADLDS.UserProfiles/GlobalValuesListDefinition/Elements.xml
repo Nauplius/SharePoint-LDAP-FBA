@@ -3,12 +3,12 @@
     <!-- Do not change the value of the Name attribute below. If it does not match the folder name of the List Definition project item, an error will occur when the project is run. -->
     <ListTemplate
         Name="GlobalValuesListDefinition"
-        Type="55000"
+        Type="10001"
         BaseType="0"
         OnQuickLaunch="FALSE"
         SecurityBits="11"
         Sequence="410"
-        DisplayName="Nauplius.ADLDS.UserProfiles - Global Settings"
-        Description="AD LDS Global Values"
+        DisplayName="Nauplius ADLDS Global Settings"
+        Description="AD LDS Global Settings"
         Image="/_layouts/images/itgen.png"/>
 </Elements>

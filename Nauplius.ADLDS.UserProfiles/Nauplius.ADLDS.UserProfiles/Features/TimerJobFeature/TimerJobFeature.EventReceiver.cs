@@ -55,12 +55,35 @@ namespace NaupliusADLDSUPATimerJobFeature
                     job.Delete();
                 }
             }
-        }
-/*
-        public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
-        {
 
+            using (SPWeb web = adminWebApplication.Sites[0].OpenWeb())
+            {
+                SPList list = web.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
+                if (list != null)
+                {
+                    try
+                    {
+                        list.Delete();
+                    }
+                    catch (Exception)
+                    { }
+                }
+
+                SPList list2 = web.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - WebAppSettings");
+                if (list2 != null)
+                {
+                    try
+                    {
+                        list2.Delete();
+                    }
+                    catch (Exception)
+                    { }
+                }
+            }
         }
- */
+
+        //public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
+        //{
+        //}
     }
 }

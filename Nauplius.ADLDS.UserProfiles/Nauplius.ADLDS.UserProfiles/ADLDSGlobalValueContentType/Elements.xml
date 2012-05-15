@@ -9,7 +9,6 @@
                Version="0">
     <FieldRefs>
       <FieldRef ID="{BA9B2EE1-FD01-4B7F-89B1-DE4DBF425834}" Name="GlobalDefault" DisplayName="Global Values" Required="TRUE"/>
-      <!--<FieldRef ID="{094CED60-F0F1-4B8D-8181-301D02160BE1}" Name="GlobalDefaultLinkToItem" DisplayName="Global Default (Link To Item)" />-->
       <FieldRef ID="{A07A904B-2979-4818-9BB6-A4B4B0E80EDE}" Name="ImportTimer" Required="FALSE"/>
       <FieldRef ID="{E4150F5B-E1BD-4953-B253-31AA7BBE247A}" Name="ClaimsIdentifier" Required="TRUE"/>
       <FieldRef ID="{5EA0D55C-0347-4FCC-9342-DE69878B4A4A}" Name="LDAPFilter" Required="TRUE"/>

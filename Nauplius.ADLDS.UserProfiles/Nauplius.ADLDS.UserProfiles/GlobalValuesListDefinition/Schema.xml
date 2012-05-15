@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<List xmlns:ows="Microsoft SharePoint" Title="Nauplius.ADLDS.UserProfiles - Global Settings" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/Nauplius.ADLDS.UserProfiles-GlobalValuesListDefinition" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/">
+<List xmlns:ows="Microsoft SharePoint" Title="GlobalSettingsListDefinition" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/GlobalValuesListDefinition" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/">
   <MetaData>
     <ContentTypes>
-      <ContentType ID="0x010081c4b4162aa14fd6901c40d8f5b2b06b" Name="Nauplius.ADLDS.UserProfiles - ADLDSGlobalValueContentType" Group="Custom Content Types" Description="Global Default Values for AD LDS/ADAM User Profile Import" Inherits="FALSE" Version="0">
+      <ContentType ID="0x010081c4b4162aa14fd6901c40d8f5b2b06b" Name="ADLDSGlobalValueContentType" Group="Custom Content Types" Description="Global Default Values for AD LDS/ADAM User Profile Import" Inherits="FALSE" Version="0">
         <FieldRefs>
           <FieldRef ID="{BA9B2EE1-FD01-4B7F-89B1-DE4DBF425834}" Name="GlobalDefault" DisplayName="Global Values" Required="TRUE" />
-          <!--<FieldRef ID="{094CED60-F0F1-4B8D-8181-301D02160BE1}" Name="GlobalDefaultLinkToItem" DisplayName="Global Default (Link To Item)" />-->
           <FieldRef ID="{A07A904B-2979-4818-9BB6-A4B4B0E80EDE}" Name="ImportTimer" Required="FALSE" />
           <FieldRef ID="{E4150F5B-E1BD-4953-B253-31AA7BBE247A}" Name="ClaimsIdentifier" Required="TRUE"/>
           <FieldRef ID="{5EA0D55C-0347-4FCC-9342-DE69878B4A4A}" Name="LDAPFilter" Required="TRUE"/>
@@ -29,20 +28,6 @@
              ShowInNewForm="TRUE" Indexed="TRUE" EnforceUniqueValues="TRUE" Group="ADLDSGlobalValues">
     <Default>GlobalDefaultValues</Default>
       </Field>
-<!--
-      <Field ID="{094CED60-F0F1-4B8D-8181-301D02160BE1}" Type="Computed" Name="GlobalDefaultLinkToItem" LinkToItem="TRUE" ReadOnly="TRUE" Dir="" 
-             DisplayNameSrcField="GlobalDefault" DisplayName="Global Default (Link To Item)" 
-             ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE"
-             SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="LinkToItemGlobalDefault">
-        <DisplayPattern>
-          <HTML><![CDATA[<a href="]]></HTML>
-          <URL />
-          <HTML><![CDATA[" ONCLICK="GoToLink(this);return false;" target="_self">]]></HTML>
-          <Column HTMLEncode="TRUE" Name="GlobalDefault" />
-          <HTML><![CDATA[</a>]]></HTML>
-        </DisplayPattern>
-      </Field>
-      -->
       <Field ID="{a07a904b-2979-4818-9bb6-a4b4b0e80ede}" Type="Integer" Name="ImportTimer" DisplayName="Import Timer" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Min="1" Max="99" Percentage="FALSE" Decimals="0" Group="ADLDSGlobalValues">
     <Default>30</Default>
   </Field>
@@ -110,7 +95,6 @@
         <RowLimit Paged="TRUE">30</RowLimit>
         <ViewFields>
           <FieldRef Name="GlobalDefault" DisplayName="Global Values"></FieldRef>
-<!--          <FieldRef Name="GlobalDefaultLinkToItem"></FieldRef> -->
         </ViewFields>
         <Query>
           <OrderBy>

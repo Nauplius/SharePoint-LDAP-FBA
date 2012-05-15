@@ -5,7 +5,7 @@ using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Security;
 
-namespace NaupliusADLDSUPAListPageFeature
+namespace NaupliusADLDSUPAListsFeature
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -14,26 +14,46 @@ namespace NaupliusADLDSUPAListPageFeature
     /// The GUID attached to this class may be used during packaging and should not be modified.
     /// </remarks>
 
-    [Guid("4f37712b-f57c-43c6-9f09-58e128c550ad")]
-    public class ListPage : SPFeatureReceiver
+    [Guid("ea3a8db2-df1a-4ffa-97e4-ce1f763d4b50")]
+    public class Lists : SPFeatureReceiver
     {
         // Uncomment the method below to handle the event raised after a feature has been activated.
 
-        //public override void FeatureActivated(SPFeatureReceiverProperties properties)
-        //{
-        //}
+        public override void FeatureActivated(SPFeatureReceiverProperties properties)
+        {
+            SPWeb web = properties.Feature.Parent as SPWeb;
 
+                using (web = web.Site.OpenWeb())
+                {
+                    try
+                    {
+                        web.AllowUnsafeUpdates = true;
+                        Guid listId1 = web.Lists.Add("Nauplius.ADLDS.UserProfiles - GlobalSettings",
+                            "AD LDS User Profile Import Global Settings",
+                            "Lists/Nauplius.ADLDS.UserProfiles-GlobalSettings",
+                            "d81d5f6c-88ad-4f1b-bb14-05d929137637", 10001, "101");
+                        web.Update();
+                        Guid listId2 = web.Lists.Add("Nauplius.ADLDS.UserProfiles - WebAppSettings",
+                            "AD LDS User Profile Import Web Application Settings",
+                            "Lists/Nauplius.ADLDS.UserProfiles-WebAppSettings",
+                            "d81d5f6c-88ad-4f1b-bb14-05d929137637", 10002, "101");
+                        web.Update();
+                        web.AllowUnsafeUpdates = false;
+                    }
+                    catch (Exception)
+                    { }
+            }
+        }
 
         // Uncomment the method below to handle the event raised before a feature is deactivated.
 
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
-            SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
-            using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
-            {
-                using (SPWeb site = siteCollection.OpenWeb())
+            SPWeb web = properties.Feature.Parent as SPWeb;
+
+                using (web = web.Site.OpenWeb())
                 {
-                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
+                    SPList list = web.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
                     if (list != null)
                     {
                         try
@@ -44,7 +64,7 @@ namespace NaupliusADLDSUPAListPageFeature
                         { }
                     }
 
-                    SPList list2 = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - WebAppSettings");
+                    SPList list2 = web.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - WebAppSettings");
                     if (list2 != null)
                     {
                         try
@@ -56,8 +76,6 @@ namespace NaupliusADLDSUPAListPageFeature
                     }
                 }
             }
-        }
-
 
         // Uncomment the method below to handle the event raised after a feature has been installed.
 
@@ -68,37 +86,9 @@ namespace NaupliusADLDSUPAListPageFeature
 
         // Uncomment the method below to handle the event raised before a feature is uninstalled.
 
-        public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
-        {
-            SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
-            using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
-            {
-                using (SPWeb site = siteCollection.OpenWeb())
-                {
-                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
-                    if (list != null)
-                    {
-                        try
-                        {
-                            list.Delete();
-                        }
-                        catch (Exception)
-                        { }
-                    }
-
-                    SPList list2 = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - WebAppSettings");
-                    if (list2 != null)
-                    {
-                        try
-                        {
-                            list2.Delete();
-                        }
-                        catch (Exception)
-                        { }
-                    }
-                }
-            }
-        }
+        //public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
+        //{
+        //}
 
         // Uncomment the method below to handle the event raised when a feature is upgrading.
 

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<List xmlns:ows="Microsoft SharePoint" Title="Nauplius.ADLDS.UserProfiles - PerWebAppValuesListDefinition" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/Nauplius.ADLDS.UserProfiles-PerWebAppValuesListDefinition" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/">
+<List xmlns:ows="Microsoft SharePoint" Title="PerWebAppValuesListDefinition" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/PerWebAppValuesListDefinition" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/">
   <MetaData>
     <ContentTypes>
-      <ContentType ID="0x010052943430b5e940a780e0f618f7b7c36f" Name="Nauplius.ADLDS.UserProfiles - ADLDSPerWebApplicationContentType" Group="Custom Content Types" Description="My Content Type" Inherits="FALSE" Version="0">
+      <ContentType ID="0x010052943430b5e940a780e0f618f7b7c36f" Name="ADLDSPerWebApplicationContentType" Group="Custom Content Types" Description="My Content Type" Inherits="FALSE" Version="0">
         <FieldRefs>
           <FieldRef ID="{EE590E8D-6009-4548-83FE-D95629C3B0B1}" Name="WebApplicationUrl" />
           <FieldRef ID="{2284D486-D162-4093-A1C8-B360FFD8540A}" Name="ADLDSServer" />

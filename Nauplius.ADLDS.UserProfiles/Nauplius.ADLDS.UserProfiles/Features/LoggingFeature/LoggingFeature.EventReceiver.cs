@@ -24,16 +24,6 @@ namespace NaupliusADLDSUPALoggingFeature
             RegisterLogging(properties, true);
         }
 
-        public override void FeatureActivated(SPFeatureReceiverProperties properties)
-        {
-            RegisterLogging(properties, true);
-        }
-        
-        public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
-        {
-           RegisterLogging(properties, false);
-        }
-
         public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
         {
             RegisterLogging(properties, false);
