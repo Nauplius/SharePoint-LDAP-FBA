@@ -25,14 +25,18 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
         {
             SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
             WebModifications.CreateWildcardNode(false, properties);
+            WebModifications.CreateProviderNode(false, properties);
         }
 
 
         // Uncomment the method below to handle the event raised before a feature is deactivated.
 
-        //public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
-        //{
-        //}
+        public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
+        {
+            SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
+            WebModifications.CreateWildcardNode(true, properties);
+            WebModifications.CreateProviderNode(true, properties);
+        }
 
 
         // Uncomment the method below to handle the event raised after a feature has been installed.
@@ -44,9 +48,12 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
 
         // Uncomment the method below to handle the event raised before a feature is uninstalled.
 
-        //public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
-        //{
-        //}
+        public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
+        {
+            SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
+            WebModifications.CreateWildcardNode(true, properties);
+            WebModifications.CreateProviderNode(true, properties);
+        }
 
         // Uncomment the method below to handle the event raised when a feature is upgrading.
 
