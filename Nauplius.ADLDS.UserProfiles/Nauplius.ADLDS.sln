@@ -2,11 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauplius.ADLDS.UserProfiles", "Nauplius.ADLDS.UserProfiles\Nauplius.ADLDS.UserProfiles.csproj", "{7C3F563A-B138-40E2-9BF1-B652A189A47C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B} = {B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauplius.ADLDS.FBA", "Nauplius.ADLDS.FBA\Nauplius.ADLDS.FBA.csproj", "{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7C3F563A-B138-40E2-9BF1-B652A189A47C} = {7C3F563A-B138-40E2-9BF1-B652A189A47C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -27,12 +27,12 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

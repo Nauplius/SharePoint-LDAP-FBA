@@ -73,6 +73,9 @@
     <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAWebApplicationSettings.aspx.designer.cs">
       <DependentUpon>FBAWebApplicationSettings.aspx.cs</DependentUpon>
     </Compile>
+    <Compile Include="Features\ListsFeature\ListsFeature.EventReceiver.cs">
+      <DependentUpon>ListsFeature.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\FBAFeature\FBAFeature.EventReceiver.cs">
       <DependentUpon>FBAFeature.feature</DependentUpon>
     </Compile>
@@ -96,10 +99,16 @@
     <None Include="FBAPerWebApplicationContentType\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{16989441-e45e-4d32-8f49-fd44ca5f8097}</SharePointProjectItemId>
     </None>
+    <None Include="FBAPerWebApplicationListDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{053db551-4dd7-4d36-8050-f12442761407}</SharePointProjectItemId>
+    </None>
     <None Include="FBAUserApprovalContentType\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{bc5f1db5-70a2-4d82-806b-17c9447a90f9}</SharePointProjectItemId>
     </None>
-    <None Include="Features\AdministrationFeature\AdministrationFeature.feature">
+    <None Include="FBAUserApprovalListDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{7c54e4f9-99c4-41f9-8a4c-79225fe8c801}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\ListsFeature\ListsFeature.feature">
       <FeatureId>{ee56f930-6777-4282-994e-3d8f3aa012d0}</FeatureId>
     </None>
     <None Include="Features\FBAFeature\FBAFeature.feature">
@@ -122,9 +131,13 @@
     <Content Include="FBAPerWebApplicationContentType\Elements.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="FBAPerWebApplicationListDefinition\Elements.xml" />
+    <Content Include="FBAPerWebApplicationListDefinition\Schema.xml" />
     <Content Include="FBAUserApprovalContentType\Elements.xml" />
-    <Content Include="Features\AdministrationFeature\AdministrationFeature.Template.xml">
-      <DependentUpon>AdministrationFeature.feature</DependentUpon>
+    <Content Include="FBAUserApprovalListDefinition\Elements.xml" />
+    <Content Include="FBAUserApprovalListDefinition\Schema.xml" />
+    <Content Include="Features\ListsFeature\ListsFeature.Template.xml">
+      <DependentUpon>ListsFeature.feature</DependentUpon>
     </Content>
     <Content Include="ADMIN\Nauplius.ADLDS.FBA\FBAUserManager.aspx">
       <SubType>ASPXCodeBehind</SubType>

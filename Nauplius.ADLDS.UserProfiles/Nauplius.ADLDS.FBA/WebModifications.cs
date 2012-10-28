@@ -83,16 +83,16 @@ namespace Nauplius.ADLDS.FBA
                  * scope="Subtree" otherRequiredUserAttributes="sn,givenname,cn" />
                 */
 
-                name = string.Format("add[@name={0}", provider["WebApplicationMembershipProvider"]);
+                name = string.Format("add[@name='{0}'", provider["WebApplicationMembershipProvider"]);
                 xpath = "configuration/system.web/membership/providers";
-                value = String.Format("<add name=""{0}"" type="\"{1}\" server="\"{2}\" port="\"{3}\"" +
-                    "useSSL=""{4}"" enableSearchMethods=""{5}"" userDNAttribute=""{6}"" userNameAttribute=""{7}"" " +
-                    "userContainer=""{8}"" userObjectClass=""{9}"" userFilter=""{10}"" scope=""{11}"" " +
-                    "otherRequiredUserAttributes=""{12}"" />", provider["WebApplicationMembershipProvider"],
-                    ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
-                    "true", provider["ADLDSUserDNAttrib"], provider["ADLDSUserLoginAttrib"], provider["ADLDSUserContainer"],
-                    provider["ADLDSUserObjectClass"], provider["ADLDSUserfilter"], provider["ADLDSUserScope"],
-                    provider["ADLDSUserOtherReqAttrib"]);
+                value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
+                                        "useSSL='{4}' enableSearchMethods='{5}' userDNAttribute='{6}' userNameAttribute='{7}' " +
+                                        "userContainer='{8}' userObjectClass='{9}' userFilter='{10}' scope='{11}' " +
+                                        "otherRequiredUserAttributes='{12}' />", provider["WebApplicationMembershipProvider"],
+                                        ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
+                                        "true", provider["ADLDSUserDNAttrib"], provider["ADLDSUserLoginAttrib"], provider["ADLDSUserContainer"],
+                                        provider["ADLDSUserObjectClass"], provider["ADLDSUserfilter"], provider["ADLDSUserScope"],
+                                        provider["ADLDSUserOtherReqAttrib"]);
                 ModifyWebConfig(webApp, name, xpath, value, SPWebConfigModification.SPWebConfigModificationType.EnsureChildNode);
 
                 /* add name="FabrikamRole" 
@@ -105,20 +105,20 @@ namespace Nauplius.ADLDS.FBA
                  * groupFilter="&amp;(objectCategory=Group)(objectClass=group)" />
                 */
 
-                name = String.Format("add[@name={0}", provider["WebApplicationRoleProvider"]);
+                name = String.Format("add[@name='{0}'", provider["WebApplicationRoleProvider"]);
                 xpath = "configuration/system.web/roleManager/providers";
-                value = String.Format("<add name={0} type={1} server={2} port={3} " +
-                                      "useSSL={4} enableSearchMethods={5} groupNameAttribute={6} " +
-                                      "groupContainer={7} groupNameAlterateSearchAttribute={8} groupMemberAttribute={9} " +
-                                      "userNameAttribute={10} dnAttribute={11} useUserDNAttribute={12} scope={13} " +
-                                      "userFilter={14} groupFilter={15} />", provider["WebApplicationRoleProvider"],
-                                      ProviderRoleType, provider["ADLDSServer"], provider["ADLDSPort"],
-                                      provider["ADLDSUseSSL"], "true", provider["ADLDSGroupNameAttrib"],
-                                      provider["ADLDSGroupContainer"],
-                                      provider["ADLDSGroupNameAltSearchAttrib"], provider["ADLDSGroupMemAttrib"],
-                                      provider["ADLDSLoginAttrib"], provider["ADLDSGroupDNAttrib"], "true",
-                                      provider["ADLDSGroupScope"], provider["ADLDSGroupUserFilter"],
-                                      provider["ADLDSGroupFilter"]);
+                value = String.Format("<add name='{0}' type=''{1}'' server='{2}' port='{3}' " +
+                                        "useSSL='{4}' enableSearchMethods='{5}' groupNameAttribute='{6}' " +
+                                        "groupContainer='{7}' groupNameAlterateSearchAttribute='{8}' groupMemberAttribute='{9}' " +
+                                        "userNameAttribute='{10}' dnAttribute='{11}' useUserDNAttribute='{12}' scope='{13}' " +
+                                        "userFilter='{14}' groupFilter='{15}' />", provider["WebApplicationRoleProvider"],
+                                        ProviderRoleType, provider["ADLDSServer"], provider["ADLDSPort"],
+                                        provider["ADLDSUseSSL"], "true", provider["ADLDSGroupNameAttrib"],
+                                        provider["ADLDSGroupContainer"],
+                                        provider["ADLDSGroupNameAltSearchAttrib"], provider["ADLDSGroupMemAttrib"],
+                                        provider["ADLDSLoginAttrib"], provider["ADLDSGroupDNAttrib"], "true",
+                                        provider["ADLDSGroupScope"], provider["ADLDSGroupUserFilter"],
+                                        provider["ADLDSGroupFilter"]);
                 ModifyWebConfig(webApp, name, xpath, value, SPWebConfigModification.SPWebConfigModificationType.EnsureChildNode);
 
                 try
@@ -194,15 +194,14 @@ namespace Nauplius.ADLDS.FBA
                             {
                                 if (SPWebApplication.Lookup(new Uri(item["WebApplicationUrl"].ToString())).GetResponseUri((SPUrlZone)(item["WebApplicationZone"])).AbsoluteUri == webApp.GetResponseUri(zone).AbsoluteUri)
                                 {
-                                        SPListItem provider = item as SPListItem;
-                                        return provider;
+                                        return item;
                                 }
                             }
                         }
                     }
                 }
             }
-            
+            return null;
         }
     }
 }
