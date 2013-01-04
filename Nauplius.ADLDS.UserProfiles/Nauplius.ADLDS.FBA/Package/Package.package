@@ -3,6 +3,9 @@
   <features>
     <featureReference itemId="ee56f930-6777-4282-994e-3d8f3aa012d0" />
     <featureReference itemId="1ce5787d-a285-484d-8276-3430844cd5b1" />
+    <featureReference itemId="fcd07f51-9439-4d3f-9510-cf65da150478" />
+    <featureReference itemId="3d92ef4e-81d2-4299-87f7-1a383c4404d9" />
+    <featureReference itemId="1710eacf-d1e9-4c5b-be26-c778607804e3" />
   </features>
   <projectItems>
     <projectItemReference itemId="88e2ad5a-9855-4bd3-a7fa-1f9af4492e99" />
