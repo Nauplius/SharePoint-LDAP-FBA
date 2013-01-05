@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Web.Security;
-
+using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Administration.Claims;
 using Microsoft.SharePoint.IdentityModel;
+using Microsoft.SharePoint.Utilities;
 
 namespace Nauplius.ADLDS.FBA
 {
@@ -202,6 +203,97 @@ namespace Nauplius.ADLDS.FBA
                 }
             }
             return null;
+        }
+
+        public static void CreateStsProviderNode(bool removeModification, SPFeatureReceiverProperties properties)
+        {
+            string featureId = properties.Feature.DefinitionId.ToString();
+            SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
+
+            if (webApp.UseClaimsAuthentication)
+            {
+                if (removeModification)
+                {
+                    //remove sts modification  
+                }
+
+                string xpath, xpath2, value, value2;
+                SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
+            
+                foreach (SPServer spServer in SPFarm.Local.Servers)
+                {
+                    string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
+                    var config = new XmlDocument();
+                    config.Load(path);
+
+                    if (config.SelectSingleNode(@"configuration/system.web") == null)
+                    {
+                        CreateStsXPath(config, path, "configuration/system.web");
+                    }
+
+                    if (config.SelectSingleNode(@"configuration/system.web/membership") == null)
+                    {
+                        CreateStsXPath(config, path, "configuration/system.web/membership");
+                    }
+
+                    if (config.SelectSingleNode(@"configuration/system.web/membership/providers") == null)
+                    {
+                        CreateStsXPath(config, path, "configuration/system.web/membership/providers");
+                    }
+
+                    if (config.SelectSingleNode(@"configuration/system.web/roleManager") == null)
+                    {
+                        CreateStsXPath(config, path, "configuration/system.web/roleManager");
+                    }
+
+                    if (config.SelectSingleNode(@"configuration/system.web/roleManager/providers") == null)
+                    {
+                        CreateStsXPath(config, path, "configuration/system.web/roleManager/providers");
+                    }
+
+
+                    xpath = "configuration/system.web/membership/providers";
+                    value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
+                                            "useSSL='{4}' enableSearchMethods='{5}' userDNAttribute='{6}' userNameAttribute='{7}' " +
+                                            "userContainer='{8}' userObjectClass='{9}' userFilter='{10}' scope='{11}' " +
+                                            "otherRequiredUserAttributes='{12}' />", provider["WebApplicationMembershipProvider"],
+                                            ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
+                                            "true", provider["ADLDSUserDNAttrib"], provider["ADLDSUserLoginAttrib"], provider["ADLDSUserContainer"],
+                                            provider["ADLDSUserObjectClass"], provider["ADLDSUserfilter"], provider["ADLDSUserScope"],
+                                            provider["ADLDSUserOtherReqAttrib"]);
+
+                    xpath2 = "configuration/system.web/roleManager/providers";
+                    value2 = String.Format("<add name='{0}' type=''{1}'' server='{2}' port='{3}' " +
+                                            "useSSL='{4}' enableSearchMethods='{5}' groupNameAttribute='{6}' " +
+                                            "groupContainer='{7}' groupNameAlterateSearchAttribute='{8}' groupMemberAttribute='{9}' " +
+                                            "userNameAttribute='{10}' dnAttribute='{11}' useUserDNAttribute='{12}' scope='{13}' " +
+                                            "userFilter='{14}' groupFilter='{15}' />", provider["WebApplicationRoleProvider"],
+                                            ProviderRoleType, provider["ADLDSServer"], provider["ADLDSPort"],
+                                            provider["ADLDSUseSSL"], "true", provider["ADLDSGroupNameAttrib"],
+                                            provider["ADLDSGroupContainer"],
+                                            provider["ADLDSGroupNameAltSearchAttrib"], provider["ADLDSGroupMemAttrib"],
+                                            provider["ADLDSLoginAttrib"], provider["ADLDSGroupDNAttrib"], "true",
+                                            provider["ADLDSGroupScope"], provider["ADLDSGroupUserFilter"],
+                                            provider["ADLDSGroupFilter"]);   
+                }
+            }
+        }
+
+        public static void CreateStsXPath(XmlDocument config, string path, string xpath)
+        {
+            if (config.SelectSingleNode(xpath) == null)
+            {
+                XmlNode parentNode = config.SelectSingleNode(xpath.Remove(xpath.LastIndexOf("/", System.StringComparison.Ordinal)));
+                XmlNode childNode = config.CreateNode(XmlNodeType.Element, xpath.Substring(xpath.LastIndexOf("/", System.StringComparison.Ordinal) + 1), "");
+                if (parentNode != null) parentNode.AppendChild(childNode);
+                try
+                {
+                    config.Save(path);
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
     }
 }

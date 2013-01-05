@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -36,15 +37,30 @@ namespace Nauplius.ADLDS.FBA
         public override void Execute(Guid targetInstanceId)
         {
             Logging.LogMessage(900, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Entering " + tJobName);
-            List<XmlDocument> stsConfigurations = new List<XmlDocument>();
+            var stsConfigurations = new Dictionary<SPServer, XmlDocument>();
+
+            
 
             foreach (SPServer spServer in SPFarm.Local.Servers)
             {
                 string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
-                XmlDocument config = new XmlDocument();
+                var config = new XmlDocument();
                 config.Load(path);
-                stsConfigurations.Add(config);
+                stsConfigurations.Add(spServer, config);
             }
+
+            if (stsConfigurations.Count > 1)
+            {
+                //compare
+
+                
+            }
+            else
+            {
+                Logging.LogMessage(902, Logging.LogCategories.TimerJob, TraceSeverity.Verbose, "Single server in farm.");
+            }
+
+            Logging.LogMessage(901, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Leaving " + tJobName);
         }
     }
 }
