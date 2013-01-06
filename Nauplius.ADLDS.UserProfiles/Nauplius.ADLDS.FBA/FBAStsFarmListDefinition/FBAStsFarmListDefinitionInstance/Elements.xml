@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <ListInstance Title="Nauplius.ADLDS.FBA - StsFarm" OnQuickLaunch="FALSE" TemplateType="10000" Url="Lists/Nauplius.ADLDS.FBA-StsFarm" Description="AD LDS/ADAM FBA Security Token Service Validation Fragment"></ListInstance>
+</Elements>

@@ -33,6 +33,7 @@ namespace Nauplius.ADLDS.FBA
             //public static string Profiles = "Profiles";
             //public static string LDAP = "LDAP";
             public static string TimerJob = "Timer Job";
+            public static string Health = "Health";
         }
 
         public static string DefaultName
@@ -58,12 +59,13 @@ namespace Nauplius.ADLDS.FBA
                         //new SPDiagnosticsCategory(LogCategories.Profiles, null, TraceSeverity.Unexpected, EventSeverity.Error, 0, 0, false, true),
                         //new SPDiagnosticsCategory(LogCategories.LDAP, null, TraceSeverity.Unexpected, EventSeverity.Error, 0, 0, false, true),
                         new SPDiagnosticsCategory(LogCategories.TimerJob, null, TraceSeverity.Medium, EventSeverity.Information, 0, 0, false, true),
+                        new SPDiagnosticsCategory(LogCategories.Health, null, TraceSeverity.Medium, EventSeverity.Information, 0, 0, false, true),
                     })
             };
             return areas;
         }
 
-        public static void LogMessage(ushort id, string LogCategory, TraceSeverity traceSeverity, string message)
+        public static void LogMessage(ushort id, string LogCategory, TraceSeverity traceSeverity, string message, object[] data)
         {
             try
             {
@@ -72,7 +74,7 @@ namespace Nauplius.ADLDS.FBA
                 if (log != null)
                 {
                     SPDiagnosticsCategory category = log.Areas[NaupliusDiagnosticArea].Categories[LogCategory];
-                    log.WriteTrace(id, category, traceSeverity, message);
+                    log.WriteTrace(id, category, traceSeverity, message, data);
                 }
             }
             catch (Exception)

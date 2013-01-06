@@ -89,6 +89,12 @@
     <Compile Include="Features\FBAFeature\FBAFeature.EventReceiver.cs">
       <DependentUpon>FBAFeature.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\STSDeploymentTimerJob\STSDeploymentTimerJob.EventReceiver.cs">
+      <DependentUpon>STSDeploymentTimerJob.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.EventReceiver.cs">
+      <DependentUpon>STSSyncMonitorFeature.feature</DependentUpon>
+    </Compile>
     <Compile Include="Layouts\Nauplius.ADLDS.FBA\login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -98,6 +104,7 @@
     </Compile>
     <Compile Include="Logging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="STSHealthAnalysisRule.cs" />
     <Compile Include="STSSyncMonitor.cs" />
     <Compile Include="WebModifications.cs" />
   </ItemGroup>
@@ -105,26 +112,26 @@
     <None Include="ADMIN\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{88e2ad5a-9855-4bd3-a7fa-1f9af4492e99}</SharePointProjectItemId>
     </None>
+    <None Include="FBAStsFarmListDefinition\FBAStsFarmListDefinitionInstance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{59bae7f8-6964-42c9-939e-ae859bdf8eb8}</SharePointProjectItemId>
+    </None>
+    <None Include="FBAStsFarmListDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{07d527e7-f19f-488e-9513-45a352528e08}</SharePointProjectItemId>
+    </None>
+    <None Include="FBAWebApplicationListDefinition\FBAWebApplicationListDefinitionInstance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{1e36645c-2b3b-4ac9-89c9-4dd41e8f08a1}</SharePointProjectItemId>
+    </None>
+    <None Include="FBAWebApplicationListDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{d3997312-bff5-496f-a4a3-fa720b6138a1}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\STSDeploymentTimerJob\STSDeploymentTimerJob.feature">
+      <FeatureId>{27680adf-2511-4ab5-a2b1-a5cb78614041}</FeatureId>
+    </None>
     <None Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.feature">
       <FeatureId>{1710eacf-d1e9-4c5b-be26-c778607804e3}</FeatureId>
     </None>
-    <None Include="Features\TimerJobFeature\TimerJobFeature.feature">
-      <FeatureId>{3d92ef4e-81d2-4299-87f7-1a383c4404d9}</FeatureId>
-    </None>
     <None Include="NaupliusApplicationPageLinks\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{c6d0e2a0-8079-4eaa-9fe5-227720692e71}</SharePointProjectItemId>
-    </None>
-    <None Include="FBAPerWebApplicationContentType\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{16989441-e45e-4d32-8f49-fd44ca5f8097}</SharePointProjectItemId>
-    </None>
-    <None Include="FBAPerWebApplicationListDefinition\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{053db551-4dd7-4d36-8050-f12442761407}</SharePointProjectItemId>
-    </None>
-    <None Include="FBAUserApprovalContentType\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{bc5f1db5-70a2-4d82-806b-17c9447a90f9}</SharePointProjectItemId>
-    </None>
-    <None Include="FBAUserApprovalListDefinition\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{7c54e4f9-99c4-41f9-8a4c-79225fe8c801}</SharePointProjectItemId>
     </None>
     <None Include="Features\AdminPagesFeature\AdminPagesFeature.feature">
       <FeatureId>{fcd07f51-9439-4d3f-9510-cf65da150478}</FeatureId>
@@ -148,21 +155,19 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="FBAStsFarmListDefinition\Elements.xml" />
+    <Content Include="FBAStsFarmListDefinition\FBAStsFarmListDefinitionInstance\Elements.xml" />
+    <Content Include="FBAStsFarmListDefinition\Schema.xml" />
+    <Content Include="FBAWebApplicationListDefinition\Elements.xml" />
+    <Content Include="FBAWebApplicationListDefinition\FBAWebApplicationListDefinitionInstance\Elements.xml" />
+    <Content Include="FBAWebApplicationListDefinition\Schema.xml" />
+    <Content Include="Features\STSDeploymentTimerJob\STSDeploymentTimerJob.Template.xml">
+      <DependentUpon>STSDeploymentTimerJob.feature</DependentUpon>
+    </Content>
     <Content Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.Template.xml">
       <DependentUpon>STSSyncMonitorFeature.feature</DependentUpon>
     </Content>
-    <Content Include="Features\TimerJobFeature\TimerJobFeature.Template.xml">
-      <DependentUpon>TimerJobFeature.feature</DependentUpon>
-    </Content>
     <Content Include="NaupliusApplicationPageLinks\Elements.xml" />
-    <Content Include="FBAPerWebApplicationContentType\Elements.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="FBAPerWebApplicationListDefinition\Elements.xml" />
-    <Content Include="FBAPerWebApplicationListDefinition\Schema.xml" />
-    <Content Include="FBAUserApprovalContentType\Elements.xml" />
-    <Content Include="FBAUserApprovalListDefinition\Elements.xml" />
-    <Content Include="FBAUserApprovalListDefinition\Schema.xml" />
     <Content Include="Features\AdminPagesFeature\AdminPagesFeature.Template.xml">
       <DependentUpon>AdminPagesFeature.feature</DependentUpon>
     </Content>

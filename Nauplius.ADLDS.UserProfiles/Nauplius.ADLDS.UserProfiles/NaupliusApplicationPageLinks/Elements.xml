@@ -1,3 +1,25 @@
-﻿﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomActionGroup Id="820FDE62-62F6-403F-8F85-8C6F85BCF1B7"
+							 Title="Nauplius AD LDS User Profiles"
+							 Location="Microsoft.SharePoint.Administration.Applications"
+							 RequiredAdmin="Farm"
+							 ImageUrl="/_admin/Nauplius.ADLDS.UserProfiles/icon_32x32.png"
+							 Sequence="120" />
+  <CustomAction Id="31819CDA-676A-450F-88E5-064F5A7FEA27"
+							 Title="Configure Global Settings"
+							 FeatureId="71fb6706-a085-46fe-91a5-a6f76153e592"
+							 Sequence="10"
+							 GroupId="820FDE62-62F6-403F-8F85-8C6F85BCF1B7"
+							 Location="Microsoft.SharePoint.Administration.Applications">
+    <UrlAction Url="/_admin/Nauplius.ADLDS.UserProfiles/ADLDSGlobalSettings.aspx" />
+  </CustomAction>
+  <CustomAction Id="6D015267-2DB4-456D-90B3-F928B09779C3"
+								Title="Configure Web Applications Settings"
+								FeatureId="71fb6706-a085-46fe-91a5-a6f76153e592"
+								Sequence="20"
+								GroupId="820FDE62-62F6-403F-8F85-8C6F85BCF1B7"
+								Location="Microsoft.SharePoint.Administration.Applications">
+    <UrlAction Url="/_admin/Nauplius.ADLDS.UserProfiles/ADLDSWebApplicationSettings.aspx"/>
+  </CustomAction>
 </Elements>

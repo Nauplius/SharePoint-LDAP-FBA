@@ -18,8 +18,11 @@ namespace Nauplius.ADLDS.FBA
     internal class STSSyncMonitor : SPJobDefinition
     {
         private const string tJobName = "Nauplius ADLDS FBA STS Sync Monitor";
+        private static readonly XmlDocument MasterXmlFragment = new XmlDocument();
+        private static XmlNode _masterXmlNode = null;
 
-        public STSSyncMonitor() : base()
+        public STSSyncMonitor()
+            : base()
         {
         }
 
@@ -36,31 +39,86 @@ namespace Nauplius.ADLDS.FBA
 
         public override void Execute(Guid targetInstanceId)
         {
-            Logging.LogMessage(900, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Entering " + tJobName);
-            var stsConfigurations = new Dictionary<SPServer, XmlDocument>();
+            Logging.LogMessage(900, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Entering " + tJobName,
+                               new object[] {null});
 
-            
-
-            foreach (SPServer spServer in SPFarm.Local.Servers)
+            SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
+            using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
             {
-                string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
-                var config = new XmlDocument();
-                config.Load(path);
-                stsConfigurations.Add(spServer, config);
-            }
+                using (SPWeb site = siteCollection.OpenWeb())
+                {
+                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - StsFarm");
+                    if (list != null)
+                    {
+                        if (list.ItemCount >= 1)
+                        {
+                            foreach (SPListItem item in list.Items)
+                            {
+                                if (item["StsConfig"].ToString() == "MasterXmlFragment")
+                                {
+                                    MasterXmlFragment.LoadXml(item["XmlStsConfig"].ToString());
+                                    _masterXmlNode = MasterXmlFragment.DocumentElement;
 
-            if (stsConfigurations.Count > 1)
-            {
-                //compare
+                                    if (MasterXmlFragment == null)
+                                    {
+                                        Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
+                                                           "AD LDS/ADAM Forms Based Authentication not configured.",
+                                                           new object[] {null});
+                                    }
+                                    else if (MasterXmlFragment != null)
+                                    {
+                                        foreach (SPServer server in SPFarm.Local.Servers)
+                                        {
 
-                
-            }
-            else
-            {
-                Logging.LogMessage(902, Logging.LogCategories.TimerJob, TraceSeverity.Verbose, "Single server in farm.");
-            }
+                                            string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
+                                            var config = new XmlDocument();
+                                            config.Load(path);
 
-            Logging.LogMessage(901, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Leaving " + tJobName);
+                                            XmlNode systemwebChild =
+                                                config.SelectSingleNode("configuration/system.web");
+
+                                            if (systemwebChild != null)
+                                            {
+                                                if (systemwebChild.ParentNode != null)
+                                                    systemwebChild.ParentNode.RemoveChild(systemwebChild);
+                                                try
+                                                {
+                                                    config.Save(path);
+                                                }
+                                                catch (Exception)
+                                                {
+                                                    Logging.LogMessage(902, Logging.LogCategories.Health,
+                                                                       TraceSeverity.Verbose,
+                                                                       "Failed to save removal of child node to Security Token Service web.config on {0}.",
+                                                                       new object[] {server.Name});
+                                                }
+                                            }
+
+                                            XmlNode importNode = config.ImportNode(MasterXmlFragment, true);
+                                            if (config.DocumentElement != null)
+                                                config.DocumentElement.AppendChild(importNode);
+
+                                            try
+                                            {
+                                                config.Save(path);
+                                            }
+                                            catch (Exception)
+                                            {
+                                                Logging.LogMessage(902, Logging.LogCategories.Health,
+                                                                   TraceSeverity.Verbose,
+                                                                   "Failed to save updates to Security Token Service web.config on {0}.",
+                                                                   new object[] {server.Name});
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Logging.LogMessage(900, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Leaving " + tJobName,
+                   new object[] { null });
         }
     }
 }
