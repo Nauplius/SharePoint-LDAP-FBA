@@ -109,7 +109,7 @@ namespace Nauplius.ADLDS.FBA
 
         public override SPHealthCategory Category
         {
-            get { return SPHealthCategory.System; }
+            get { return SPHealthCategory.Configuration; }
         }
 
         public override SPHealthRepairStatus Repair()
