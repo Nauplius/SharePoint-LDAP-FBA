@@ -89,8 +89,8 @@
     <Compile Include="Features\FBAFeature\FBAFeature.EventReceiver.cs">
       <DependentUpon>FBAFeature.feature</DependentUpon>
     </Compile>
-    <Compile Include="Features\STSDeploymentTimerJob\STSDeploymentTimerJob.EventReceiver.cs">
-      <DependentUpon>STSDeploymentTimerJob.feature</DependentUpon>
+    <Compile Include="Features\STSHealthAnalyzerFeature\STSHealthAnalyzerFeature.EventReceiver.cs">
+      <DependentUpon>STSHealthAnalyzerFeature.feature</DependentUpon>
     </Compile>
     <Compile Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.EventReceiver.cs">
       <DependentUpon>STSSyncMonitorFeature.feature</DependentUpon>
@@ -124,8 +124,8 @@
     <None Include="FBAWebApplicationListDefinition\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{d3997312-bff5-496f-a4a3-fa720b6138a1}</SharePointProjectItemId>
     </None>
-    <None Include="Features\STSDeploymentTimerJob\STSDeploymentTimerJob.feature">
-      <FeatureId>{27680adf-2511-4ab5-a2b1-a5cb78614041}</FeatureId>
+    <None Include="Features\STSHealthAnalyzerFeature\STSHealthAnalyzerFeature.feature">
+      <FeatureId>{43f06a04-fcf2-49c8-aeb1-8a1dc15d8859}</FeatureId>
     </None>
     <None Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.feature">
       <FeatureId>{1710eacf-d1e9-4c5b-be26-c778607804e3}</FeatureId>
@@ -161,8 +161,8 @@
     <Content Include="FBAWebApplicationListDefinition\Elements.xml" />
     <Content Include="FBAWebApplicationListDefinition\FBAWebApplicationListDefinitionInstance\Elements.xml" />
     <Content Include="FBAWebApplicationListDefinition\Schema.xml" />
-    <Content Include="Features\STSDeploymentTimerJob\STSDeploymentTimerJob.Template.xml">
-      <DependentUpon>STSDeploymentTimerJob.feature</DependentUpon>
+    <Content Include="Features\STSHealthAnalyzerFeature\STSHealthAnalyzerFeature.Template.xml">
+      <DependentUpon>STSHealthAnalyzerFeature.feature</DependentUpon>
     </Content>
     <Content Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.Template.xml">
       <DependentUpon>STSSyncMonitorFeature.feature</DependentUpon>

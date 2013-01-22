@@ -1,12 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<List xmlns:ows="Microsoft SharePoint" Title="FBAStsFarmListDefinition" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/FBAStsFarmListDefinition" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/">
+<List xmlns:ows="Microsoft SharePoint" Title="FBAStsFarmListDefinition" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/FBAStsFarmListDefinition" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/" EnableContentTypes="TRUE">
   <MetaData>
     <ContentTypes>
       
       
-    <ContentType ID="0x010021a72f4a95974325949c8e21e4c10e19" Name="ListFieldsContentType"><FieldRefs><FieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" /><FieldRef ID="{e8d718ac-60eb-459e-8e20-86bd4156c263}" Name="XMLStsConfig" /></FieldRefs></ContentType><ContentTypeRef ID="0x01">
-        <Folder TargetName="Item" />
-      </ContentTypeRef><ContentTypeRef ID="0x0120" /></ContentTypes>
+    <ContentType ID="0x010021a72f4a95974325949c8e21e4c10e19" Name="ListFieldsContentType"><FieldRefs><FieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" /><FieldRef ID="{e8d718ac-60eb-459e-8e20-86bd4156c263}" Name="XMLStsConfig" /></FieldRefs></ContentType></ContentTypes>
     <Fields>
        
     <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" DisplayName="StsConfig" Required="TRUE" SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="Title" MaxLength="255" /><Field Name="XMLStsConfig" ID="{e8d718ac-60eb-459e-8e20-86bd4156c263}" DisplayName="XMLStsConfig" Type="Note" Required="TRUE" /></Fields>

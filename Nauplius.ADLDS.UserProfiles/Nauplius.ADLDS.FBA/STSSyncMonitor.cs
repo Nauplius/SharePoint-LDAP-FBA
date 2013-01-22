@@ -32,7 +32,7 @@ namespace Nauplius.ADLDS.FBA
         }
 
         public STSSyncMonitor(String name, SPWebApplication adminWebApplication)
-            : base(name, adminWebApplication, null, SPJobLockType.Job)
+            : base(name, adminWebApplication, null, SPJobLockType.None)
         {
             this.Title = tJobName;
         }

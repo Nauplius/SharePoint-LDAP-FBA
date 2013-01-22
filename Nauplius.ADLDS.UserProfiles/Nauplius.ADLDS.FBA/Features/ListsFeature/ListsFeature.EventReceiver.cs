@@ -17,7 +17,7 @@ namespace Nauplius.ADLDS.FBA.Features.AdministrationFeature
     public class AdministrationFeatureEventReceiver : SPFeatureReceiver
     {
         // Uncomment the method below to handle the event raised after a feature has been activated.
-
+        /*
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
             SPWeb web = properties.Feature.Parent as SPWeb;
@@ -92,6 +92,7 @@ namespace Nauplius.ADLDS.FBA.Features.AdministrationFeature
 
         //public override void FeatureUpgrading(SPFeatureReceiverProperties properties, string upgradeActionName, System.Collections.Generic.IDictionary<string, string> parameters)
         //{
-        //}
+        //}*/
     }
+         
 }
