@@ -200,7 +200,7 @@
 				Title="WorkEmail Attribute Field"
 				Description="The field associated with WorkEmail.">
 				<template_inputformcontrols>
-					<wssuc:InputFormControl runat="server" LabelText="WebSite:" ExampleText="mail" LabelAssociatedControlId="tBWE">
+					<wssuc:InputFormControl runat="server" LabelText="WorkEmail:" ExampleText="mail" LabelAssociatedControlId="tBWE">
 						<Template_Control>                   
 							<div class="ms-authoringcontrols">
 								<SharePoint:InputFormTextBox runat="server" ID="tBWE" Width="60%" />              
