@@ -19,7 +19,6 @@ namespace Nauplius.ADLDS.FBA
     {
         private const string tJobName = "Nauplius ADLDS FBA STS Sync Monitor";
         private static readonly XmlDocument MasterXmlFragment = new XmlDocument();
-        private static XmlNode _masterXmlNode = null;
 
         public STSSyncMonitor()
             : base()
@@ -56,8 +55,7 @@ namespace Nauplius.ADLDS.FBA
                             {
                                 if (item["StsConfig"].ToString() == "MasterXmlFragment")
                                 {
-                                    MasterXmlFragment.LoadXml(item["XmlStsConfig"].ToString());
-                                    _masterXmlNode = MasterXmlFragment.DocumentElement;
+                                    MasterXmlFragment.LoadXml(item["XMLStsConfig"].ToString());
 
                                     if (MasterXmlFragment == null)
                                     {
@@ -67,37 +65,17 @@ namespace Nauplius.ADLDS.FBA
                                     }
                                     else if (MasterXmlFragment != null)
                                     {
-                                        foreach (SPServer server in SPFarm.Local.Servers)
+                                        string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
+                                        var config = new XmlDocument();
+                                        config.Load(path);
+
+                                        XmlNode systemwebChild =
+                                            config.SelectSingleNode("configuration/system.web");
+
+                                        if (systemwebChild != null)
                                         {
-
-                                            string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
-                                            var config = new XmlDocument();
-                                            config.Load(path);
-
-                                            XmlNode systemwebChild =
-                                                config.SelectSingleNode("configuration/system.web");
-
-                                            if (systemwebChild != null)
-                                            {
-                                                if (systemwebChild.ParentNode != null)
-                                                    systemwebChild.ParentNode.RemoveChild(systemwebChild);
-                                                try
-                                                {
-                                                    config.Save(path);
-                                                }
-                                                catch (Exception)
-                                                {
-                                                    Logging.LogMessage(902, Logging.LogCategories.Health,
-                                                                       TraceSeverity.Verbose,
-                                                                       "Failed to save removal of child node to Security Token Service web.config on {0}.",
-                                                                       new object[] {server.Name});
-                                                }
-                                            }
-
-                                            XmlNode importNode = config.ImportNode(MasterXmlFragment, true);
-                                            if (config.DocumentElement != null)
-                                                config.DocumentElement.AppendChild(importNode);
-
+                                            if (systemwebChild.ParentNode != null)
+                                                systemwebChild.ParentNode.RemoveChild(systemwebChild);
                                             try
                                             {
                                                 config.Save(path);
@@ -105,10 +83,26 @@ namespace Nauplius.ADLDS.FBA
                                             catch (Exception)
                                             {
                                                 Logging.LogMessage(902, Logging.LogCategories.Health,
-                                                                   TraceSeverity.Verbose,
-                                                                   "Failed to save updates to Security Token Service web.config on {0}.",
-                                                                   new object[] {server.Name});
+                                                                    TraceSeverity.Verbose,
+                                                                    "Failed to save removal of child node to Security Token Service web.config on {0}.",
+                                                                    new object[] {SPServer.Local.DisplayName});
                                             }
+                                        }
+
+                                        XmlNode importNode = config.ImportNode(MasterXmlFragment.SelectSingleNode("system.web"), true);
+                                        if (config.DocumentElement != null)
+                                            config.DocumentElement.AppendChild(importNode);
+
+                                        try
+                                        {
+                                            config.Save(path);
+                                        }
+                                        catch (Exception)
+                                        {
+                                            Logging.LogMessage(902, Logging.LogCategories.Health,
+                                                                TraceSeverity.Verbose,
+                                                                "Failed to save updates to Security Token Service web.config on {0}.",
+                                                                new object[] {SPServer.Local.DisplayName});
                                         }
                                     }
                                 }

@@ -11,12 +11,12 @@ namespace Nauplius.ADLDS.FBA
 {
     internal class STSHealthAnalysisRule : SPRepairableHealthAnalysisRule
     {
-        private List<SPServer> _servers = new List<SPServer>(); 
+        //private List<SPServer> _servers = new List<SPServer>(); 
         private const string _summary = @"Security Token Service has incorrect or missing entries used to support Active Directory Lightweight Directory Services/Active Directory Application Mode.";
         private const string _explanation = @"The Security Token Service configuration file must be consistent between all SharePoint Servers in the farm.";
         private const string _remedy = "";
         private static readonly XmlDocument MasterXmlFragment = new XmlDocument();
-        private static XmlNode _masterXmlNode = null;
+        //private static XmlNode _masterXmlNode = null;
 
         public override SPHealthCheckStatus Check()
         {
@@ -39,8 +39,8 @@ namespace Nauplius.ADLDS.FBA
                             {
                                 if (item["StsConfig"].ToString() == "MasterXmlFragment")
                                 {
-                                    MasterXmlFragment.LoadXml(item["XmlStsConfig"].ToString());
-                                    _masterXmlNode = MasterXmlFragment.DocumentElement;
+                                    MasterXmlFragment.LoadXml((string)item["XMLStsConfig"]);
+                                    //_masterXmlNode = MasterXmlFragment.DocumentElement;
 
                                     if (MasterXmlFragment == null)
                                     {
@@ -59,32 +59,20 @@ namespace Nauplius.ADLDS.FBA
                 }
             }
 
-            foreach (SPServer server in SPFarm.Local.Servers)
+            uint num = 0;
+            string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
+            var config = new XmlDocument();
+            config.Load(path);
+
+            XmlNode xmlNode = config.SelectSingleNode("configuration/system.web");
+
+            if (xmlNode != null && MasterXmlFragment.OuterXml != xmlNode.OuterXml)
             {
-                uint num = 0;
-                string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
-                var config = new XmlDocument();
-                config.Load(path);
-
-                XmlNode xmlNode = config.SelectSingleNode("system.web");
-
-                if (xmlNode == null)
-                {
-                    return SPHealthCheckStatus.Failed;
-                }
-
-                if (MasterXmlFragment != xmlNode)
-                {
-                    Logging.LogMessage(901, Logging.LogCategories.Health, TraceSeverity.Unexpected, "SharePoint Server {0} does not match master Security Token Service configuration.", new object[] {server.Name});
-
-                    if (!_servers.Contains(server))
-                    {
-                        _servers.Add(server);
-                    }
-                }
+                Logging.LogMessage(901, Logging.LogCategories.Health, TraceSeverity.Unexpected, "SharePoint Server {0} does not match master Security Token Service configuration.", new object[] {SPServer.Local.DisplayName});
+                return SPHealthCheckStatus.Failed;
             }
 
-            return _servers.Count >= 1 ? SPHealthCheckStatus.Failed : SPHealthCheckStatus.Passed;
+            return SPHealthCheckStatus.Passed;
         }
 
         public override string Summary
@@ -114,8 +102,6 @@ namespace Nauplius.ADLDS.FBA
 
         public override SPHealthRepairStatus Repair()
         {
-            foreach (SPServer server in SPFarm.Local.Servers)
-            {
                 Logging.LogMessage(903, Logging.LogCategories.Health, TraceSeverity.Verbose,
                                    "Starting Security Token Service configuration repair.", new object[] {null});
 
@@ -133,8 +119,8 @@ namespace Nauplius.ADLDS.FBA
                                 {
                                     if (item["StsConfig"].ToString() == "MasterXmlFragment")
                                     {
-                                        MasterXmlFragment.LoadXml(item["XmlStsConfig"].ToString());
-                                        _masterXmlNode = MasterXmlFragment.DocumentElement;
+                                        MasterXmlFragment.LoadXml(item["XMLStsConfig"].ToString());
+                                        //_masterXmlNode = MasterXmlFragment.DocumentElement;
 
                                         if (MasterXmlFragment == null)
                                         {
@@ -162,12 +148,12 @@ namespace Nauplius.ADLDS.FBA
                                                 {
                                                     Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
                                                                        "Failed to save removal of child node to Security Token Service web.config on {0}.",
-                                                                       new object[] { server.Name });
+                                                                       new object[] { SPServer.Local.DisplayName });
                                                     return SPHealthRepairStatus.Failed;
                                                 }
                                             }
 
-                                            XmlNode importNode = config.ImportNode(MasterXmlFragment, true);
+                                            XmlNode importNode = config.ImportNode(MasterXmlFragment.SelectSingleNode("system.web"), true);
                                             if (config.DocumentElement != null)
                                                 config.DocumentElement.AppendChild(importNode);
 
@@ -179,7 +165,7 @@ namespace Nauplius.ADLDS.FBA
                                             {
                                                 Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
                                                                    "Failed to save updates to Security Token Service web.config on {0}.",
-                                                                   new object[] { server.Name });
+                                                                   new object[] { SPServer.Local.DisplayName });
                                                 return SPHealthRepairStatus.Failed;
                                             }
                                         }
@@ -190,7 +176,6 @@ namespace Nauplius.ADLDS.FBA
                     }
                     return SPHealthRepairStatus.Succeeded;
                 }
-            }
             return SPHealthRepairStatus.Succeeded;
         }
 

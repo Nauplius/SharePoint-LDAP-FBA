@@ -205,6 +205,23 @@ namespace Nauplius.ADLDS.FBA
             return null;
         }
 
+        public static void BuildStsProviderNode(bool removeModification, SPFeatureReceiverProperties properties)
+        {
+            string featureId = properties.Feature.DefinitionId.ToString();
+            SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
+
+            if (webApp.UseClaimsAuthentication)
+            {
+                if (removeModification)
+                {
+                    //remove STS changes from MasterXmlFragment
+                }
+
+
+            }
+        }
+        
+        //don't use? All STS changes should happen in timer job
         public static void CreateStsProviderNode(bool removeModification, SPFeatureReceiverProperties properties)
         {
             string featureId = properties.Feature.DefinitionId.ToString();

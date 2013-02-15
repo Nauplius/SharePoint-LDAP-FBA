@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Administration.Health;
+using Microsoft.SharePoint.Utilities;
 
 namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
 {
@@ -20,6 +22,7 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
     public class STSSyncMonitorFeatureEventReceiver : SPFeatureReceiver
     {
         const string tJobName = "Nauplius ADLDS FBA STS Sync Monitor";
+        private static readonly XmlDocument MasterXmlFragment = new XmlDocument();
 
         // Uncomment the method below to handle the event raised after a feature has been activated.
 
@@ -41,6 +44,38 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
                 var jobSchedule = new SPOneTimeSchedule(DateTime.UtcNow);
                 newTimerJob.Schedule = jobSchedule;
                 newTimerJob.Update();
+            }
+
+            //build the Master XML Fragment
+            SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
+            using (var siteCollection = new SPSite(adminWebApp.Sites[0].Url))
+            {
+                using (var site = siteCollection.OpenWeb())
+                {
+                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - StsFarm");
+                    if (list == null) return;
+                    if (list.ItemCount == 0)
+                    {
+                        var path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
+                        var config = new XmlDocument();
+                        config.Load(path);
+
+                        XmlNode systemwebChild =
+                            config.SelectSingleNode("configuration/system.web");
+
+                        if (systemwebChild != null)
+                        {
+                            SPListItem item = list.Items.Add();
+                            item["StsConfig"] = "MasterXmlFragment";
+                            item["XMLStsConfig"] = systemwebChild.OuterXml;
+                            item.Update();
+                        }
+                    }
+                    else if (list.ItemCount >= 1)
+                    {
+                        //load existing file
+                    }
+                }
             }
         }
 
