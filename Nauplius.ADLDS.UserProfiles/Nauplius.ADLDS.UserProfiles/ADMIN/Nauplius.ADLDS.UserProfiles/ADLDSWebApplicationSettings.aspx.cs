@@ -84,6 +84,7 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles
                                         updateItem["ADLDSUseSSL"] = cBUseSSL.Checked;
                                         updateItem["ADLDSLoginAttrib"] = tBLoginAttrib.Text;
                                         updateItem.Update();
+                                        return;
                                     }
                                 }
 
