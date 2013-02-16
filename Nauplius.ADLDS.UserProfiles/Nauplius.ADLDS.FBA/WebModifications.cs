@@ -179,24 +179,30 @@ namespace Nauplius.ADLDS.FBA
 
         public static SPListItem GetClaimProvider(SPWebApplication webApp, SPUrlZone zone)
         {
-            IEnumerable<SPAuthenticationProvider> providers = webApp.GetIisSettingsWithFallback(zone).ClaimsAuthenticationProviders;
+            //IEnumerable<SPAuthenticationProvider> providers = webApp.GetIisSettingsWithFallback(zone).ClaimsAuthenticationProviders;
             SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
 
             using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
             {
                 using (SPWeb site = siteCollection.OpenWeb())
                 {
-                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - Administration");
+                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - WebApplicationSettings");
                     if (list != null)
                     {
                         if (list.ItemCount >= 1)
                         {
                             foreach (SPListItem item in list.Items)
                             {
+                                if (item["WebApplicationUrl"].ToString() == webApp.GetResponseUri(zone).AbsoluteUri)
+                                {
+                                    return item;
+                                }
+                                /*
                                 if (SPWebApplication.Lookup(new Uri(item["WebApplicationUrl"].ToString())).GetResponseUri((SPUrlZone)(item["WebApplicationZone"])).AbsoluteUri == webApp.GetResponseUri(zone).AbsoluteUri)
                                 {
                                         return item;
                                 }
+                                 */
                             }
                         }
                     }

@@ -11,12 +11,10 @@ namespace Nauplius.ADLDS.FBA
 {
     internal class STSHealthAnalysisRule : SPRepairableHealthAnalysisRule
     {
-        //private List<SPServer> _servers = new List<SPServer>(); 
         private const string _summary = @"Security Token Service has incorrect or missing entries used to support Active Directory Lightweight Directory Services/Active Directory Application Mode.";
         private const string _explanation = @"The Security Token Service configuration file must be consistent between all SharePoint Servers in the farm.";
         private const string _remedy = "";
         private static readonly XmlDocument MasterXmlFragment = new XmlDocument();
-        //private static XmlNode _masterXmlNode = null;
 
         public override SPHealthCheckStatus Check()
         {
@@ -40,7 +38,6 @@ namespace Nauplius.ADLDS.FBA
                                 if (item["StsConfig"].ToString() == "MasterXmlFragment")
                                 {
                                     MasterXmlFragment.LoadXml((string)item["XMLStsConfig"]);
-                                    //_masterXmlNode = MasterXmlFragment.DocumentElement;
 
                                     if (MasterXmlFragment == null)
                                     {
@@ -102,61 +99,43 @@ namespace Nauplius.ADLDS.FBA
 
         public override SPHealthRepairStatus Repair()
         {
-                Logging.LogMessage(903, Logging.LogCategories.Health, TraceSeverity.Verbose,
-                                   "Starting Security Token Service configuration repair.", new object[] {null});
+            Logging.LogMessage(903, Logging.LogCategories.Health, TraceSeverity.Verbose,
+                                "Starting Security Token Service configuration repair.", new object[] {null});
 
-                SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
-                using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
+            SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
+            using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
+            {
+                using (SPWeb site = siteCollection.OpenWeb())
                 {
-                    using (SPWeb site = siteCollection.OpenWeb())
+                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - StsFarm");
+                    if (list != null)
                     {
-                        SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - StsFarm");
-                        if (list != null)
+                        if (list.ItemCount >= 1)
                         {
-                            if (list.ItemCount >= 1)
+                            foreach (SPListItem item in list.Items)
                             {
-                                foreach (SPListItem item in list.Items)
+                                if (item["StsConfig"].ToString() == "MasterXmlFragment")
                                 {
-                                    if (item["StsConfig"].ToString() == "MasterXmlFragment")
+                                    MasterXmlFragment.LoadXml(item["XMLStsConfig"].ToString());
+
+                                    if (MasterXmlFragment == null)
                                     {
-                                        MasterXmlFragment.LoadXml(item["XMLStsConfig"].ToString());
-                                        //_masterXmlNode = MasterXmlFragment.DocumentElement;
+                                        Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
+                                                            "AD LDS/ADAM Forms Based Authentication not configured.",
+                                                            new object[] {null});
+                                    }
+                                    else if (MasterXmlFragment != null)
+                                    {
+                                        string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
+                                        var config = new XmlDocument();
+                                        config.Load(path);
 
-                                        if (MasterXmlFragment == null)
-                                        {
-                                            Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
-                                                               "AD LDS/ADAM Forms Based Authentication not configured.",
-                                                               new object[] {null});
-                                        }
-                                        else if (MasterXmlFragment != null)
-                                        {
-                                            string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
-                                            var config = new XmlDocument();
-                                            config.Load(path);
-
-                                            XmlNode systemwebChild = config.SelectSingleNode("configuration/system.web");
+                                        XmlNode systemwebChild = config.SelectSingleNode("configuration/system.web");
                                             
-                                            if (systemwebChild != null)
-                                            {
-                                                if (systemwebChild.ParentNode != null)
-                                                    systemwebChild.ParentNode.RemoveChild(systemwebChild);
-                                                try
-                                                {
-                                                    config.Save(path);
-                                                }
-                                                catch (Exception)
-                                                {
-                                                    Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
-                                                                       "Failed to save removal of child node to Security Token Service web.config on {0}.",
-                                                                       new object[] { SPServer.Local.DisplayName });
-                                                    return SPHealthRepairStatus.Failed;
-                                                }
-                                            }
-
-                                            XmlNode importNode = config.ImportNode(MasterXmlFragment.SelectSingleNode("system.web"), true);
-                                            if (config.DocumentElement != null)
-                                                config.DocumentElement.AppendChild(importNode);
-
+                                        if (systemwebChild != null)
+                                        {
+                                            if (systemwebChild.ParentNode != null)
+                                                systemwebChild.ParentNode.RemoveChild(systemwebChild);
                                             try
                                             {
                                                 config.Save(path);
@@ -164,19 +143,35 @@ namespace Nauplius.ADLDS.FBA
                                             catch (Exception)
                                             {
                                                 Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
-                                                                   "Failed to save updates to Security Token Service web.config on {0}.",
-                                                                   new object[] { SPServer.Local.DisplayName });
+                                                                    "Failed to save removal of child node to Security Token Service web.config on {0}.",
+                                                                    new object[] { SPServer.Local.DisplayName });
                                                 return SPHealthRepairStatus.Failed;
                                             }
+                                        }
+
+                                        XmlNode importNode = config.ImportNode(MasterXmlFragment.SelectSingleNode("system.web"), true);
+                                        if (config.DocumentElement != null)
+                                            config.DocumentElement.AppendChild(importNode);
+
+                                        try
+                                        {
+                                            config.Save(path);
+                                        }
+                                        catch (Exception)
+                                        {
+                                            Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
+                                                                "Failed to save updates to Security Token Service web.config on {0}.",
+                                                                new object[] { SPServer.Local.DisplayName });
+                                            return SPHealthRepairStatus.Failed;
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    return SPHealthRepairStatus.Succeeded;
                 }
-            return SPHealthRepairStatus.Succeeded;
+                return SPHealthRepairStatus.Succeeded;
+            }
         }
 
         public override SPHealthAnalysisRuleAutomaticExecutionParameters AutomaticExecutionParameters

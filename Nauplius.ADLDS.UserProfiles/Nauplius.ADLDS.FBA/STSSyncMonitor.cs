@@ -8,7 +8,6 @@ using System.Web;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Utilities;
-using Microsoft.Web.Administration;
 using Microsoft.SharePoint.Administration.Claims;
 using System.Xml;
 

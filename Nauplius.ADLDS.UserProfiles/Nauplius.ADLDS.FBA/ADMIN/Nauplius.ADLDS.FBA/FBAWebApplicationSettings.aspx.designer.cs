@@ -94,13 +94,22 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA {
         protected global::System.Web.UI.UserControl InputFormSection5;
         
         /// <summary>
-        /// txtServName control.
+        /// tBSN control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtServName;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBSN;
+        
+        /// <summary>
+        /// tBSNReqField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.InputFormRequiredFieldValidator tBSNReqField;
         
         /// <summary>
         /// InputFormSection6 control.
@@ -112,49 +121,31 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA {
         protected global::System.Web.UI.UserControl InputFormSection6;
         
         /// <summary>
-        /// txtPortNumb control.
+        /// tBPrtNo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtPortNumb;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBPrtNo;
         
         /// <summary>
-        /// InputFormSection7 control.
+        /// tBPrtNoReqField control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UserControl InputFormSection7;
+        protected global::Microsoft.SharePoint.WebControls.InputFormRequiredFieldValidator tBPrtNoReqField;
         
         /// <summary>
-        /// txtServName2 control.
+        /// tBPortNoCustValidation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtServName2;
-        
-        /// <summary>
-        /// InputFormSection8 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UserControl InputFormSection8;
-        
-        /// <summary>
-        /// txtPortNumb2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtPortNumb2;
+        protected global::Microsoft.SharePoint.WebControls.InputFormCustomValidator tBPortNoCustValidation;
         
         /// <summary>
         /// InputFormSection9 control.
@@ -166,22 +157,13 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA {
         protected global::System.Web.UI.UserControl InputFormSection9;
         
         /// <summary>
-        /// btnUseSSLTrue control.
+        /// cBUseSSL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormRadioButton btnUseSSLTrue;
-        
-        /// <summary>
-        /// btnUseSSLFalse control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormRadioButton btnUseSSLFalse;
+        protected global::Microsoft.SharePoint.WebControls.InputFormCheckBox cBUseSSL;
         
         /// <summary>
         /// InputFormSection10 control.
@@ -193,31 +175,22 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA {
         protected global::System.Web.UI.UserControl InputFormSection10;
         
         /// <summary>
-        /// txtLoginAttrib control.
+        /// tBLoginAttrib control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtLoginAttrib;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox tBLoginAttrib;
         
         /// <summary>
-        /// InputFormSection11 control.
+        /// tBLoginAttribReqField control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UserControl InputFormSection11;
-        
-        /// <summary>
-        /// txtUsrDnAttrib control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtUsrDnAttrib;
+        protected global::Microsoft.SharePoint.WebControls.InputFormRequiredFieldValidator tBLoginAttribReqField;
         
         /// <summary>
         /// InputFormSection12 control.
@@ -292,6 +265,24 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA {
         protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtUsrScope;
         
         /// <summary>
+        /// InputFormSection31 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection31;
+        
+        /// <summary>
+        /// txtUsrDNAttrib control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtUsrDNAttrib;
+        
+        /// <summary>
         /// InputFormSection16 control.
         /// </summary>
         /// <remarks>
@@ -337,13 +328,13 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA {
         protected global::System.Web.UI.UserControl InputFormSection18;
         
         /// <summary>
-        /// txtGrpAttrib control.
+        /// txtGrpNameAttrib control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtGrpAttrib;
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtGrpNameAttrib;
         
         /// <summary>
         /// InputFormSection19 control.
@@ -452,6 +443,24 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtGrpScope;
+        
+        /// <summary>
+        /// InputFormSection25 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection25;
+        
+        /// <summary>
+        /// txtGrpUsrDnAttrib control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtGrpUsrDnAttrib;
         
         /// <summary>
         /// btnSaveBottom control.

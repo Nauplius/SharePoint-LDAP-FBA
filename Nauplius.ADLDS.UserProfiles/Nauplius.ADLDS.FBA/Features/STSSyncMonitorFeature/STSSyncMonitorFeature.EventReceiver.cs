@@ -71,10 +71,6 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
                             item.Update();
                         }
                     }
-                    else if (list.ItemCount >= 1)
-                    {
-                        //load existing file
-                    }
                 }
             }
         }
