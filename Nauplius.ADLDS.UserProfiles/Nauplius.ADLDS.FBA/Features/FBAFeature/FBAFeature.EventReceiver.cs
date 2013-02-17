@@ -264,6 +264,29 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
 
             WebModifications.CreateAdminWildcardNode(true, webApp);
             WebModifications.CreateAdminProviderNode(true, webApp);
+
+            //Remove the Forms Authentication provider for the Web Application
+            try
+            {
+                foreach (SPAuthenticationProvider provider in
+                    webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationProviders)
+                {
+                    if (provider.ClaimProviderName == "Forms")
+                    {
+                        webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
+                        //webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
+                        break;
+                    }
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                //Forms provider already removed
+            }
+            catch (ArgumentException)
+            {
+                //Claims provider is null
+            }
         }
 
         // Uncomment the method below to handle the event raised when a feature is upgrading.
