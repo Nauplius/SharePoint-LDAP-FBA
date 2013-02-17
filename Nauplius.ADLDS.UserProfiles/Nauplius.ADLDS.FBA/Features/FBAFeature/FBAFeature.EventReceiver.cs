@@ -93,8 +93,7 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                                 item.Update();
                                             }
                                             catch (Exception)
-                                            {
-                                            }
+                                            {}
                                         }
                                     }
                                 }
@@ -110,10 +109,7 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                         }
                     }
                     catch (Exception)
-                    {
-                        
-                        throw;
-                    }
+                    {}
 
                     try
                     {
@@ -128,12 +124,31 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                 if (item["WebApplicationUrl"].ToString() ==
                                     webApp.GetResponseUri(SPUrlZone.Default).ToString())
                                 {
-                                    var iisSettings = new SPIisSettings();
-                                    //ToDo: get auth providers, remove 'forms' (?), add in new provider
-                                    // var ap1 = new SPFormsAuthenticationProvider(item["WebApplicationMembershipProvider"].ToString(), item["WebApplicationRoleProvider"].ToString());
+                                    //Set the Membership and Role providers for the Web Application
+                                    var ap = new SPFormsAuthenticationProvider(
+                                        item["WebApplicationMembershipProvider"].ToString(), item["WebApplicationRoleProvider"].ToString());
 
-                                    // iisSettings.AddClaimsAuthenticationProvider(ap1);
-                                    // webApp.IisSettings.Add(SPUrlZone.Default, iisSettings);
+                                    try
+                                    {
+                                        webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
+                                    }
+                                    catch (ArgumentException)
+                                    {
+                                        foreach (
+                                            SPAuthenticationProvider provider in
+                                                webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationProviders)
+                                        {
+                                            if (provider.ClaimProviderName == "Forms")
+                                            {
+                                                webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
+                                                break;
+                                            }
+
+                                            webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
+                                            //webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = new Uri("/_layouts/Nauplius.ADLDS.FBA/login.aspx", UriKind.RelativeOrAbsolute);
+                                        }
+                                    }
+
                                     try
                                     {
                                         WebModifications.CreateWildcardNode(false, webApp);
@@ -157,7 +172,6 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                     }
                                     catch (Exception)
                                     {
-                                        //FeatureDeactivating(properties);
                                     }
                                 }
                             }
@@ -194,6 +208,29 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
 
             WebModifications.CreateAdminWildcardNode(true, webApp);
             WebModifications.CreateAdminProviderNode(true, webApp);
+
+            //Remove the Forms Authentication provider for the Web Application
+            try
+            {
+                foreach (SPAuthenticationProvider provider in
+                    webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationProviders)
+                {
+                    if (provider.ClaimProviderName == "Forms")
+                    {
+                        webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
+                        //webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
+                        break;
+                    }
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                //Forms provider already removed
+            }
+            catch (ArgumentException)
+            {
+                //Claims provider is null
+            }
         }
 
 

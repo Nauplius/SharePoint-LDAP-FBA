@@ -375,11 +375,6 @@ namespace Nauplius.ADLDS.FBA
 
             if (webApp.UseClaimsAuthentication)
             {
-                if (removeModification)
-                {
-                    //remove sts modification
-                    return true;
-                }
 
                 SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
 
@@ -437,9 +432,11 @@ namespace Nauplius.ADLDS.FBA
                                             catch (Exception)
                                             {}
 
-                                            MasterXmlFragment.DocumentElement.SelectSingleNode("roleManager/providers")
-                                                             .AppendChild(xmlFrag1);
-
+                                            if (!removeModification)
+                                            {
+                                                MasterXmlFragment.DocumentElement.SelectSingleNode("roleManager/providers")
+                                                                 .AppendChild(xmlFrag1);
+                                            }
                                             XmlDocumentFragment xmlFrag2 = MasterXmlFragment.CreateDocumentFragment();
                                             xmlFrag2.InnerXml = value;
 
@@ -455,8 +452,11 @@ namespace Nauplius.ADLDS.FBA
                                             catch (Exception)
                                             { }
 
-                                            MasterXmlFragment.DocumentElement.SelectSingleNode("membership/providers")
-                                                             .AppendChild(xmlFrag2);
+                                            if (!removeModification)
+                                            {
+                                                MasterXmlFragment.DocumentElement.SelectSingleNode("membership/providers")
+                                                                 .AppendChild(xmlFrag2);
+                                            }
 
                                             item["XMLStsConfig"] = MasterXmlFragment.OuterXml;
                                             item.Update();
