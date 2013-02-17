@@ -34,7 +34,7 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
             var webApp = properties.Feature.Parent as SPWebApplication;
-            var adminWebApp = new SPAdministrationWebApplication();
+            var adminWebApp = SPAdministrationWebApplication.Local;
 
             //Build MasterXmlFragment if SPListItem is blank or missing attributes
             using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))
@@ -141,19 +141,23 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                         bool successful = WebModifications.CreateStsProviderNode(false, properties);
                                         if (successful)
                                         {
-                                            var newTimerJob = new STSSyncMonitor(tJobName, adminWebApp);
-
-                                            var jobSchedule = new SPOneTimeSchedule(DateTime.Now);
-                                            newTimerJob.Schedule = jobSchedule;
-                                            newTimerJob.Update();
+                                            foreach (SPJobDefinition job in adminWebApp.JobDefinitions)
+                                            {
+                                                if (job.Name == tJobName)
+                                                {
+                                                    job.IsDisabled = false;
+                                                    job.Execute(Guid.Empty);
+                                                    job.IsDisabled = true;
+                                                }
+                                            }
                                         }
 
-                                        WebModifications.CreateWildcardNode(false, adminWebApp);
-                                        WebModifications.CreateProviderNode(false, webApp);
+                                        WebModifications.CreateAdminWildcardNode(false, webApp);
+                                        WebModifications.CreateAdminProviderNode(false, webApp);
                                     }
                                     catch (Exception)
                                     {
-                                        FeatureDeactivating(properties);
+                                        //FeatureDeactivating(properties);
                                     }
                                 }
                             }
@@ -172,20 +176,24 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
             var webApp = properties.Feature.Parent as SPWebApplication;
-            var adminWebApp = new SPAdministrationWebApplication();
+            var adminWebApp = SPAdministrationWebApplication.Local;
 
             WebModifications.CreateWildcardNode(true, webApp);
             WebModifications.CreateProviderNode(true, webApp);
             WebModifications.CreateStsProviderNode(true, properties);
 
-            var newTimerJob = new STSSyncMonitor(tJobName, adminWebApp);
+            foreach (SPJobDefinition job in adminWebApp.JobDefinitions)
+            {
+                if (job.Name == tJobName)
+                {
+                    job.IsDisabled = false;
+                    job.Execute(Guid.Empty);
+                    job.IsDisabled = true;
+                }                               
+            }
 
-            var jobSchedule = new SPOneTimeSchedule(DateTime.Now);
-            newTimerJob.Schedule = jobSchedule;
-            newTimerJob.Update();
-
-            WebModifications.CreateWildcardNode(true, adminWebApp);
-            WebModifications.CreateProviderNode(true, adminWebApp);
+            WebModifications.CreateAdminWildcardNode(true, webApp);
+            WebModifications.CreateAdminProviderNode(true, webApp);
         }
 
 
@@ -207,14 +215,18 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
             WebModifications.CreateProviderNode(true, webApp);
             WebModifications.CreateStsProviderNode(true, properties);
 
-            var newTimerJob = new STSSyncMonitor(tJobName, adminWebApp);
+            foreach (SPJobDefinition job in adminWebApp.JobDefinitions)
+            {
+                if (job.Name == tJobName)
+                {
+                    job.IsDisabled = false;
+                    job.Execute(Guid.Empty);
+                    job.IsDisabled = true;
+                }
+            }
 
-            var jobSchedule = new SPOneTimeSchedule(DateTime.Now);
-            newTimerJob.Schedule = jobSchedule;
-            newTimerJob.Update();
-
-            WebModifications.CreateWildcardNode(true, adminWebApp);
-            WebModifications.CreateProviderNode(true, adminWebApp);
+            WebModifications.CreateAdminWildcardNode(true, webApp);
+            WebModifications.CreateAdminProviderNode(true, webApp);
         }
 
         // Uncomment the method below to handle the event raised when a feature is upgrading.

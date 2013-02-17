@@ -26,7 +26,7 @@ namespace Nauplius.ADLDS.FBA
 
         public static void CreateWildcardNode(bool removeModification, SPWebApplication webApp)
         {
-            if(webApp.UseClaimsAuthentication)
+            if (webApp.UseClaimsAuthentication)
             {
                 if (removeModification)
                 {
@@ -111,6 +111,93 @@ namespace Nauplius.ADLDS.FBA
             }
         }
 
+        public static void CreateAdminWildcardNode(bool removeModification, SPWebApplication webApp)
+        {
+            var adminWebApplication = SPAdministrationWebApplication.Local;
+
+            if (removeModification)
+            {
+                RemoveAllModifications(webApp);
+                return;
+            }
+
+            string name, xpath, value;
+            SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
+
+            xpath = "configuration/SharePoint/PeoplePickerWildcards";
+            name = String.Format("add[@key='{0}']", provider["WebApplicationMembershipProvider"]);
+            value = String.Format("<add key='{0}' value='*' />", provider["WebApplicationMembershipProvider"]);
+            ModifyAdminWebConfig(adminWebApplication, name, xpath, value, SPWebConfigModification.SPWebConfigModificationType.EnsureChildNode);
+
+            name = String.Format("add[@key='{0}']", provider["WebApplicationRoleProvider"]);
+            value = String.Format("<add key='{0}' value='*' />", provider["WebApplicationRoleProvider"]);
+            ModifyAdminWebConfig(adminWebApplication, name, xpath, value, SPWebConfigModification.SPWebConfigModificationType.EnsureChildNode);
+
+            try
+            {
+                SPWebService.AdministrationService.WebApplications[adminWebApplication.Id].WebService.ApplyWebConfigModifications();
+                //adminWebApplication.Farm.Services.GetValue<SPWebService>().ApplyWebConfigModifications();
+            }
+            catch (Exception ex)
+            {
+                RemoveAllModifications(webApp);
+                throw ex;
+            }
+        }
+
+        public static void CreateAdminProviderNode(bool removeModification, SPWebApplication webApp)
+        {
+            var adminWebApplication = SPAdministrationWebApplication.Local;
+
+            if (removeModification)
+            {
+                RemoveAllModifications(webApp);
+                return;
+            }
+
+            string name, xpath, value;
+            SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
+
+            name = string.Format("add[@name='{0}']", provider["WebApplicationMembershipProvider"]);
+            xpath = "configuration/system.web/membership/providers";
+            value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
+                                    "useSSL='{4}' enableSearchMethods='{5}' userDNAttribute='{6}' userNameAttribute='{7}' " +
+                                    "userContainer='{8}' userObjectClass='{9}' userFilter='{10}' scope='{11}' " +
+                                    "otherRequiredUserAttributes='{12}' />", provider["WebApplicationMembershipProvider"],
+                                    ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
+                                    "true", provider["ADLDSUserDNAttrib"], provider["ADLDSLoginAttrib"], provider["ADLDSUserContainer"],
+                                    provider["ADLDSUserObjectClass"], provider["ADLDSUserFilter"], provider["ADLDSUserScope"],
+                                    provider["ADLDSUserOtherReqAttrib"]);
+            ModifyAdminWebConfig(adminWebApplication, name, xpath, value, SPWebConfigModification.SPWebConfigModificationType.EnsureChildNode);
+
+            name = String.Format("add[@name='{0}']", provider["WebApplicationRoleProvider"]);
+            xpath = "configuration/system.web/roleManager/providers";
+            value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
+                                    "useSSL='{4}' enableSearchMethods='{5}' groupNameAttribute='{6}' " +
+                                    "groupContainer='{7}' groupNameAlterateSearchAttribute='{8}' groupMemberAttribute='{9}' " +
+                                    "userNameAttribute='{10}' dnAttribute='{11}' useUserDNAttribute='{12}' scope='{13}' " +
+                                    "userFilter=\"{14}\" groupFilter=\"{15}\" />", provider["WebApplicationRoleProvider"],
+                                    ProviderRoleType, provider["ADLDSServer"], provider["ADLDSPort"],
+                                    provider["ADLDSUseSSL"], "true", provider["ADLDSGroupNameAttrib"],
+                                    provider["ADLDSGroupContainer"],
+                                    provider["ADLDSGroupNameAltSearchAttrib"], provider["ADLDSGroupMemAttrib"],
+                                    provider["ADLDSLoginAttrib"], provider["ADLDSGroupDNAttrib"], "true",
+                                    provider["ADLDSGroupScope"], provider["ADLDSGroupUserFilter"],
+                                    provider["ADLDSGroupFilter"]);
+            ModifyAdminWebConfig(adminWebApplication, name, xpath, value, SPWebConfigModification.SPWebConfigModificationType.EnsureChildNode);
+
+            try
+            {
+                SPWebService.AdministrationService.WebApplications[adminWebApplication.Id].WebService.ApplyWebConfigModifications();
+                //adminWebApplication.Farm.Services.GetValue<SPWebService>().ApplyWebConfigModifications();
+            }
+            catch (Exception ex)
+            {
+                RemoveAllModifications(webApp);
+                throw ex;
+            }
+        }
+
         private static void ModifyWebConfig(SPWebApplication webApp, string modificationName, string modificationPath,
             string modificationValue, SPWebConfigModification.SPWebConfigModificationType modificationType)
         {
@@ -124,6 +211,29 @@ namespace Nauplius.ADLDS.FBA
             {
                 webApp.WebConfigModifications.Add(modification);
                 webApp.Update();
+            }
+            catch (Exception ex)
+            {
+                EventLog eventLog = new EventLog();
+                eventLog.Source = ModificationOwner;
+                eventLog.WriteEntry(ex.Message);
+                throw ex;
+            }
+        }
+
+        private static void ModifyAdminWebConfig(SPAdministrationWebApplication adminWebApp, string modificationName, string modificationPath,
+    string modificationValue, SPWebConfigModification.SPWebConfigModificationType modificationType)
+        {
+            SPWebConfigModification modification = new SPWebConfigModification(modificationName, modificationPath);
+            modification.Value = modificationValue;
+            modification.Sequence = 0;
+            modification.Type = modificationType;
+            modification.Owner = ModificationOwner;
+
+            try
+            {
+                adminWebApp.WebConfigModifications.Add(modification);
+                adminWebApp.Update();
             }
             catch (Exception ex)
             {
@@ -271,7 +381,8 @@ namespace Nauplius.ADLDS.FBA
                                             MasterXmlFragment.DocumentElement.SelectSingleNode("membership/providers")
                                                              .AppendChild(xmlFrag2);
 
-                                            item["StsConfig"] = MasterXmlFragment.OuterXml;
+                                            item["XMLStsConfig"] = MasterXmlFragment.OuterXml;
+                                            item.Update();
                                             return true;
                                         }
                                     }

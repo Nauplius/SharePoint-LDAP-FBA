@@ -22,7 +22,6 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
     public class STSSyncMonitorFeatureEventReceiver : SPFeatureReceiver
     {
         const string tJobName = "Nauplius ADLDS FBA STS Sync Monitor";
-        private static readonly XmlDocument MasterXmlFragment = new XmlDocument();
 
         // Uncomment the method below to handle the event raised after a feature has been activated.
 
@@ -40,9 +39,7 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
                     }
                 }
                 var newTimerJob = new STSSyncMonitor(tJobName, adminWebApplication);
-
-                var jobSchedule = new SPOneTimeSchedule(DateTime.Now);
-                newTimerJob.Schedule = jobSchedule;
+                newTimerJob.IsDisabled = true;
                 newTimerJob.Update();
             }
 
@@ -77,7 +74,7 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
 
 
         // Uncomment the method below to handle the event raised before a feature is deactivated.
-
+/*
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
             var adminWebApplication = properties.Feature.Parent as SPWebApplication;
@@ -90,7 +87,7 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
                 }
             }
         }
-
+*/
 
         // Uncomment the method below to handle the event raised after a feature has been installed.
 
