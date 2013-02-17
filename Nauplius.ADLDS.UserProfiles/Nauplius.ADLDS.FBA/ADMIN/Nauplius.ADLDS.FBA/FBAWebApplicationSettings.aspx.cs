@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Web.UI.WebControls;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.WebControls;
+
+//ToDo: Replace & with &amp; in all strings.
 
 namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
 {
@@ -70,6 +73,10 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                             if (selectedWebApp != null)
                             {
                                 string webAppUrl = selectedWebApp.GetResponseUri(SPUrlZone.Default).AbsoluteUri;
+                                
+                                //Amerstands can't be passed directly to XML
+                                string grpUsrFilter = Regex.Replace(txtGrpUsrFilter.Text, "&(?!amp;)", "&amp;");
+                                string grpFilter = Regex.Replace(txtGrpFilter.Text, "&(?!amp;)", "&amp;");
 
                                 SPListItemCollection items = list.Items;
 
@@ -105,11 +112,12 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                                         updateItem["ADLDSGroupNameAltSearchAttrib"] = txtGrpAltSearchAttrib.Text;
                                         updateItem["ADLDSGroupMemAttrib"] = txtGrpMemAttrib.Text;
                                         updateItem["ADLDSGroupDNAttrib"] = txtGrpDNAttrib.Text;
-                                        updateItem["ADLDSGroupUserFilter"] = txtGrpUsrFilter.Text;
-                                        updateItem["ADLDSGroupFilter"] = txtGrpFilter.Text;
+                                        updateItem["ADLDSGroupUserFilter"] = grpUsrFilter;
+                                        updateItem["ADLDSGroupFilter"] = grpFilter;
                                         updateItem["ADLDSGroupScope"] = txtGrpScope.Text;
 
                                         updateItem.Update();
+                                        return;
                                     }
                                 }
 
@@ -140,8 +148,8 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                                 newItem["ADLDSGroupNameAltSearchAttrib"] = txtGrpAltSearchAttrib.Text;
                                 newItem["ADLDSGroupMemAttrib"] = txtGrpMemAttrib.Text;
                                 newItem["ADLDSGroupDNAttrib"] = txtGrpDNAttrib.Text;
-                                newItem["ADLDSGroupUserFilter"] = txtGrpUsrFilter.Text;
-                                newItem["ADLDSGroupFilter"] = txtGrpFilter.Text;
+                                newItem["ADLDSGroupUserFilter"] = grpUsrFilter;
+                                newItem["ADLDSGroupFilter"] = grpFilter;
                                 newItem["ADLDSGroupScope"] = txtGrpScope.Text;
 
                                 newItem.Update();

@@ -16,25 +16,22 @@ namespace Nauplius.ADLDS.FBA
     class WebModifications
     {
         private const string ModificationOwner = "Nauplius.ADLDS.FBA";
+        private static readonly XmlDocument MasterXmlFragment = new XmlDocument();
 
         private const string ProviderMemberType =
-            @"Microsoft.Office.Server.Security.LdapMembershipProvider, Microsoft.Office.Server, 
-            Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c";
+            @"Microsoft.Office.Server.Security.LdapMembershipProvider, Microsoft.Office.Server, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c";
 
         private const string ProviderRoleType =
-            @"Microsoft.Office.Server.Security.LdapRoleProvider, Microsoft.Office.Server, 
-            Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c";
+            @"Microsoft.Office.Server.Security.LdapRoleProvider, Microsoft.Office.Server, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c";
 
-        public static void CreateWildcardNode(bool removeModification, SPFeatureReceiverProperties properties)
+        public static void CreateWildcardNode(bool removeModification, SPWebApplication webApp)
         {
-            string featureId = properties.Feature.DefinitionId.ToString();
-            SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
-
             if(webApp.UseClaimsAuthentication)
             {
                 if (removeModification)
                 {
-                    RemoveAllModifications(properties);
+                    RemoveAllModifications(webApp);
+                    return;
                 }
 
                 string name, xpath, value;
@@ -45,7 +42,7 @@ namespace Nauplius.ADLDS.FBA
                 value = String.Format("<add key='{0}' value='*' />", provider["WebApplicationMembershipProvider"]);
                 ModifyWebConfig(webApp, name, xpath, value, SPWebConfigModification.SPWebConfigModificationType.EnsureChildNode);
 
-                name = String.Format("add[@key='{0}'", provider["WebApplicationRoleProvider"]);
+                name = String.Format("add[@key='{0}']", provider["WebApplicationRoleProvider"]);
                 value = String.Format("<add key='{0}' value='*' />", provider["WebApplicationRoleProvider"]);
                 ModifyWebConfig(webApp, name, xpath, value, SPWebConfigModification.SPWebConfigModificationType.EnsureChildNode);
 
@@ -55,64 +52,44 @@ namespace Nauplius.ADLDS.FBA
                 }
                 catch (Exception ex)
                 {
-                    RemoveAllModifications(properties);
+                    RemoveAllModifications(webApp);
                     throw ex;
                 }
             }
         }
 
-        public static void CreateProviderNode(bool removeModification, SPFeatureReceiverProperties properties)
+        public static void CreateProviderNode(bool removeModification, SPWebApplication webApp)
         {
-            string featureId = properties.Feature.DefinitionId.ToString();
-            SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
-
             if (webApp.UseClaimsAuthentication)
             {
                 if (removeModification)
                 {
-                    RemoveAllModifications(properties);
+                    RemoveAllModifications(webApp);
+                    return;
                 }
 
                 string name, xpath, value;
                 SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
 
-                /* <add name="FabrikamMember" type="Microsoft.Office.Server.Security.LdapMembershipProvider, Microsoft.Office.Server, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" 
-                 * server="adlds01.nauplius.local" port="636" useSSL="true" enableSearchMethods="true"
-                 * userDNAttribute="distinguishedName" userNameAttribute="mail" 
-                 * userContainer="CN=SharePoint,DC=Fabrikam,DC=local" 
-                 * userObjectClass="user" userFilter="(ObjectClass=*)" 
-                 * scope="Subtree" otherRequiredUserAttributes="sn,givenname,cn" />
-                */
-
-                name = string.Format("add[@name='{0}'", provider["WebApplicationMembershipProvider"]);
+                name = string.Format("add[@name='{0}']", provider["WebApplicationMembershipProvider"]);
                 xpath = "configuration/system.web/membership/providers";
                 value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
                                         "useSSL='{4}' enableSearchMethods='{5}' userDNAttribute='{6}' userNameAttribute='{7}' " +
                                         "userContainer='{8}' userObjectClass='{9}' userFilter='{10}' scope='{11}' " +
                                         "otherRequiredUserAttributes='{12}' />", provider["WebApplicationMembershipProvider"],
                                         ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
-                                        "true", provider["ADLDSUserDNAttrib"], provider["ADLDSUserLoginAttrib"], provider["ADLDSUserContainer"],
-                                        provider["ADLDSUserObjectClass"], provider["ADLDSUserfilter"], provider["ADLDSUserScope"],
+                                        "true", provider["ADLDSUserDNAttrib"], provider["ADLDSLoginAttrib"], provider["ADLDSUserContainer"],
+                                        provider["ADLDSUserObjectClass"], provider["ADLDSUserFilter"], provider["ADLDSUserScope"],
                                         provider["ADLDSUserOtherReqAttrib"]);
                 ModifyWebConfig(webApp, name, xpath, value, SPWebConfigModification.SPWebConfigModificationType.EnsureChildNode);
 
-                /* add name="FabrikamRole" 
-                 * type="Microsoft.Office.Server.Security.LdapRoleProvider, Microsoft.Office.Server, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" 
-                 * server="adlds01.nauplius.local" port="636" useSSL="true" enableSearchMethods="true" 
-                 * groupContainer="CN=SharePoint,DC=Fabrikam,DC=local" groupNameAttribute="cn" 
-                 * groupNameAlternateSearchAttribute="cn" groupMemberAttribute="member" userNameAttribute="mail" 
-                 * dnAttribute="distinguishedName" useUserDNAttribute="true" scope="Subtree" 
-                 * userFilter="&amp;(objectClass=user)(objectCategory=person)" 
-                 * groupFilter="&amp;(objectCategory=Group)(objectClass=group)" />
-                */
-
-                name = String.Format("add[@name='{0}'", provider["WebApplicationRoleProvider"]);
+                name = String.Format("add[@name='{0}']", provider["WebApplicationRoleProvider"]);
                 xpath = "configuration/system.web/roleManager/providers";
-                value = String.Format("<add name='{0}' type=''{1}'' server='{2}' port='{3}' " +
+                value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
                                         "useSSL='{4}' enableSearchMethods='{5}' groupNameAttribute='{6}' " +
                                         "groupContainer='{7}' groupNameAlterateSearchAttribute='{8}' groupMemberAttribute='{9}' " +
                                         "userNameAttribute='{10}' dnAttribute='{11}' useUserDNAttribute='{12}' scope='{13}' " +
-                                        "userFilter='{14}' groupFilter='{15}' />", provider["WebApplicationRoleProvider"],
+                                        "userFilter=\"{14}\" groupFilter=\"{15}\" />", provider["WebApplicationRoleProvider"],
                                         ProviderRoleType, provider["ADLDSServer"], provider["ADLDSPort"],
                                         provider["ADLDSUseSSL"], "true", provider["ADLDSGroupNameAttrib"],
                                         provider["ADLDSGroupContainer"],
@@ -128,7 +105,7 @@ namespace Nauplius.ADLDS.FBA
                 }
                 catch (Exception ex)
                 {
-                    RemoveAllModifications(properties);
+                    RemoveAllModifications(webApp);
                     throw ex;
                 }
             }
@@ -157,9 +134,9 @@ namespace Nauplius.ADLDS.FBA
             }
         }
 
-        public static void RemoveAllModifications(SPFeatureReceiverProperties properties)
+        public static void RemoveAllModifications(SPWebApplication webApp)
         {
-            SPWebApplication webApp = (SPWebApplication) properties.Feature.Parent;
+            //SPWebApplication webApp = (SPWebApplication) properties.Feature.Parent;
 
             List<SPWebConfigModification> modifications = new List<SPWebConfigModification>();
 
@@ -179,7 +156,6 @@ namespace Nauplius.ADLDS.FBA
 
         public static SPListItem GetClaimProvider(SPWebApplication webApp, SPUrlZone zone)
         {
-            //IEnumerable<SPAuthenticationProvider> providers = webApp.GetIisSettingsWithFallback(zone).ClaimsAuthenticationProviders;
             SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
 
             using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
@@ -197,12 +173,6 @@ namespace Nauplius.ADLDS.FBA
                                 {
                                     return item;
                                 }
-                                /*
-                                if (SPWebApplication.Lookup(new Uri(item["WebApplicationUrl"].ToString())).GetResponseUri((SPUrlZone)(item["WebApplicationZone"])).AbsoluteUri == webApp.GetResponseUri(zone).AbsoluteUri)
-                                {
-                                        return item;
-                                }
-                                 */
                             }
                         }
                     }
@@ -211,7 +181,7 @@ namespace Nauplius.ADLDS.FBA
             return null;
         }
 
-        public static void BuildStsProviderNode(bool removeModification, SPFeatureReceiverProperties properties)
+        public static bool CreateStsProviderNode(bool removeModification, SPFeatureReceiverProperties properties)
         {
             string featureId = properties.Feature.DefinitionId.ToString();
             SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
@@ -220,86 +190,102 @@ namespace Nauplius.ADLDS.FBA
             {
                 if (removeModification)
                 {
-                    //remove STS changes from MasterXmlFragment
+                    //remove sts modification
+                    return true;
                 }
 
-
-            }
-        }
-        
-        //don't use? All STS changes should happen in timer job
-        public static void CreateStsProviderNode(bool removeModification, SPFeatureReceiverProperties properties)
-        {
-            string featureId = properties.Feature.DefinitionId.ToString();
-            SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
-
-            if (webApp.UseClaimsAuthentication)
-            {
-                if (removeModification)
-                {
-                    //remove sts modification  
-                }
-
-                string xpath, xpath2, value, value2;
                 SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
-            
-                foreach (SPServer spServer in SPFarm.Local.Servers)
+
+                string value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
+                                        "useSSL='{4}' enableSearchMethods='{5}' userDNAttribute='{6}' userNameAttribute='{7}' " +
+                                        "userContainer='{8}' userObjectClass='{9}' userFilter='{10}' scope='{11}' " +
+                                        "otherRequiredUserAttributes='{12}' />", provider["WebApplicationMembershipProvider"],
+                                        ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
+                                        "true", provider["ADLDSUserDNAttrib"], provider["ADLDSLoginAttrib"], provider["ADLDSUserContainer"],
+                                        provider["ADLDSUserObjectClass"], provider["ADLDSUserFilter"], provider["ADLDSUserScope"],
+                                        provider["ADLDSUserOtherReqAttrib"]);
+
+                string value2 = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
+                                        "useSSL='{4}' enableSearchMethods='{5}' groupNameAttribute='{6}' " +
+                                        "groupContainer='{7}' groupNameAlterateSearchAttribute='{8}' groupMemberAttribute='{9}' " +
+                                        "userNameAttribute='{10}' dnAttribute='{11}' useUserDNAttribute='{12}' scope='{13}' " +
+                                        "userFilter=\"{14}\" groupFilter=\"{15}\" />", provider["WebApplicationRoleProvider"],
+                                        ProviderRoleType, provider["ADLDSServer"], provider["ADLDSPort"],
+                                        provider["ADLDSUseSSL"], "true", provider["ADLDSGroupNameAttrib"],
+                                        provider["ADLDSGroupContainer"],
+                                        provider["ADLDSGroupNameAltSearchAttrib"], provider["ADLDSGroupMemAttrib"],
+                                        provider["ADLDSLoginAttrib"], provider["ADLDSGroupDNAttrib"], "true",
+                                        provider["ADLDSGroupScope"], provider["ADLDSGroupUserFilter"],
+                                        provider["ADLDSGroupFilter"]);
+
+                using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))
                 {
-                    string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
-                    var config = new XmlDocument();
-                    config.Load(path);
-
-                    if (config.SelectSingleNode(@"configuration/system.web") == null)
+                    using (SPWeb site = siteCollection.OpenWeb())
                     {
-                        CreateStsXPath(config, path, "configuration/system.web");
+                        try
+                        {
+                            SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - StsFarm");
+                            if (list != null)
+                            {
+                                if (list.ItemCount >= 1)
+                                {
+                                    foreach (SPListItem item in list.Items)
+                                    {
+                                        if (item["StsConfig"].ToString() == "MasterXmlFragment")
+                                        {
+                                            MasterXmlFragment.LoadXml((string) item["XMLStsConfig"]);
+
+                                            XmlDocumentFragment xmlFrag1 = MasterXmlFragment.CreateDocumentFragment();
+                                            xmlFrag1.InnerXml = value2;
+
+                                            try
+                                            {
+                                                string nvalue =
+                                                    xmlFrag1.FirstChild.Attributes.GetNamedItem("name").Value;
+                                                XmlNode node =
+                                                    MasterXmlFragment.DocumentElement.SelectSingleNode(
+                                                        "roleManager/providers/add[@name='" + nvalue + "']");
+                                                node.ParentNode.RemoveChild(node);
+                                            }
+                                            catch (Exception)
+                                            {}
+
+                                            MasterXmlFragment.DocumentElement.SelectSingleNode("roleManager/providers")
+                                                             .AppendChild(xmlFrag1);
+
+                                            XmlDocumentFragment xmlFrag2 = MasterXmlFragment.CreateDocumentFragment();
+                                            xmlFrag2.InnerXml = value;
+
+                                            try
+                                            {
+                                                string nvalue =
+                                                    xmlFrag2.FirstChild.Attributes.GetNamedItem("name").Value;
+                                                XmlNode node =
+                                                    MasterXmlFragment.DocumentElement.SelectSingleNode(
+                                                        "membership/providers/add[@name='" + nvalue + "']");
+                                                node.ParentNode.RemoveChild(node);
+                                            }
+                                            catch (Exception)
+                                            { }
+
+                                            MasterXmlFragment.DocumentElement.SelectSingleNode("membership/providers")
+                                                             .AppendChild(xmlFrag2);
+
+                                            item["StsConfig"] = MasterXmlFragment.OuterXml;
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            return false;
+                        }
                     }
-
-                    if (config.SelectSingleNode(@"configuration/system.web/membership") == null)
-                    {
-                        CreateStsXPath(config, path, "configuration/system.web/membership");
-                    }
-
-                    if (config.SelectSingleNode(@"configuration/system.web/membership/providers") == null)
-                    {
-                        CreateStsXPath(config, path, "configuration/system.web/membership/providers");
-                    }
-
-                    if (config.SelectSingleNode(@"configuration/system.web/roleManager") == null)
-                    {
-                        CreateStsXPath(config, path, "configuration/system.web/roleManager");
-                    }
-
-                    if (config.SelectSingleNode(@"configuration/system.web/roleManager/providers") == null)
-                    {
-                        CreateStsXPath(config, path, "configuration/system.web/roleManager/providers");
-                    }
-
-
-                    xpath = "configuration/system.web/membership/providers";
-                    value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
-                                            "useSSL='{4}' enableSearchMethods='{5}' userDNAttribute='{6}' userNameAttribute='{7}' " +
-                                            "userContainer='{8}' userObjectClass='{9}' userFilter='{10}' scope='{11}' " +
-                                            "otherRequiredUserAttributes='{12}' />", provider["WebApplicationMembershipProvider"],
-                                            ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
-                                            "true", provider["ADLDSUserDNAttrib"], provider["ADLDSUserLoginAttrib"], provider["ADLDSUserContainer"],
-                                            provider["ADLDSUserObjectClass"], provider["ADLDSUserfilter"], provider["ADLDSUserScope"],
-                                            provider["ADLDSUserOtherReqAttrib"]);
-
-                    xpath2 = "configuration/system.web/roleManager/providers";
-                    value2 = String.Format("<add name='{0}' type=''{1}'' server='{2}' port='{3}' " +
-                                            "useSSL='{4}' enableSearchMethods='{5}' groupNameAttribute='{6}' " +
-                                            "groupContainer='{7}' groupNameAlterateSearchAttribute='{8}' groupMemberAttribute='{9}' " +
-                                            "userNameAttribute='{10}' dnAttribute='{11}' useUserDNAttribute='{12}' scope='{13}' " +
-                                            "userFilter='{14}' groupFilter='{15}' />", provider["WebApplicationRoleProvider"],
-                                            ProviderRoleType, provider["ADLDSServer"], provider["ADLDSPort"],
-                                            provider["ADLDSUseSSL"], "true", provider["ADLDSGroupNameAttrib"],
-                                            provider["ADLDSGroupContainer"],
-                                            provider["ADLDSGroupNameAltSearchAttrib"], provider["ADLDSGroupMemAttrib"],
-                                            provider["ADLDSLoginAttrib"], provider["ADLDSGroupDNAttrib"], "true",
-                                            provider["ADLDSGroupScope"], provider["ADLDSGroupUserFilter"],
-                                            provider["ADLDSGroupFilter"]);   
                 }
             }
+            return true;
         }
 
         public static void CreateStsXPath(XmlDocument config, string path, string xpath)

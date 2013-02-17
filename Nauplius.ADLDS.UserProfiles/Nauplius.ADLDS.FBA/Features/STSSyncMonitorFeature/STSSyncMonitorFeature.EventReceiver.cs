@@ -41,7 +41,7 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
                 }
                 var newTimerJob = new STSSyncMonitor(tJobName, adminWebApplication);
 
-                var jobSchedule = new SPOneTimeSchedule(DateTime.UtcNow);
+                var jobSchedule = new SPOneTimeSchedule(DateTime.Now);
                 newTimerJob.Schedule = jobSchedule;
                 newTimerJob.Update();
             }
