@@ -31,6 +31,14 @@ namespace Nauplius.ADLDS.FBA
                 if (removeModification)
                 {
                     RemoveAllModifications(webApp);
+
+                    try
+                    {
+                        webApp.Farm.Services.GetValue<SPWebService>().ApplyWebConfigModifications();
+                    }
+                    catch(Exception)
+                    {}
+
                     return;
                 }
 
@@ -65,6 +73,14 @@ namespace Nauplius.ADLDS.FBA
                 if (removeModification)
                 {
                     RemoveAllModifications(webApp);
+
+                    try
+                    {
+                        webApp.Farm.Services.GetValue<SPWebService>().ApplyWebConfigModifications();
+                    }
+                    catch (Exception)
+                    { }
+
                     return;
                 }
 
@@ -118,6 +134,14 @@ namespace Nauplius.ADLDS.FBA
             if (removeModification)
             {
                 RemoveAllModifications(webApp);
+
+                try
+                {
+                    SPWebService.AdministrationService.WebApplications[adminWebApplication.Id].WebService.ApplyWebConfigModifications();
+                }
+                catch (Exception)
+                { }
+
                 return;
             }
 
@@ -136,7 +160,6 @@ namespace Nauplius.ADLDS.FBA
             try
             {
                 SPWebService.AdministrationService.WebApplications[adminWebApplication.Id].WebService.ApplyWebConfigModifications();
-                //adminWebApplication.Farm.Services.GetValue<SPWebService>().ApplyWebConfigModifications();
             }
             catch (Exception ex)
             {
@@ -152,6 +175,14 @@ namespace Nauplius.ADLDS.FBA
             if (removeModification)
             {
                 RemoveAllModifications(webApp);
+
+                try
+                {
+                    SPWebService.AdministrationService.WebApplications[adminWebApplication.Id].WebService.ApplyWebConfigModifications();
+                }
+                catch (Exception)
+                { }
+
                 return;
             }
 
@@ -189,7 +220,6 @@ namespace Nauplius.ADLDS.FBA
             try
             {
                 SPWebService.AdministrationService.WebApplications[adminWebApplication.Id].WebService.ApplyWebConfigModifications();
-                //adminWebApplication.Farm.Services.GetValue<SPWebService>().ApplyWebConfigModifications();
             }
             catch (Exception ex)
             {
@@ -244,10 +274,8 @@ namespace Nauplius.ADLDS.FBA
             }
         }
 
-        public static void RemoveAllModifications(SPWebApplication webApp)
+        public static void RemoveAllModifications(SPWebApplication webApp, string name)
         {
-            //SPWebApplication webApp = (SPWebApplication) properties.Feature.Parent;
-
             List<SPWebConfigModification> modifications = new List<SPWebConfigModification>();
 
             foreach (SPWebConfigModification modification in webApp.WebConfigModifications)
@@ -258,7 +286,10 @@ namespace Nauplius.ADLDS.FBA
 
             foreach (SPWebConfigModification modification in modifications)
             {
-                webApp.WebConfigModifications.Remove(modification);
+                if(modification.Name == name)
+                {
+                    webApp.WebConfigModifications.Remove(modification);
+                }
             }
 
             webApp.Update();
