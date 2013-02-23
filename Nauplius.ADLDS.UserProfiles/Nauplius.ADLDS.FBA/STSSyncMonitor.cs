@@ -24,13 +24,13 @@ namespace Nauplius.ADLDS.FBA
         {
         }
 
-        public STSSyncMonitor(String name, SPWebApplication adminWebApplication, SPServer server, SPJobLockType lockType)
-            : base(name, adminWebApplication, server, lockType)
+        public STSSyncMonitor(String name, SPService service, SPServer server, SPJobLockType lockType)
+            : base(name, service, server, lockType)
         {
         }
 
-        public STSSyncMonitor(String name, SPWebApplication adminWebApplication)
-            : base(name, adminWebApplication, null, SPJobLockType.None)
+        public STSSyncMonitor(String name, SPService service)
+            : base(name, service, null, SPJobLockType.None)
         {
             this.Title = tJobName;
         }

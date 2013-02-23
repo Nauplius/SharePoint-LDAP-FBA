@@ -83,9 +83,6 @@ net start sptimerv4</PostDeploymentCommand>
     <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAWebApplicationSettings.aspx.designer.cs">
       <DependentUpon>FBAWebApplicationSettings.aspx.cs</DependentUpon>
     </Compile>
-    <Compile Include="Features\ListsFeature\ListsFeature.EventReceiver.cs">
-      <DependentUpon>ListsFeature.feature</DependentUpon>
-    </Compile>
     <Compile Include="Features\FBAFeature\FBAFeature.EventReceiver.cs">
       <DependentUpon>FBAFeature.feature</DependentUpon>
     </Compile>
@@ -130,6 +127,7 @@ net start sptimerv4</PostDeploymentCommand>
     <None Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.feature">
       <FeatureId>{1710eacf-d1e9-4c5b-be26-c778607804e3}</FeatureId>
     </None>
+    <None Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.min.map" />
     <None Include="NaupliusApplicationPageLinks\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{c6d0e2a0-8079-4eaa-9fe5-227720692e71}</SharePointProjectItemId>
     </None>
@@ -167,6 +165,9 @@ net start sptimerv4</PostDeploymentCommand>
     <Content Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.Template.xml">
       <DependentUpon>STSSyncMonitorFeature.feature</DependentUpon>
     </Content>
+    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1-vsdoc.js" />
+    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.js" />
+    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.min.js" />
     <Content Include="NaupliusApplicationPageLinks\Elements.xml" />
     <Content Include="Features\AdminPagesFeature\AdminPagesFeature.Template.xml">
       <DependentUpon>AdminPagesFeature.feature</DependentUpon>

@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
-using Microsoft.SharePoint.Administration.Health;
 using Microsoft.SharePoint.Utilities;
 
 namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
@@ -27,21 +24,26 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
 
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
-            var adminWebApplication = properties.Feature.Parent as SPWebApplication;
+            SPFarm local = SPFarm.Local;
 
-            if (((SPWebApplication)properties.Feature.Parent).IsAdministrationWebApplication)
+            var services = from s in local.Services
+                          where s.Name == "SPTimerV4"
+                          select s;
+
+            var service = services.First();
+
+            foreach (SPJobDefinition job in service.JobDefinitions)
             {
-                foreach (SPJobDefinition job in adminWebApplication.JobDefinitions)
+                if (job.Name == tJobName)
                 {
-                    if (job.Name == tJobName)
-                    {
-                        job.Delete();
-                    }
+                    job.Delete();
                 }
-                var newTimerJob = new STSSyncMonitor(tJobName, adminWebApplication);
-                newTimerJob.IsDisabled = true;
-                newTimerJob.Update();
             }
+
+            var newTimerJob = new STSSyncMonitor(tJobName, service);
+            newTimerJob.IsDisabled = false;
+            newTimerJob.Schedule = new SPYearlySchedule();
+            newTimerJob.Update();
 
             //build the Master XML Fragment
             SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
@@ -74,12 +76,18 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
 
 
         // Uncomment the method below to handle the event raised before a feature is deactivated.
-/*
+
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
-            var adminWebApplication = properties.Feature.Parent as SPWebApplication;
+            SPFarm local = SPFarm.Local;
 
-            foreach (SPJobDefinition job in adminWebApplication.JobDefinitions)
+            var services = from s in local.Services
+                           where s.Name == "SPTimerV4"
+                           select s;
+
+            var service = services.First();
+
+            foreach (SPJobDefinition job in service.JobDefinitions)
             {
                 if (job.Name == tJobName)
                 {
@@ -87,7 +95,7 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
                 }
             }
         }
-*/
+
 
         // Uncomment the method below to handle the event raised after a feature has been installed.
 
@@ -100,9 +108,15 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
 
         public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
         {
-            var adminWebApplication = properties.Feature.Parent as SPWebApplication;
+            SPFarm local = SPFarm.Local;
 
-            foreach (SPJobDefinition job in adminWebApplication.JobDefinitions)
+            var services = from s in local.Services
+                           where s.Name == "SPTimerV4"
+                           select s;
+
+            var service = services.First();
+
+            foreach (SPJobDefinition job in service.JobDefinitions)
             {
                 if (job.Name == tJobName)
                 {

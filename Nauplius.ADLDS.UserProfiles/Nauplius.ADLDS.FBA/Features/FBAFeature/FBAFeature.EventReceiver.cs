@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Xml;
@@ -26,7 +27,6 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
         private const string ProviderRoleType =
             @"Microsoft.Office.Server.Security.LdapRoleProvider, Microsoft.Office.Server, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c";
         private static readonly XmlDocument MasterXmlFragment = new XmlDocument();
-
         const string tJobName = "Nauplius ADLDS FBA STS Sync Monitor";
 
         // Uncomment the method below to handle the event raised after a feature has been activated.
@@ -34,7 +34,6 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
             var webApp = properties.Feature.Parent as SPWebApplication;
-            var adminWebApp = SPAdministrationWebApplication.Local;
 
             //Build MasterXmlFragment if SPListItem is blank or missing attributes
             using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))
@@ -141,34 +140,40 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                             if (provider.ClaimProviderName == "Forms")
                                             {
                                                 webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
+                                                webApp.Update();
                                                 break;
                                             }
-
-                                            webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
-                                            //webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = new Uri("/_layouts/Nauplius.ADLDS.FBA/login.aspx", UriKind.RelativeOrAbsolute);
                                         }
+                                            webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
+                                            webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = new Uri("/_layouts/Nauplius.ADLDS.FBA/login.aspx", UriKind.RelativeOrAbsolute);
+                                            webApp.Update();
                                     }
 
                                     try
                                     {
                                         WebModifications.CreateWildcardNode(false, webApp);
                                         WebModifications.CreateProviderNode(false, webApp);
-                                        bool successful = WebModifications.CreateStsProviderNode(false, properties);
-                                        if (successful)
-                                        {
-                                            foreach (SPJobDefinition job in adminWebApp.JobDefinitions)
-                                            {
-                                                if (job.Name == tJobName)
-                                                {
-                                                    job.IsDisabled = false;
-                                                    job.Execute(Guid.Empty);
-                                                    job.IsDisabled = true;
-                                                }
-                                            }
-                                        }
-
+                                        WebModifications.CreateStsProviderNode(false, properties);
                                         WebModifications.CreateAdminWildcardNode(false, webApp);
                                         WebModifications.CreateAdminProviderNode(false, webApp);
+
+                                        SPFarm local = SPFarm.Local;
+
+                                        var services = from s in local.Services
+                                                       where s.Name == "SPTimerV4"
+                                                       select s;
+
+                                        var service = services.First();
+
+                                        foreach (SPJobDefinition job in service.JobDefinitions)
+                                        {
+                                            if (job.Name == tJobName)
+                                            {
+                                                if (job.IsDisabled)
+                                                    job.IsDisabled = false;
+                                                job.RunNow();
+                                            }
+                                        }
                                     }
                                     catch (Exception)
                                     {
@@ -190,24 +195,30 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
             var webApp = properties.Feature.Parent as SPWebApplication;
-            var adminWebApp = SPAdministrationWebApplication.Local;
 
             WebModifications.CreateWildcardNode(true, webApp);
             WebModifications.CreateProviderNode(true, webApp);
             WebModifications.CreateStsProviderNode(true, properties);
+            WebModifications.CreateAdminWildcardNode(true, webApp);
+            WebModifications.CreateAdminProviderNode(true, webApp);
 
-            foreach (SPJobDefinition job in adminWebApp.JobDefinitions)
+            SPFarm local = SPFarm.Local;
+
+            var services = from s in local.Services
+                           where s.Name == "SPTimerV4"
+                           select s;
+
+            var service = services.First();
+
+            foreach (SPJobDefinition job in service.JobDefinitions)
             {
                 if (job.Name == tJobName)
                 {
-                    job.IsDisabled = false;
-                    job.Execute(Guid.Empty);
-                    job.IsDisabled = true;
-                }                               
+                    if (job.IsDisabled)
+                        job.IsDisabled = false;
+                    job.RunNow();
+                }
             }
-
-            WebModifications.CreateAdminWildcardNode(true, webApp);
-            WebModifications.CreateAdminProviderNode(true, webApp);
 
             //Remove the Forms Authentication provider for the Web Application
             try
@@ -218,7 +229,7 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                     if (provider.ClaimProviderName == "Forms")
                     {
                         webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
-                        //webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
+                        webApp.Update();
                         break;
                     }
                 }
@@ -230,6 +241,11 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
             catch (ArgumentException)
             {
                 //Claims provider is null
+            }
+            finally
+            {
+                webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
+                webApp.Update();
             }
         }
 
@@ -246,22 +262,10 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
         public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
         {
             var webApp = properties.Feature.Parent as SPWebApplication;
-            var adminWebApp = new SPAdministrationWebApplication();
 
             WebModifications.CreateWildcardNode(true, webApp);
             WebModifications.CreateProviderNode(true, webApp);
             WebModifications.CreateStsProviderNode(true, properties);
-
-            foreach (SPJobDefinition job in adminWebApp.JobDefinitions)
-            {
-                if (job.Name == tJobName)
-                {
-                    job.IsDisabled = false;
-                    job.Execute(Guid.Empty);
-                    job.IsDisabled = true;
-                }
-            }
-
             WebModifications.CreateAdminWildcardNode(true, webApp);
             WebModifications.CreateAdminProviderNode(true, webApp);
 
@@ -274,7 +278,7 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                     if (provider.ClaimProviderName == "Forms")
                     {
                         webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
-                        //webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
+                        webApp.Update();
                         break;
                     }
                 }
@@ -286,6 +290,11 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
             catch (ArgumentException)
             {
                 //Claims provider is null
+            }
+            finally
+            {
+                webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
+                webApp.Update();
             }
         }
 
