@@ -86,6 +86,9 @@ net start sptimerv4</PostDeploymentCommand>
     <Compile Include="Features\FBAFeature\FBAFeature.EventReceiver.cs">
       <DependentUpon>FBAFeature.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\ListsFeature\ListsFeature.EventReceiver.cs">
+      <DependentUpon>ListsFeature.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\STSHealthAnalyzerFeature\STSHealthAnalyzerFeature.EventReceiver.cs">
       <DependentUpon>STSHealthAnalyzerFeature.feature</DependentUpon>
     </Compile>
@@ -109,14 +112,8 @@ net start sptimerv4</PostDeploymentCommand>
     <None Include="ADMIN\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{88e2ad5a-9855-4bd3-a7fa-1f9af4492e99}</SharePointProjectItemId>
     </None>
-    <None Include="FBAStsFarmListDefinition\FBAStsFarmListDefinitionInstance\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{59bae7f8-6964-42c9-939e-ae859bdf8eb8}</SharePointProjectItemId>
-    </None>
     <None Include="FBAStsFarmListDefinition\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{07d527e7-f19f-488e-9513-45a352528e08}</SharePointProjectItemId>
-    </None>
-    <None Include="FBAWebApplicationListDefinition\FBAWebApplicationListDefinitionInstance\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{1e36645c-2b3b-4ac9-89c9-4dd41e8f08a1}</SharePointProjectItemId>
     </None>
     <None Include="FBAWebApplicationListDefinition\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{d3997312-bff5-496f-a4a3-fa720b6138a1}</SharePointProjectItemId>
@@ -155,10 +152,8 @@ net start sptimerv4</PostDeploymentCommand>
   <ItemGroup>
     <Content Include="ADMIN\Nauplius.ADLDS.FBA\icon_32x32.png" />
     <Content Include="FBAStsFarmListDefinition\Elements.xml" />
-    <Content Include="FBAStsFarmListDefinition\FBAStsFarmListDefinitionInstance\Elements.xml" />
     <Content Include="FBAStsFarmListDefinition\Schema.xml" />
     <Content Include="FBAWebApplicationListDefinition\Elements.xml" />
-    <Content Include="FBAWebApplicationListDefinition\FBAWebApplicationListDefinitionInstance\Elements.xml" />
     <Content Include="FBAWebApplicationListDefinition\Schema.xml" />
     <Content Include="Features\STSHealthAnalyzerFeature\STSHealthAnalyzerFeature.Template.xml">
       <DependentUpon>STSHealthAnalyzerFeature.feature</DependentUpon>

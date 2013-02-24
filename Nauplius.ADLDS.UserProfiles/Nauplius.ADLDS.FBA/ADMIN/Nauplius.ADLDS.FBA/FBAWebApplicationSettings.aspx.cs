@@ -188,7 +188,15 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                                         //txtWebAppZone.text = item["WebApplicationZone"].ToString();
                                         txtMemProv.Text = item["WebApplicationMembershipProvider"].ToString();
                                         txtRoleProv.Text = item["WebApplicationRoleProvider"].ToString();
-                                        txtCustomUrl.Text = item["CustomUrl"].ToString();
+
+                                        try
+                                        {
+                                            txtCustomUrl.Text = item["CustomUrl"].ToString();
+                                        }
+                                        catch (Exception)
+                                        {
+                                            //CustomUrl is null
+                                        }
 
                                         //AD LDS Server
                                         tBSN.Text = item["ADLDSServer"].ToString();
