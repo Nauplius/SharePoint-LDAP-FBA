@@ -91,6 +91,7 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                                         updateItem["WebApplicationZone"] = "Default";
                                         updateItem["WebApplicationMembershipProvider"] = txtMemProv.Text;
                                         updateItem["WebApplicationRoleProvider"] = txtRoleProv.Text;
+                                        updateItem["CustomUrl"] = txtCustomUrl.Text;
 
                                         //AD LDS Server
                                         updateItem["ADLDSServer"] = tBSN.Text;
@@ -127,6 +128,7 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                                 newItem["WebApplicationZone"] = "Default";
                                 newItem["WebApplicationMembershipProvider"] = txtMemProv.Text;
                                 newItem["WebApplicationRoleProvider"] = txtRoleProv.Text;
+                                newItem["CustomUrl"] = txtCustomUrl.Text;
 
                                 //AD LDS Server
                                 newItem["ADLDSServer"] = tBSN.Text;
@@ -186,7 +188,8 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                                         //txtWebAppZone.text = item["WebApplicationZone"].ToString();
                                         txtMemProv.Text = item["WebApplicationMembershipProvider"].ToString();
                                         txtRoleProv.Text = item["WebApplicationRoleProvider"].ToString();
-                                        
+                                        txtCustomUrl.Text = item["CustomUrl"].ToString();
+
                                         //AD LDS Server
                                         tBSN.Text = item["ADLDSServer"].ToString();
                                         tBPrtNo.Text = item["ADLDSPort"].ToString();

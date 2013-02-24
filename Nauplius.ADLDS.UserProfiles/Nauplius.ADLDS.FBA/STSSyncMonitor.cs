@@ -99,9 +99,9 @@ namespace Nauplius.ADLDS.FBA
                                         catch (Exception)
                                         {
                                             Logging.LogMessage(902, Logging.LogCategories.Health,
-                                                                TraceSeverity.Verbose,
-                                                                "Failed to save updates to Security Token Service web.config on {0}.",
-                                                                new object[] {SPServer.Local.DisplayName});
+                                                               TraceSeverity.Verbose,
+                                                               "Failed to save updates to Security Token Service web.config on {0}.",
+                                                               new object[] {SPServer.Local.DisplayName});
                                         }
                                     }
                                 }
@@ -112,6 +112,8 @@ namespace Nauplius.ADLDS.FBA
             }
             Logging.LogMessage(900, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Leaving " + tJobName,
                    new object[] { null });
+            IsDisabled = true;
+            Update();
         }
     }
 }

@@ -153,6 +153,7 @@ net start sptimerv4</PostDeploymentCommand>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="ADMIN\Nauplius.ADLDS.FBA\icon_32x32.png" />
     <Content Include="FBAStsFarmListDefinition\Elements.xml" />
     <Content Include="FBAStsFarmListDefinition\FBAStsFarmListDefinitionInstance\Elements.xml" />
     <Content Include="FBAStsFarmListDefinition\Schema.xml" />

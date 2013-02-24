@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.SharePoint.Administration;
 
 namespace Nauplius.ADLDS.FBA
@@ -34,6 +32,7 @@ namespace Nauplius.ADLDS.FBA
             //public static string LDAP = "LDAP";
             public static string TimerJob = "Timer Job";
             public static string Health = "Health";
+            public static string STSXML = "STS XML";
         }
 
         public static string DefaultName
@@ -60,6 +59,7 @@ namespace Nauplius.ADLDS.FBA
                         //new SPDiagnosticsCategory(LogCategories.LDAP, null, TraceSeverity.Unexpected, EventSeverity.Error, 0, 0, false, true),
                         new SPDiagnosticsCategory(LogCategories.TimerJob, null, TraceSeverity.Medium, EventSeverity.Information, 0, 0, false, true),
                         new SPDiagnosticsCategory(LogCategories.Health, null, TraceSeverity.Medium, EventSeverity.Information, 0, 0, false, true),
+                        new SPDiagnosticsCategory(LogCategories.STSXML, null, TraceSeverity.Medium, EventSeverity.Information, 0, 0, false, true),
                     })
             };
             return areas;

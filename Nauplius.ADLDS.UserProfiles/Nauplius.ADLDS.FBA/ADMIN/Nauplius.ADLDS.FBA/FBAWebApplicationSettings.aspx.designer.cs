@@ -85,6 +85,24 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA {
         protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtRoleProv;
         
         /// <summary>
+        /// InputFormSection26 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection26;
+        
+        /// <summary>
+        /// txtCustomUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.InputFormTextBox txtCustomUrl;
+        
+        /// <summary>
         /// InputFormSection5 control.
         /// </summary>
         /// <remarks>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauplius.ADLDS.UserProfiles", "Nauplius.ADLDS.UserProfiles\Nauplius.ADLDS.UserProfiles.csproj", "{7C3F563A-B138-40E2-9BF1-B652A189A47C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauplius.ADLDS.FBA", "Nauplius.ADLDS.FBA\Nauplius.ADLDS.FBA.csproj", "{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBA", "Nauplius.ADLDS.FBA\FBA.csproj", "{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -14,7 +14,7 @@ Global
 		SccProjectUniqueName1 = Nauplius.ADLDS.UserProfiles\\Nauplius.ADLDS.UserProfiles.csproj
 		SccProjectName1 = Nauplius.ADLDS.UserProfiles
 		SccLocalPath1 = Nauplius.ADLDS.UserProfiles
-		SccProjectUniqueName2 = Nauplius.ADLDS.FBA\\Nauplius.ADLDS.FBA.csproj
+		SccProjectUniqueName2 = Nauplius.ADLDS.FBA\\FBA.csproj
 		SccProjectName2 = Nauplius.ADLDS.FBA
 		SccLocalPath2 = Nauplius.ADLDS.FBA
 	EndGlobalSection

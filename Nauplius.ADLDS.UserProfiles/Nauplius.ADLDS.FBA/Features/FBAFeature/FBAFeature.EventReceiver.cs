@@ -1,13 +1,10 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
-using Microsoft.SharePoint.Security;
 
-using Nauplius.ADLDS.FBA;
 
 namespace Nauplius.ADLDS.FBA.Features.FBAFeature
 {
@@ -60,13 +57,14 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                             MasterXmlFragment.AppendChild(
                                                 MasterXmlFragment.CreateNode(XmlNodeType.Element, "system.web", ""));
                                         }
-                                        
+
                                         if (MasterXmlFragment.SelectSingleNode(@"system.web/membership") == null)
                                         {
                                             CreateStsXPath(MasterXmlFragment, item, "system.web/membership");
                                         }
 
-                                        if (MasterXmlFragment.SelectSingleNode(@"system.web/membership/providers") == null)
+                                        if (MasterXmlFragment.SelectSingleNode(@"system.web/membership/providers") ==
+                                            null)
                                         {
                                             CreateStsXPath(MasterXmlFragment, item, "system.web/membership/providers");
                                         }
@@ -76,23 +74,37 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                             CreateStsXPath(MasterXmlFragment, item, "system.web/roleManager");
                                         }
 
-                                        if (MasterXmlFragment.SelectSingleNode(@"system.web/roleManager/providers") == null)
+                                        if (MasterXmlFragment.SelectSingleNode(@"system.web/roleManager/providers") ==
+                                            null)
                                         {
                                             CreateStsXPath(MasterXmlFragment, item, "system.web/roleManager/providers");
                                         }
 
-                                        if (MasterXmlFragment.SelectSingleNode(@"system.web/roleManager[@enabled='true']") == null)
+                                        if (
+                                            MasterXmlFragment.SelectSingleNode(
+                                                @"system.web/roleManager[@enabled='true']") == null)
                                         {
-                                            var roleManagerNode = (XmlElement)MasterXmlFragment.SelectSingleNode(@"system.web/roleManager");
+                                            var roleManagerNode =
+                                                (XmlElement)
+                                                MasterXmlFragment.SelectSingleNode(@"system.web/roleManager");
                                             roleManagerNode.SetAttribute("enabled", "true");
+                                            item["XMLStsConfig"] = MasterXmlFragment.OuterXml;
 
                                             try
                                             {
-                                                item["XMLStsConfig"] = MasterXmlFragment.OuterXml;
                                                 item.Update();
                                             }
-                                            catch (Exception)
-                                            {}
+                                            catch (SPException ex)
+                                            {
+                                                Logging.LogMessage(950, Logging.LogCategories.STSXML,
+                                                                   TraceSeverity.Unexpected,
+                                                                   String.Format(
+                                                                       "Unable to update the StsFarm List in Central Administration. {0}",
+                                                                       ex.StackTrace),
+                                                                   new object[] {null});
+                                                throw new SPException(
+                                                    @"Unable to update the StsFarm List in Central Administration.  Check to see if the item was removed.");
+                                            }
                                         }
                                     }
                                 }
@@ -103,12 +115,32 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                 item["StsConfig"] = "MasterXmlFragment";
                                 item["XMLStsConfig"] =
                                     @"<system.web><membership><providers /></membership><roleManager enabled='true'><providers /></roleManager></system.web>";
-                                item.Update();
+
+                                try
+                                {
+                                    item.Update();
+                                }
+                                catch (SPException ex)
+                                {
+                                    Logging.LogMessage(950, Logging.LogCategories.STSXML, TraceSeverity.Unexpected,
+                                                       String.Format(
+                                                           "Unable to update the StsFarm List in Central Administration. {0}",
+                                                           ex.StackTrace),
+                                                       new object[] {null});
+                                    throw new SPException(
+                                        @"Unable to update the StsFarm List in Central Administration.  Check to see if the item was removed.");
+                                }
                             }
                         }
                     }
-                    catch (Exception)
-                    {}
+                    catch (SPException ex)
+                    {
+                        Logging.LogMessage(950, Logging.LogCategories.STSXML, TraceSeverity.Unexpected,
+                                            String.Format("Unable to update the StsFarm List in Central Administration. {0}", 
+                                            ex.StackTrace),
+                                            new object[] { null });
+                        throw new SPException(@"Unable to update the StsFarm List in Central Administration.  Validate the list exists.");
+                    }
 
                     try
                     {
@@ -127,6 +159,18 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                     var ap = new SPFormsAuthenticationProvider(
                                         item["WebApplicationMembershipProvider"].ToString(), item["WebApplicationRoleProvider"].ToString());
 
+                                    //Set the custom URL
+                                    try
+                                    {
+                                        var customUrl = item["CustomUrl"].ToString();
+                                        webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl =
+                                            new Uri(customUrl, UriKind.RelativeOrAbsolute);     
+                                    }
+                                    catch (NullReferenceException)
+                                    {
+                                        //CustomUrl is null
+                                    }
+
                                     try
                                     {
                                         webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
@@ -134,7 +178,7 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                     catch (ArgumentException)
                                     {
                                         foreach (
-                                            SPAuthenticationProvider provider in
+                                            var provider in
                                                 webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationProviders)
                                         {
                                             if (provider.ClaimProviderName == "Forms")
@@ -145,7 +189,6 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                             }
                                         }
                                             webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
-                                            webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = new Uri("/_layouts/Nauplius.ADLDS.FBA/login.aspx", UriKind.RelativeOrAbsolute);
                                             webApp.Update();
                                     }
 
@@ -157,7 +200,7 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                         WebModifications.CreateAdminWildcardNode(false, webApp);
                                         WebModifications.CreateAdminProviderNode(false, webApp);
 
-                                        SPFarm local = SPFarm.Local;
+                                        var local = SPFarm.Local;
 
                                         var services = from s in local.Services
                                                        where s.Name == "SPTimerV4"
@@ -171,19 +214,30 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
                                             {
                                                 if (job.IsDisabled)
                                                     job.IsDisabled = false;
+                                                job.Update();
                                                 job.RunNow();
                                             }
                                         }
                                     }
-                                    catch (Exception)
+                                    catch (SPException ex)
                                     {
+                                        Logging.LogMessage(952, Logging.LogCategories.STSXML, TraceSeverity.Unexpected,
+                                                            String.Format("An unknown error has occurred. {0}",
+                                                            ex.StackTrace),
+                                                            new object[] { null });
+                                        throw new SPException(@"An unknown error has occurred. Please review the ULS file.");
                                     }
                                 }
                             }
                         }
                     }
-                    catch
+                    catch (SPException ex)
                     {
+                        Logging.LogMessage(951, Logging.LogCategories.STSXML, TraceSeverity.Unexpected,
+                                            String.Format("Unable to update the WebApplicationSettings List in Central Administration. {0}",
+                                            ex.StackTrace),
+                                            new object[] { null });
+                        throw new SPException(@"Unable to update the WebApplicationSettings List in Central Administration.  Validate the list exists.");
                     }
                 }
             }
@@ -202,7 +256,7 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
             WebModifications.CreateAdminWildcardNode(true, webApp);
             WebModifications.CreateAdminProviderNode(true, webApp);
 
-            SPFarm local = SPFarm.Local;
+            var local = SPFarm.Local;
 
             var services = from s in local.Services
                            where s.Name == "SPTimerV4"
@@ -210,12 +264,13 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
 
             var service = services.First();
 
-            foreach (SPJobDefinition job in service.JobDefinitions)
+            foreach (var job in service.JobDefinitions)
             {
                 if (job.Name == tJobName)
                 {
                     if (job.IsDisabled)
                         job.IsDisabled = false;
+                    job.Update();
                     job.RunNow();
                 }
             }
@@ -223,7 +278,7 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
             //Remove the Forms Authentication provider for the Web Application
             try
             {
-                foreach (SPAuthenticationProvider provider in
+                foreach (var provider in
                     webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationProviders)
                 {
                     if (provider.ClaimProviderName == "Forms")
@@ -269,10 +324,29 @@ namespace Nauplius.ADLDS.FBA.Features.FBAFeature
             WebModifications.CreateAdminWildcardNode(true, webApp);
             WebModifications.CreateAdminProviderNode(true, webApp);
 
+            var local = SPFarm.Local;
+
+            var services = from s in local.Services
+                           where s.Name == "SPTimerV4"
+                           select s;
+
+            var service = services.First();
+
+            foreach (var job in service.JobDefinitions)
+            {
+                if (job.Name == tJobName)
+                {
+                    if (job.IsDisabled)
+                        job.IsDisabled = false;
+                    job.Update();
+                    job.RunNow();
+                }
+            }
+
             //Remove the Forms Authentication provider for the Web Application
             try
             {
-                foreach (SPAuthenticationProvider provider in
+                foreach (var provider in
                     webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationProviders)
                 {
                     if (provider.ClaimProviderName == "Forms")

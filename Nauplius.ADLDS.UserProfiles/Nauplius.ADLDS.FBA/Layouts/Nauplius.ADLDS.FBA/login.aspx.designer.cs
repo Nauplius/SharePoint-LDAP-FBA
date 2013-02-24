@@ -7,45 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Contoso.SharePoint.Authentication {
+namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA {
     
     
-    public partial class Login {
-        
-        /// <summary>
-        /// ClaimsFormsPageTitle control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.EncodedLiteral ClaimsFormsPageTitle;
-        
-        /// <summary>
-        /// ClaimsFormsPageTitleInTitleArea control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.EncodedLiteral ClaimsFormsPageTitleInTitleArea;
-        
-        /// <summary>
-        /// ClaimsFormsPageMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.EncodedLiteral ClaimsFormsPageMessage;
-        
-        /// <summary>
-        /// signInControl control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Login signInControl;
+    public partial class login {
     }
 }

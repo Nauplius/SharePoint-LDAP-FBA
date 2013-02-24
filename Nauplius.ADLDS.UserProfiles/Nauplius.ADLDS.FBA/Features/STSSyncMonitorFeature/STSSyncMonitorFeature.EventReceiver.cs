@@ -41,7 +41,7 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
             }
 
             var newTimerJob = new STSSyncMonitor(tJobName, service);
-            newTimerJob.IsDisabled = false;
+            newTimerJob.IsDisabled = true;
             newTimerJob.Schedule = new SPYearlySchedule();
             newTimerJob.Update();
 

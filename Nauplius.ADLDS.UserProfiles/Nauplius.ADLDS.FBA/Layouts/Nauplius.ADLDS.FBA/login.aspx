@@ -12,14 +12,14 @@
     Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" %>
 
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" 
-    Inherits="Contoso.SharePoint.Authentication.Login" MasterPageFile="~/_layouts/simple.master" %>
+    Inherits="Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA.login" MasterPageFile="~/_layouts/simple.master" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PlaceHolderPageTitle"
     runat="server">
     <SharePoint:EncodedLiteral runat="server"
         EncodeMethod="HtmlEncode" ID="ClaimsFormsPageTitle"
         Visible="false" />
-    My Custom Login
+    Forms Login
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="PlaceHolderPageTitleInTitleArea"
     runat="server">
