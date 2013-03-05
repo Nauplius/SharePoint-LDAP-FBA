@@ -3,25 +3,50 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauplius.ADLDS.Provider", "Nauplius.ADLDS.Provider\Nauplius.ADLDS.Provider.csproj", "{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Setup", "Setup\Setup.wixproj", "{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
+		SccNumberOfProjects = 3
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs03
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Nauplius.ADLDS.Provider\\Nauplius.ADLDS.Provider.csproj
 		SccProjectName1 = Nauplius.ADLDS.Provider
 		SccLocalPath1 = Nauplius.ADLDS.Provider
+		SccProjectUniqueName2 = Setup\\Setup.wixproj
+		SccProjectName2 = Setup
+		SccLocalPath2 = Setup
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Debug|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Debug|Mixed Platforms.Build.0 = Release|Any CPU
+		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{48DF9E43-AF82-42FB-9F77-67DFD49AA1FA}.Release|x86.ActiveCfg = Release|Any CPU
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Debug|Mixed Platforms.ActiveCfg = Release|x86
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Debug|Mixed Platforms.Build.0 = Release|x86
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Debug|x86.ActiveCfg = Debug|x86
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Debug|x86.Build.0 = Debug|x86
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Release|Any CPU.ActiveCfg = Release|x86
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Release|Mixed Platforms.Build.0 = Release|x86
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Release|x86.ActiveCfg = Release|x86
+		{BCBA8A0B-F02F-4C0F-9F33-B81B0ED8609F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

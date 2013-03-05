@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.DirectoryServices;
 using System.DirectoryServices.ActiveDirectory;
 using System.DirectoryServices.Protocols;
@@ -296,11 +297,11 @@ namespace Nauplius.ADLDS.Provider
             {
                 connection.SessionOptions.SecureSocketLayer = true;
             }
-
-            connection.SessionOptions.Signing = true;
-            connection.SessionOptions.Sealing = true;
-
-            string test1 = connection.Directory.ToString();
+            else
+            {
+                connection.SessionOptions.Signing = true;
+                connection.SessionOptions.Sealing = true;                
+            }
 
             try
             {
@@ -436,6 +437,7 @@ namespace Nauplius.ADLDS.Provider
     {
         public override string[] GetRolesForUser(string username)
         {
+            var userRoles = new List<string>();
             var _server = string.Empty;
             var _port = 389;
             var _useSSL = false;
@@ -445,7 +447,8 @@ namespace Nauplius.ADLDS.Provider
             var _userNameAttribute = string.Empty;
             var _scope = new SearchScope();
 
-            var directoryEntry = StsManager.ProviderNode(Name, false, out _server, out _port, out _useSSL, out _path, out _username, out _password, out _userNameAttribute, out _scope);
+            var directoryEntry = StsManager.ProviderNode(Name, false, out _server, out _port, out _useSSL, 
+                out _path, out _username, out _password, out _userNameAttribute, out _scope);
 
             var directorySearcher = new DirectorySearcher(directoryEntry)
             {
@@ -455,28 +458,21 @@ namespace Nauplius.ADLDS.Provider
                 SearchScope = _scope
             };
 
-            var result = directorySearcher.FindOne();
+            var results = directorySearcher.FindAll();
 
-            if (result != null)
+            foreach (SearchResult result in results)
             {
-                var roles = new string[result.GetDirectoryEntry().Properties["memberof"].Count];
+                var roleName = result.GetDirectoryEntry();
+                userRoles.Add(roleName.Properties["distinguishedName"].Value.ToString());
+            }
 
-                for (var i = 0; i < result.GetDirectoryEntry().Properties["memberof"].Count; i++)
-                {
-                    var groupName = result.Properties["memberof"][i].ToString();
-                    roles[i] = groupName; //.Replace(',', '.');
-                }
-
-                return roles;
-            }                
-
-            return null;
+            return userRoles.ToArray();
         }
 
         public override bool RoleExists(string roleName)
-        {
-            
-            var directoryEntry = LdapManager.Connect(LdapRoleManager.Server, LdapRoleManager.Port, LdapRoleManager.UseSSL, LdapRoleManager.GroupContainer,
+        {         
+            var directoryEntry = LdapManager.Connect(LdapRoleManager.Server, LdapRoleManager.Port, 
+                LdapRoleManager.UseSSL, LdapRoleManager.GroupContainer,
                 LdapRoleManager.UserName, LdapRoleManager.Password);
 
             var directorySearcher = new DirectorySearcher(directoryEntry);
@@ -492,6 +488,33 @@ namespace Nauplius.ADLDS.Provider
             }
             
             return false;
+        }
+
+        public override string[] GetUsersInRole(string roleName)
+        {
+            var users = new List<string>();
+
+            var directoryEntry = LdapManager.Connect(LdapRoleManager.Server, LdapRoleManager.Port,
+                LdapRoleManager.UseSSL, LdapRoleManager.GroupContainer,
+                LdapRoleManager.UserName, LdapRoleManager.Password);
+
+            var directorySearcher = new DirectorySearcher(directoryEntry);
+            directorySearcher.Filter = String.Format("(&(&(&(ObjectClass=group)({0}={1}))))",
+                                                     LdapRoleManager.GroupNameAttribute, roleName);
+            directorySearcher.SearchScope = LdapRoleManager.Scope;
+
+            var result = directorySearcher.FindOne();
+
+            if (result != null)
+            {
+                foreach (DirectoryEntry user in result.Properties["memberof"])
+                {
+                    users.Add(user.Properties[LdapMembershipManager.UserName].Value.ToString());
+                }
+                return users.ToArray();
+            }
+
+            return null;
         }
 
         private MembershipUser GetUserFromSearchResult(DirectoryEntry result)
@@ -514,44 +537,6 @@ namespace Nauplius.ADLDS.Provider
             throw new NotImplementedException();
         }
 
-        public override string[] GetUsersInRole(string roleName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string[] GetAllRoles()
-        {
-            var roles = new string[]{};
-            
-            if (LdapManager.ValidateServer(LdapRoleManager.Server, LdapRoleManager.Port))
-            {
-                var directoryEntry = LdapManager.Connect(LdapRoleManager.Server, LdapRoleManager.Port,
-                                                         LdapRoleManager.UseSSL,
-                                                         LdapRoleManager.GroupContainer,
-                                                         LdapRoleManager.UserName, LdapRoleManager.Password);
-
-                var directorySearcher = new DirectorySearcher(directoryEntry)
-                {
-                    Filter =
-                        String.Format("(&(&(&(ObjectClass=group)({0}=*))))",
-                                      LdapRoleManager.GroupNameAttribute),
-                    SearchScope = LdapRoleManager.Scope,
-
-                };
-
-                var results = directorySearcher.FindAll();
-
-                var i = 0;
-
-                for (var n = i; (n < (i + results.Count)) && (n < results.Count); n++)
-                {
-                    roles[n] = results[i].GetDirectoryEntry().ToString();
-                }
-            }
-
-            return roles;
-        }
-
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)
         {
             throw new NotImplementedException();
@@ -562,6 +547,10 @@ namespace Nauplius.ADLDS.Provider
             throw new NotImplementedException();
         }
 
+        public override string[] GetAllRoles()
+        {
+            throw new NotImplementedException();
+        }
         public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
         {
             throw new NotImplementedException();
@@ -613,9 +602,18 @@ namespace Nauplius.ADLDS.Provider
             get
             {
                 var membershipProvider = MembershipProviderNode();
-                var _server = (membershipProvider.Attributes["server"].Value == null) ? "localhost" : 
-                    membershipProvider.Attributes["server"].Value;
-                return _server;
+                var _server = "localhost";
+
+                try
+                {
+                    _server = (membershipProvider.Attributes["server"].Value == null) ? "localhost" :
+                        membershipProvider.Attributes["server"].Value;
+                    return _server;
+                }
+                catch (NullReferenceException)
+                {
+                    return _server;
+                }
             }
         }
 
@@ -624,9 +622,19 @@ namespace Nauplius.ADLDS.Provider
             get
             {
                 var membershipProvider = MembershipProviderNode();
-                var _port = (membershipProvider.Attributes["port"].Value == null) ? "389" : 
-                    membershipProvider.Attributes["port"].Value;
-                return Convert.ToInt32(_port);
+                var _port = "389";
+
+                try
+                {
+                    _port = (membershipProvider.Attributes["port"].Value == null) ? "389" :
+                        membershipProvider.Attributes["port"].Value;
+                    return Convert.ToInt32(_port);
+                }
+                catch (NullReferenceException)
+                {
+                    return Convert.ToInt32(_port);
+                }
+
             }
         }
 
@@ -635,9 +643,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             {
                 var membershipProvider = MembershipProviderNode();
-                var _useSsl = (membershipProvider.Attributes["useSSL"].Value == null) ? false : 
-                    membershipProvider.Attributes["useSSL"].Value == null;
-                return Convert.ToBoolean(_useSsl);
+                var _useSsl = false;
+
+                try
+                {
+                    _useSsl = (membershipProvider.Attributes["useSSL"].Value == null) ? false : 
+                        membershipProvider.Attributes["useSSL"].Value == null;
+                    return Convert.ToBoolean(_useSsl);
+                }
+                catch (NullReferenceException)
+                {
+                    return Convert.ToBoolean(_useSsl);
+                }
             }
         }
 
@@ -646,9 +663,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             {
                 var membershipProvider = MembershipProviderNode();
-                var _userDnAttribute = (membershipProvider.Attributes["userDNAttribute"].Value == null) ? "userPrincipalName" : 
-                    membershipProvider.Attributes["userDNAttribute"].Value;
-                return _userDnAttribute;
+                var _userDnAttribute = "distinguishedName";
+
+                try
+                {
+                    _userDnAttribute = (membershipProvider.Attributes["userDNAttribute"].Value == null) ? "distinguishedName" : 
+                        membershipProvider.Attributes["userDNAttribute"].Value;
+                    return _userDnAttribute;
+                }
+                catch (NullReferenceException)
+                {
+                    return _userDnAttribute;
+                }
             }
         }
 
@@ -657,9 +683,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             {
                 var membershipProvider = MembershipProviderNode();
-                var _useDnAttribute = (membershipProvider.Attributes["useDNAttribute"].Value == null) ? "true" : 
-                    membershipProvider.Attributes["useDNAttribute"].Value;
-                return Convert.ToBoolean(_useDnAttribute);
+                var _useDnAttribute = "true";
+
+                try
+                {
+                    _useDnAttribute = (membershipProvider.Attributes["useDNAttribute"].Value == null) ? "true" : 
+                        membershipProvider.Attributes["useDNAttribute"].Value;
+                    return Convert.ToBoolean(_useDnAttribute);
+                }
+                catch (NullReferenceException)
+                {
+                    return Convert.ToBoolean(_useDnAttribute);
+                }
             }
         }
 
@@ -669,9 +704,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             {
                 var membershipProvider = MembershipProviderNode();
-                var _userNameAttribute = (membershipProvider.Attributes["userNameAttribute"].Value == null) ? "userPrincipalName" :
-                    membershipProvider.Attributes["userNameAttribute"].Value;
-                return _userNameAttribute;
+                var _userNameAttribute = "userPrincipalName";
+
+                try
+                {
+                    _userNameAttribute = (membershipProvider.Attributes["userNameAttribute"].Value == null) ? "userPrincipalName" :
+                        membershipProvider.Attributes["userNameAttribute"].Value;
+                    return _userNameAttribute;
+                }
+                catch (NullReferenceException)
+                {
+                    return _userNameAttribute;
+                }
             }
         }
 
@@ -680,9 +724,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             {
                 var membershipProvider = MembershipProviderNode();
-                var _userContainer = (membershipProvider.Attributes["userContainer"].Value == null) ? null :
-                    membershipProvider.Attributes["userContainer"].Value;
-                return _userContainer;
+                var _userContainer = string.Empty;
+
+                try
+                {
+                    _userContainer = (membershipProvider.Attributes["userContainer"].Value == null) ? string.Empty :
+                        membershipProvider.Attributes["userContainer"].Value;
+                    return _userContainer;
+                }
+                catch (NullReferenceException)
+                {
+                    return _userContainer;
+                }
             }
         }
 
@@ -691,9 +744,18 @@ namespace Nauplius.ADLDS.Provider
             get
             {
                 var membershipProvider = MembershipProviderNode();
-                var _userObjectClass = (membershipProvider.Attributes["userObjectClass"].Value == null) ? "person" :
-                    membershipProvider.Attributes["userObjectClass"].Value;
-                return _userObjectClass;
+                var _userObjectClass = "person";
+
+                try
+                {
+                    _userObjectClass = (membershipProvider.Attributes["userObjectClass"].Value == null) ? "person" :
+                        membershipProvider.Attributes["userObjectClass"].Value;
+                    return _userObjectClass;
+                }
+                catch (NullReferenceException)
+                {
+                    return _userObjectClass;
+                }
             }
         }
 
@@ -702,9 +764,18 @@ namespace Nauplius.ADLDS.Provider
             get
             {
                 var membershipProvider = MembershipProviderNode();
-                var _userFilter = (membershipProvider.Attributes["userFilter"].Value == null) ? @"(ObjectClass=*)" :
-                    membershipProvider.Attributes["userFilter"].Value;
-                return _userFilter;
+                var _userFilter = @"(ObjectClass=*)";
+
+                try
+                {
+                    _userFilter = (membershipProvider.Attributes["userFilter"].Value == null) ? @"(ObjectClass=*)" :
+                        membershipProvider.Attributes["userFilter"].Value;
+                    return _userFilter;
+                }
+                catch (NullReferenceException)
+                {
+                    return _userFilter;
+                }
             }
         }
 
@@ -713,22 +784,29 @@ namespace Nauplius.ADLDS.Provider
             get 
             {
                 var membershipProvider = MembershipProviderNode();
-                var _scope = (membershipProvider.Attributes["scope"].Value.ToUpper() == null) ? "SUBTREE" :
-                    membershipProvider.Attributes["scope"].Value.ToUpper();
 
-                if (_scope == "BASE")
+                try
                 {
-                    return SearchScope.Base;
+                    var _scope = (membershipProvider.Attributes["scope"].Value.ToUpper() == null) ? "SUBTREE" :
+                        membershipProvider.Attributes["scope"].Value.ToUpper();
+                    if (_scope == "BASE")
+                    {
+                        return SearchScope.Base;
+                    }
+                    if (_scope == "ONELEVEL")
+                    {
+                        return SearchScope.OneLevel;
+                    }
+                    if (_scope == "SUBTREE")
+                    {
+                        return SearchScope.Subtree;
+                    }
+                    return SearchScope.Subtree;
                 }
-                if (_scope == "ONELEVEL")
-                {
-                    return SearchScope.OneLevel;
-                }
-                if (_scope == "SUBTREE")
+                catch (NullReferenceException)
                 {
                     return SearchScope.Subtree;
                 }
-                return SearchScope.Subtree;
             }
         }
 
@@ -737,9 +815,20 @@ namespace Nauplius.ADLDS.Provider
             get
             {
                 var membershipProvider = MembershipProviderNode();
-                var _otherRequiredUserAttributes =
-                    membershipProvider.Attributes["otherRequiredUserAttributes"].Value;
-                return _otherRequiredUserAttributes;
+                var _otherRequiredUserAttributes = "sn,givenname,cn";
+
+                try
+                {
+                    _otherRequiredUserAttributes =
+                        (membershipProvider.Attributes["otherRequiredUserAttributes"].Value == null)
+                            ? "sn,givenname,cn"
+                            : membershipProvider.Attributes["otherRequiredUserAttributes"].Value;
+                    return _otherRequiredUserAttributes;
+                }
+                catch (NullReferenceException)
+                {
+                    return _otherRequiredUserAttributes;
+                }
             }
         }
 
@@ -749,16 +838,17 @@ namespace Nauplius.ADLDS.Provider
             {
                 var membershipProvider = MembershipProviderNode();
                 var _userName = string.Empty;
+
                 try
                 {
                     _userName = membershipProvider.Attributes["Username"].Value;
+                    return _userName;
                 }
                 catch (NullReferenceException)
                 {
                     //Attribute does not exist
-                    _userName = string.Empty;
+                    return _userName;
                 }  
-                return _userName;
             }
         }
 
@@ -768,16 +858,17 @@ namespace Nauplius.ADLDS.Provider
             {
                 var membershipProvider = MembershipProviderNode();
                 var _password = string.Empty;
+
                 try
                 {
                     _password = membershipProvider.Attributes["Password"].Value;
+                    return _password;
                 }
                 catch (NullReferenceException)
                 {
                     //Attribute does not exist
-                    _password = string.Empty;
-                }    
-                return _password;
+                    return _password;
+                }
             }
         }
     }
@@ -813,9 +904,18 @@ namespace Nauplius.ADLDS.Provider
             get
             {
                 var roleProvider = RoleProviderNode();
-                var _server = (roleProvider.Attributes["server"].Value == null) ? "localhost" : 
-                    roleProvider.Attributes["server"].Value;
-                return _server;
+                var _server = "localhost";
+
+                try
+                {
+                    _server = (roleProvider.Attributes["server"].Value == null) ? "localhost" : 
+                        roleProvider.Attributes["server"].Value;
+                    return _server;
+                }
+                catch (NullReferenceException)
+                {
+                    return _server;
+                }
             }
         }
 
@@ -824,8 +924,19 @@ namespace Nauplius.ADLDS.Provider
             get
             {
                 var roleProvider = RoleProviderNode();
-                var _port = roleProvider.Attributes["port"].Value;
-                return Convert.ToInt32(_port);
+                var _port = "389";
+
+                try
+                {
+                    _port = (roleProvider.Attributes["port"].Value == null)
+                                ? "389"
+                                : roleProvider.Attributes["port"].Value;
+                    return Convert.ToInt32(_port);
+                }
+                catch (NullReferenceException)
+                {
+                    return Convert.ToInt32(_port);
+                }
             }
         }
 
@@ -834,18 +945,38 @@ namespace Nauplius.ADLDS.Provider
             get 
             {
                 var roleProvider = RoleProviderNode();
-                var _useSsl = (roleProvider.Attributes["useSSL"].Value == null) ? "false" :
-                    roleProvider.Attributes["useSSL"].Value;
-                return Convert.ToBoolean(_useSsl);
+                var _useSsl = "false";
+
+                try
+                {
+                    _useSsl = (roleProvider.Attributes["useSSL"].Value == null) ? "false" :
+                        roleProvider.Attributes["useSSL"].Value;
+                    return Convert.ToBoolean(_useSsl);
+                }
+                catch (NullReferenceException)
+                {
+                    return Convert.ToBoolean(_useSsl);
+                }
             }
         }
 
         public static string GroupNameAttribute
         {
-            get { var roleProvider = RoleProviderNode();
-                var _groupNameAttribute = (roleProvider.Attributes["groupNameAttribute"].Value == null) ? "cn" : 
+            get 
+            { 
+                var roleProvider = RoleProviderNode();
+                var _groupNameAttribute = "cn";
+
+                try
+                {
+                    _groupNameAttribute = (roleProvider.Attributes["groupNameAttribute"].Value == null) ? "cn" : 
                     roleProvider.Attributes["groupNameAttribute"].Value;
-                return _groupNameAttribute;
+                    return _groupNameAttribute;
+                }
+                catch (NullReferenceException)
+                {
+                    return _groupNameAttribute;
+                }
             }
         }
 
@@ -854,9 +985,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             { 
                 var roleProvider = RoleProviderNode();
-                var _groupContainer = (roleProvider.Attributes["groupContainer"].Value == null) ? null :
+                var _groupContainer = string.Empty;
+
+                try
+                {
+                    _groupContainer = (roleProvider.Attributes["groupContainer"].Value == null) ? string.Empty :
                     roleProvider.Attributes["groupContainer"].Value;
-                return _groupContainer;
+                    return _groupContainer;
+                }
+                catch (NullReferenceException)
+                {
+                    return _groupContainer;
+                }
             }
         }
 
@@ -865,9 +1005,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             { 
                 var roleProvider = RoleProviderNode();
-                var _groupMemberAttribute = (roleProvider.Attributes["groupMemberAttribute"].Value == null) ? "member" :
+                var _groupMemberAttribute = "member";
+
+                try
+                {
+                    _groupMemberAttribute = (roleProvider.Attributes["groupMemberAttribute"].Value == null) ? "member" :
                     roleProvider.Attributes["groupMemberAttribute"].Value;
-                return _groupMemberAttribute;
+                    return _groupMemberAttribute;
+                }
+                catch (NullReferenceException)
+                {
+                    return _groupMemberAttribute;
+                }
             }
         }
 
@@ -876,9 +1025,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             { 
                 var roleProvider = RoleProviderNode();
-                var _userNameAttribute = (roleProvider.Attributes["userNameAttribute"].Value == null) ? "userPrincipalName" :
-                    roleProvider.Attributes["userNameAttribute"].Value;
-                return _userNameAttribute;
+                var _userNameAttribute = "userPrincipalName";
+
+                try
+                {
+                    _userNameAttribute = (roleProvider.Attributes["userNameAttribute"].Value == null) ? "userPrincipalName" :
+                        roleProvider.Attributes["userNameAttribute"].Value;
+                    return _userNameAttribute;
+                }
+                catch (NullReferenceException)
+                {
+                    return _userNameAttribute;
+                }
             }
         }
 
@@ -887,9 +1045,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             { 
                 var roleProvider = RoleProviderNode();
-                var _dnAttribute = (roleProvider.Attributes["dnAttribute"].Value == null) ? "distinguishedName" :
-                    roleProvider.Attributes["dnAttribute"].Value;
-                return _dnAttribute;
+                var _dnAttribute = "distinguishedName";
+
+                try
+                {
+                    _dnAttribute = (roleProvider.Attributes["dnAttribute"].Value == null) ? "distinguishedName" :
+                        roleProvider.Attributes["dnAttribute"].Value;
+                    return _dnAttribute;
+                }
+                catch (NullReferenceException)
+                {
+                    return _dnAttribute;
+                }
             }
         }
 
@@ -898,9 +1065,18 @@ namespace Nauplius.ADLDS.Provider
             get 
             { 
                 var roleProvider = RoleProviderNode();
-                var _useUserDnAttribute = (roleProvider.Attributes["useUserDNAttribute"].Value == null) ? "true" : 
-                    roleProvider.Attributes["useUserDNAttribute"].Value;
-                return Convert.ToBoolean(_useUserDnAttribute);
+                var _useUserDnAttribute = "true";
+
+                try
+                {
+                    _useUserDnAttribute = (roleProvider.Attributes["useUserDNAttribute"].Value == null) ? "true" : 
+                        roleProvider.Attributes["useUserDNAttribute"].Value;
+                    return Convert.ToBoolean(_useUserDnAttribute);
+                }
+                catch (NullReferenceException)
+                {
+                    return Convert.ToBoolean(_useUserDnAttribute);
+                }
             }
         }
 
@@ -909,7 +1085,10 @@ namespace Nauplius.ADLDS.Provider
             get 
             {
                 var roleProvider = RoleProviderNode();
-                var _scope = (roleProvider.Attributes["scope"].Value.ToUpper() == null) ? "SUBTREE" :
+
+                try
+                {
+                    var _scope = (roleProvider.Attributes["scope"].Value.ToUpper() == null) ? "SUBTREE" :
                     roleProvider.Attributes["scope"].Value.ToUpper();
 
                 if (_scope == "BASE")
@@ -925,24 +1104,51 @@ namespace Nauplius.ADLDS.Provider
                     return SearchScope.Subtree;
                 }
                 return SearchScope.Subtree;
+                }
+                catch (NullReferenceException)
+                {
+                    return SearchScope.Subtree;
+                }
             }
         }
 
         public static string UserFilter
         {
-            get { var roleProvider = RoleProviderNode();
-                var _userFilter = (roleProvider.Attributes["userFilter"].Value == null) ? @"&(objectClass=user)(objectCategory=person)" :
-                    roleProvider.Attributes["userFilter"].Value;
-                return _userFilter;
+            get 
+            { 
+                var roleProvider = RoleProviderNode();
+                var _userFilter = @"&(ObjectClass=User)(ObjectCategory=person)";
+
+                try
+                {
+                    _userFilter = (roleProvider.Attributes["userFilter"].Value == null) ? @"&(objectClass=user)(objectCategory=person)" :
+                        roleProvider.Attributes["userFilter"].Value;
+                    return _userFilter;
+                }
+                catch (NullReferenceException)
+                {
+                    return _userFilter;
+                }
             }
         }
 
         public static string GroupFilter
         {
-            get { var roleProvider = RoleProviderNode();
-                var _groupFilter = (roleProvider.Attributes["groupFilter"].Value == null) ? @"&(objectClass=group)(objectCategory=group)" :
-                    roleProvider.Attributes["groupFilter"].Value;
-                return _groupFilter;
+            get 
+            { 
+                var roleProvider = RoleProviderNode();
+                var _groupFilter = @"&(ObjectClass=group)(ObjectCategory=group)";
+
+                try
+                {
+                    _groupFilter = (roleProvider.Attributes["groupFilter"].Value == null) ? @"&(objectClass=group)(objectCategory=group)" :
+                        roleProvider.Attributes["groupFilter"].Value;
+                    return _groupFilter;
+                }
+                catch (NullReferenceException)
+                {
+                    return _groupFilter;
+                }
             }
         }
 
@@ -952,16 +1158,17 @@ namespace Nauplius.ADLDS.Provider
             {
                 var roleProvider = RoleProviderNode();
                 var _userName = string.Empty;
+
                 try
                 {
                     _userName = roleProvider.Attributes["Username"].Value;
+                    return _userName;
                 }
                 catch (NullReferenceException)
                 {
                     //Attribute does not exist
-                    _userName = string.Empty;
+                    return _userName;
                 }
-                return _userName;
             }
         }
 
@@ -971,16 +1178,17 @@ namespace Nauplius.ADLDS.Provider
             {
                 var roleProvider = RoleProviderNode();
                 var _password = string.Empty;
+
                 try
                 {
                     _password = roleProvider.Attributes["Password"].Value;
+                    return _password;
                 }
                 catch (NullReferenceException)
                 {
                     //Attribute does not exist
-                    _password = string.Empty;
+                    return _password;
                 }
-                return _password;
             }
         }
     }
@@ -1010,13 +1218,35 @@ namespace Nauplius.ADLDS.Provider
                         (String.Format("configuration/system.web/roleManager/providers/add[@name='{0}']", providerName)));                
             }
 
-            _server = (provider.Attributes["server"].Value == null)
-                              ? "localhost"
-                              : provider.Attributes["server"].Value;
+            try
+            {
+                _server = (provider.Attributes["server"].Value == null)
+                                  ? "localhost"
+                                  : provider.Attributes["server"].Value;
+            }
+            catch (NullReferenceException)
+            {
+                _server = "localhost";
+            }
 
-            _port = (provider.Attributes["port"].Value == null) ? 389 : Convert.ToInt32(provider.Attributes["port"].Value);
+            try
+            {
+                _port = (provider.Attributes["port"].Value == null) ? 389 : Convert.ToInt32(provider.Attributes["port"].Value);
+            }
+            catch (NullReferenceException)
+            {
+                _port = 389;
+            }
 
-            _useSSL = (provider.Attributes["useSSL"].Value != null) && Convert.ToBoolean(provider.Attributes["useSSL"].Value);
+            try
+            {
+                _useSSL = (provider.Attributes["useSSL"].Value != null) && Convert.ToBoolean(provider.Attributes["useSSL"].Value);
+            }
+            catch (NullReferenceException)
+            {
+                _useSSL = false;
+            }
+
 
             _path = string.Empty;
 
@@ -1042,33 +1272,64 @@ namespace Nauplius.ADLDS.Provider
 
             if (IsProviderMembership)
             {
-                _path = provider.Attributes["userContainer"].Value ?? "";
+                try
+                {
+                    _path = provider.Attributes["userContainer"].Value ?? string.Empty;
+                }
+                catch (NullReferenceException)
+                {
+                    _path = string.Empty;
+                }
+
             }
             else
             {
-                _path = provider.Attributes["groupContainer"].Value ?? "";
+                try
+                {
+                    _path = provider.Attributes["groupContainer"].Value ?? string.Empty;
+                }
+                catch (NullReferenceException)
+                {
+                    _path = string.Empty;
+                }
+
             }
 
-            _userNameAttribute = provider.Attributes["userNameAttribute"].Value ?? "userPrincipalName";
-
-            var scope = (provider.Attributes["scope"].Value.ToUpper() == null) ? "SUBTREE" :
-                provider.Attributes["scope"].Value;
-
-            switch (scope)
+            try
             {
-                case "BASE":
-                    _scope = SearchScope.Base;
-                    break;
-                case "ONELEVEL":
-                    _scope = SearchScope.OneLevel;
-                    break;
-                case "SUBTREE":
-                    _scope = SearchScope.Subtree;
-                    break;
-                default:
-                    _scope = SearchScope.Subtree;
-                    break;
+                _userNameAttribute = provider.Attributes["userNameAttribute"].Value ?? "userPrincipalName";
             }
+            catch (NullReferenceException)
+            {
+                _userNameAttribute = "userPrincipalName";
+            }
+
+            try
+            {
+                var scope = (provider.Attributes["scope"].Value.ToUpper() == null) ? "SUBTREE" :
+                    provider.Attributes["scope"].Value;
+
+                switch (scope)
+                {
+                    case "BASE":
+                        _scope = SearchScope.Base;
+                        break;
+                    case "ONELEVEL":
+                        _scope = SearchScope.OneLevel;
+                        break;
+                    case "SUBTREE":
+                        _scope = SearchScope.Subtree;
+                        break;
+                    default:
+                        _scope = SearchScope.Subtree;
+                        break;
+                }
+            }
+            catch (NullReferenceException)
+            {
+                _scope = SearchScope.Subtree;
+            }
+
 
             var directoryEntry = LdapManager.Connect(_server, _port, _useSSL, _path, _username, _password);
 
