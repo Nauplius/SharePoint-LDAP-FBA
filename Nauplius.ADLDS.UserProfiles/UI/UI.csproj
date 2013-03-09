@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F358607A-4DE2-4033-B931-B2E02D798E9D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UI</RootNamespace>
+    <AssemblyName>UI</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BB1F664B-9266-4fd6-B973-E1E44974B511};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SandboxedSolution>False</SandboxedSolution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SharePoint.IdentityModel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.SharePoint.IdentityModel\14.0.0.0__71e9bce111e9429c\Microsoft.SharePoint.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.SharePoint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAProfileGlobalSettings.aspx.cs">
+      <DependentUpon>FBAProfileGlobalSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAProfileGlobalSettings.aspx.designer.cs">
+      <DependentUpon>FBAProfileGlobalSettings.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAUserManager.aspx.cs">
+      <DependentUpon>FBAUserManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAUserManager.aspx.designer.cs">
+      <DependentUpon>FBAUserManager.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAWebApplicationSettings.aspx.cs">
+      <DependentUpon>FBAWebApplicationSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAWebApplicationSettings.aspx.designer.cs">
+      <DependentUpon>FBAWebApplicationSettings.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Features\FBA\FBA.EventReceiver.cs">
+      <DependentUpon>FBA.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Lists\Lists.EventReceiver.cs">
+      <DependentUpon>Lists.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Layouts\Nauplius.ADLDS.FBA\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Layouts\Nauplius.ADLDS.FBA\login.aspx.designer.cs">
+      <DependentUpon>login.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ADLDSGlobalValueContentType\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{868df483-01b2-408c-9071-35e1d39aff47}</SharePointProjectItemId>
+    </None>
+    <None Include="ADMIN\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{0af5e466-1e0f-4243-a424-d6043273b8b5}</SharePointProjectItemId>
+    </None>
+    <None Include="FBAStsFarmListDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{08e9b454-f349-46f9-a739-0b5d4c19d3b3}</SharePointProjectItemId>
+    </None>
+    <None Include="FBAWebApplicationListDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e5a907ae-4278-4b26-bb66-9eefe3234d00}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\AdminPages\AdminPages.feature">
+      <FeatureId>{7d4a6e5c-44aa-411d-988b-566f62592e29}</FeatureId>
+    </None>
+    <None Include="Features\FBA\FBA.feature">
+      <FeatureId>{4b5a30ee-fbc4-49e9-8204-14753d9caa49}</FeatureId>
+    </None>
+    <None Include="Features\Lists\Lists.feature">
+      <FeatureId>{1bd89e02-273b-4154-836e-6b2d00b5f0c0}</FeatureId>
+    </None>
+    <None Include="FBAUserProfileGlobalValuesListDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{809f9eae-cbae-464f-a5ea-5b958738fe57}</SharePointProjectItemId>
+    </None>
+    <None Include="key.snk" />
+    <None Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.min.map" />
+    <None Include="Layouts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e0f26391-fb19-4403-8d32-d3e869ad0a90}</SharePointProjectItemId>
+    </None>
+    <None Include="FBAApplicationPageLinks\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e9f78b86-28bc-457d-8232-ee9b33aca671}</SharePointProjectItemId>
+    </None>
+    <None Include="Package\Package.package">
+      <PackageId>{8cc0ddf7-af8f-41cd-aceb-4998a7e63eaf}</PackageId>
+    </None>
+    <None Include="Package\Package.Template.xml">
+      <DependentUpon>Package.package</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Layouts\UI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ADLDSGlobalValueContentType\Elements.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ADMIN\Nauplius.ADLDS.FBA\FBAProfileGlobalSettings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="ADMIN\Nauplius.ADLDS.FBA\FBAUserManager.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="ADMIN\Nauplius.ADLDS.FBA\FBAWebApplicationSettings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="ADMIN\Nauplius.ADLDS.FBA\icon_32x32.png" />
+    <Content Include="FBAStsFarmListDefinition\Elements.xml" />
+    <Content Include="FBAStsFarmListDefinition\Schema.xml" />
+    <Content Include="FBAWebApplicationListDefinition\Elements.xml" />
+    <Content Include="FBAWebApplicationListDefinition\Schema.xml" />
+    <Content Include="Features\AdminPages\AdminPages.Template.xml">
+      <DependentUpon>AdminPages.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\FBA\FBA.Template.xml">
+      <DependentUpon>FBA.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\Lists\Lists.Template.xml">
+      <DependentUpon>Lists.feature</DependentUpon>
+    </Content>
+    <Content Include="FBAUserProfileGlobalValuesListDefinition\Elements.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="FBAUserProfileGlobalValuesListDefinition\Schema.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1-vsdoc.js" />
+    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.js" />
+    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.min.js" />
+    <Content Include="Layouts\Nauplius.ADLDS.FBA\login.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="FBAApplicationPageLinks\Elements.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Nauplius.ADLDS.FBA\FBA.csproj">
+      <Project>{b48a03e5-dbcf-4a58-ad9b-b5e411bd2d5b}</Project>
+      <Name>FBA</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0'">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="'$(VSToolsPath)' != ''" />
+</Project>

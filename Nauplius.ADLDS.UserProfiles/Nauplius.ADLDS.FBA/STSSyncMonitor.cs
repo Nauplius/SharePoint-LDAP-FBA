@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Web;
-using Microsoft.SharePoint.Administration;
-using Microsoft.SharePoint;
-using Microsoft.SharePoint.Utilities;
-using Microsoft.SharePoint.Administration.Claims;
 using System.Xml;
+using Microsoft.SharePoint;
+using Microsoft.SharePoint.Administration;
+using Microsoft.SharePoint.Utilities;
 
 namespace Nauplius.ADLDS.FBA
 {

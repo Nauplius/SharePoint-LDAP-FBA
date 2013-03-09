@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Web.Security;
 using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
-using Microsoft.SharePoint.Administration.Claims;
-using Microsoft.SharePoint.IdentityModel;
-using Microsoft.SharePoint.Utilities;
 
 namespace Nauplius.ADLDS.FBA
 {
-    class WebModifications
+    public static class WebModifications
     {
         private const string ModificationOwner = "Nauplius.ADLDS.FBA";
         private static readonly XmlDocument MasterXmlFragment = new XmlDocument();
@@ -81,11 +75,11 @@ namespace Nauplius.ADLDS.FBA
                 name1 = string.Format("add[@name='{0}']", provider["WebApplicationMembershipProvider"]);
                 xpath1 = "configuration/system.web/membership/providers";
                 value1 = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
-                                        "useSSL='{4}' enableSearchMethods='{5}' userDNAttribute='{6}' userNameAttribute='{7}' " +
+                                        "useSSL='{4}' userDNAttribute='{5}' useDNAttribute='{6}' userNameAttribute='{7}' " +
                                         "userContainer='{8}' userObjectClass='{9}' userFilter='{10}' scope='{11}' " +
                                         "otherRequiredUserAttributes='{12}' />", provider["WebApplicationMembershipProvider"],
                                         ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
-                                        "true", provider["ADLDSUserDNAttrib"], provider["ADLDSLoginAttrib"], provider["ADLDSUserContainer"],
+                                        provider["ADLDSUserDNAttrib"], "true", provider["ADLDSLoginAttrib"], provider["ADLDSUserContainer"],
                                         provider["ADLDSUserObjectClass"], provider["ADLDSUserFilter"], provider["ADLDSUserScope"],
                                         provider["ADLDSUserOtherReqAttrib"]);
 
@@ -193,11 +187,11 @@ namespace Nauplius.ADLDS.FBA
             name1 = string.Format("add[@name='{0}']", provider["WebApplicationMembershipProvider"]);
             xpath1 = "configuration/system.web/membership/providers";
             value1 = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
-                                    "useSSL='{4}' enableSearchMethods='{5}' userDNAttribute='{6}' userNameAttribute='{7}' " +
+                                    "useSSL='{4}' userDNAttribute='{5}' useDNAttribute='{6}' userNameAttribute='{7}' " +
                                     "userContainer='{8}' userObjectClass='{9}' userFilter='{10}' scope='{11}' " +
                                     "otherRequiredUserAttributes='{12}' />", provider["WebApplicationMembershipProvider"],
                                     ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
-                                    "true", provider["ADLDSUserDNAttrib"], provider["ADLDSLoginAttrib"], provider["ADLDSUserContainer"],
+                                    provider["ADLDSUserDNAttrib"], "true", provider["ADLDSLoginAttrib"], provider["ADLDSUserContainer"],
                                     provider["ADLDSUserObjectClass"], provider["ADLDSUserFilter"], provider["ADLDSUserScope"],
                                     provider["ADLDSUserOtherReqAttrib"]);
 
@@ -379,11 +373,11 @@ namespace Nauplius.ADLDS.FBA
                 SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
 
                 string value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
-                                        "useSSL='{4}' enableSearchMethods='{5}' userDNAttribute='{6}' userNameAttribute='{7}' " +
+                                        "useSSL='{4}' userDNAttribute='{5}' useDNAttribute='{6}' userNameAttribute='{7}' " +
                                         "userContainer='{8}' userObjectClass='{9}' userFilter='{10}' scope='{11}' " +
                                         "otherRequiredUserAttributes='{12}' />", provider["WebApplicationMembershipProvider"],
                                         ProviderMemberType, provider["ADLDSServer"], provider["ADLDSPort"], provider["ADLDSUseSSL"],
-                                        "true", provider["ADLDSUserDNAttrib"], provider["ADLDSLoginAttrib"], provider["ADLDSUserContainer"],
+                                        provider["ADLDSUserDNAttrib"], "true", provider["ADLDSLoginAttrib"], provider["ADLDSUserContainer"],
                                         provider["ADLDSUserObjectClass"], provider["ADLDSUserFilter"], provider["ADLDSUserScope"],
                                         provider["ADLDSUserOtherReqAttrib"]);
 

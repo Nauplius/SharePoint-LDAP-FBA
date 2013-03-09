@@ -28,8 +28,8 @@ namespace Nauplius.ADLDS.FBA
 
         public static class LogCategories
         {
-            //public static string Profiles = "Profiles";
-            //public static string LDAP = "LDAP";
+            public static string Profiles = "Profiles";
+            public static string LDAP = "LDAP";
             public static string TimerJob = "Timer Job";
             public static string Health = "Health";
             public static string STSXML = "STS XML";
@@ -55,8 +55,8 @@ namespace Nauplius.ADLDS.FBA
             {
                 new SPDiagnosticsArea(NaupliusDiagnosticArea, 0, 0, false, new List<SPDiagnosticsCategory>
                     {
-                        //new SPDiagnosticsCategory(LogCategories.Profiles, null, TraceSeverity.Unexpected, EventSeverity.Error, 0, 0, false, true),
-                        //new SPDiagnosticsCategory(LogCategories.LDAP, null, TraceSeverity.Unexpected, EventSeverity.Error, 0, 0, false, true),
+                        new SPDiagnosticsCategory(LogCategories.Profiles, null, TraceSeverity.Unexpected, EventSeverity.Error, 0, 0, false, true),
+                        new SPDiagnosticsCategory(LogCategories.LDAP, null, TraceSeverity.Unexpected, EventSeverity.Error, 0, 0, false, true),
                         new SPDiagnosticsCategory(LogCategories.TimerJob, null, TraceSeverity.Medium, EventSeverity.Information, 0, 0, false, true),
                         new SPDiagnosticsCategory(LogCategories.Health, null, TraceSeverity.Medium, EventSeverity.Information, 0, 0, false, true),
                         new SPDiagnosticsCategory(LogCategories.STSXML, null, TraceSeverity.Medium, EventSeverity.Information, 0, 0, false, true),

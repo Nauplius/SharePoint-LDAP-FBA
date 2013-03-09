@@ -1,14 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" solutionId="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" resetWebServer="true" name="Nauplius.ADLDS.FBA" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" solutionId="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" resetWebServer="true" deploymentServerType="ApplicationServer" name="Nauplius.ADLDS.FBA" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
   <features>
-    <featureReference itemId="ee56f930-6777-4282-994e-3d8f3aa012d0" />
-    <featureReference itemId="1ce5787d-a285-484d-8276-3430844cd5b1" />
-    <featureReference itemId="fcd07f51-9439-4d3f-9510-cf65da150478" />
     <featureReference itemId="1710eacf-d1e9-4c5b-be26-c778607804e3" />
     <featureReference itemId="43f06a04-fcf2-49c8-aeb1-8a1dc15d8859" />
+    <featureReference itemId="aaad9e13-2411-4587-bf4b-ed816858038c" />
+    <featureReference itemId="a53ae9bc-066f-46f6-87a5-f0d025b205ff" />
   </features>
-  <projectItems>
-    <projectItemReference itemId="88e2ad5a-9855-4bd3-a7fa-1f9af4492e99" />
-    <projectItemReference itemId="a2c9788d-ac28-4448-9d70-9934a371cb00" />
-  </projectItems>
 </package>

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nauplius.ADLDS.UserProfiles", "Nauplius.ADLDS.UserProfiles\Nauplius.ADLDS.UserProfiles.csproj", "{7C3F563A-B138-40E2-9BF1-B652A189A47C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBA", "Nauplius.ADLDS.FBA\FBA.csproj", "{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{F358607A-4DE2-4033-B931-B2E02D798E9D}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -11,26 +11,28 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs03
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = Nauplius.ADLDS.UserProfiles\\Nauplius.ADLDS.UserProfiles.csproj
-		SccProjectName1 = Nauplius.ADLDS.UserProfiles
-		SccLocalPath1 = Nauplius.ADLDS.UserProfiles
-		SccProjectUniqueName2 = Nauplius.ADLDS.FBA\\FBA.csproj
-		SccProjectName2 = Nauplius.ADLDS.FBA
-		SccLocalPath2 = Nauplius.ADLDS.FBA
+		SccProjectUniqueName1 = Nauplius.ADLDS.FBA\\FBA.csproj
+		SccProjectName1 = Nauplius.ADLDS.FBA
+		SccLocalPath1 = Nauplius.ADLDS.FBA
+		SccProjectUniqueName2 = UI\\UI.csproj
+		SccProjectName2 = UI
+		SccLocalPath2 = UI
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C3F563A-B138-40E2-9BF1-B652A189A47C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F358607A-4DE2-4033-B931-B2E02D798E9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F358607A-4DE2-4033-B931-B2E02D798E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F358607A-4DE2-4033-B931-B2E02D798E9D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F358607A-4DE2-4033-B931-B2E02D798E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F358607A-4DE2-4033-B931-B2E02D798E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F358607A-4DE2-4033-B931-B2E02D798E9D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -27,6 +27,7 @@
     </PreDeploymentCommand>
     <PostDeploymentCommand>net stop sptimerv4
 net start sptimerv4</PostDeploymentCommand>
+    <AssemblyDeploymentTarget>GlobalAssemblyCache</AssemblyDeploymentTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,93 +55,55 @@ net start sptimerv4</PostDeploymentCommand>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.SharePoint.IdentityModel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Server, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.Office.Server\14.0.0.0__71e9bce111e9429c\Microsoft.Office.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Server.UserProfiles, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.Office.Server.UserProfiles\14.0.0.0__71e9bce111e9429c\Microsoft.Office.Server.UserProfiles.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.SharePoint" />
-    <Reference Include="Microsoft.SharePoint.Security" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAUserManager.aspx.cs">
-      <DependentUpon>FBAUserManager.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+    <Compile Include="Features\Logging\Logging.EventReceiver.cs">
+      <DependentUpon>Logging.feature</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAUserManager.aspx.designer.cs">
-      <DependentUpon>FBAUserManager.aspx.cs</DependentUpon>
+    <Compile Include="Features\STSHealthAnalyzer\STSHealthAnalyzer.EventReceiver.cs">
+      <DependentUpon>STSHealthAnalyzer.feature</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAWebApplicationSettings.aspx.cs">
-      <DependentUpon>FBAWebApplicationSettings.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+    <Compile Include="Features\STSSyncMonitor\STSSyncMonitor.EventReceiver.cs">
+      <DependentUpon>STSSyncMonitor.feature</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\Nauplius.ADLDS.FBA\FBAWebApplicationSettings.aspx.designer.cs">
-      <DependentUpon>FBAWebApplicationSettings.aspx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Features\FBAFeature\FBAFeature.EventReceiver.cs">
-      <DependentUpon>FBAFeature.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\ListsFeature\ListsFeature.EventReceiver.cs">
-      <DependentUpon>ListsFeature.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\STSHealthAnalyzerFeature\STSHealthAnalyzerFeature.EventReceiver.cs">
-      <DependentUpon>STSHealthAnalyzerFeature.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.EventReceiver.cs">
-      <DependentUpon>STSSyncMonitorFeature.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Layouts\Nauplius.ADLDS.FBA\login.aspx.cs">
-      <DependentUpon>login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Layouts\Nauplius.ADLDS.FBA\login.aspx.designer.cs">
-      <DependentUpon>login.aspx.cs</DependentUpon>
+    <Compile Include="Features\UserProfile\UserProfile.EventReceiver.cs">
+      <DependentUpon>UserProfile.feature</DependentUpon>
     </Compile>
     <Compile Include="Logging.cs" />
+    <Compile Include="UserProfiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="STSHealthAnalysisRule.cs" />
     <Compile Include="STSSyncMonitor.cs" />
     <Compile Include="WebModifications.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ADMIN\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{88e2ad5a-9855-4bd3-a7fa-1f9af4492e99}</SharePointProjectItemId>
+    <None Include="Features\UserProfile\UserProfile.feature">
+      <FeatureId>{a53ae9bc-066f-46f6-87a5-f0d025b205ff}</FeatureId>
     </None>
-    <None Include="FBAStsFarmListDefinition\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{07d527e7-f19f-488e-9513-45a352528e08}</SharePointProjectItemId>
+    <None Include="Features\Logging\Logging.feature">
+      <FeatureId>{aaad9e13-2411-4587-bf4b-ed816858038c}</FeatureId>
     </None>
-    <None Include="FBAWebApplicationListDefinition\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{d3997312-bff5-496f-a4a3-fa720b6138a1}</SharePointProjectItemId>
-    </None>
-    <None Include="Features\STSHealthAnalyzerFeature\STSHealthAnalyzerFeature.feature">
+    <None Include="Features\STSHealthAnalyzer\STSHealthAnalyzer.feature">
       <FeatureId>{43f06a04-fcf2-49c8-aeb1-8a1dc15d8859}</FeatureId>
     </None>
-    <None Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.feature">
+    <None Include="Features\STSSyncMonitor\STSSyncMonitor.feature">
       <FeatureId>{1710eacf-d1e9-4c5b-be26-c778607804e3}</FeatureId>
     </None>
-    <None Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.min.map" />
-    <None Include="NaupliusApplicationPageLinks\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{c6d0e2a0-8079-4eaa-9fe5-227720692e71}</SharePointProjectItemId>
-    </None>
-    <None Include="Features\AdminPagesFeature\AdminPagesFeature.feature">
-      <FeatureId>{fcd07f51-9439-4d3f-9510-cf65da150478}</FeatureId>
-    </None>
-    <None Include="Features\ListsFeature\ListsFeature.feature">
-      <FeatureId>{ee56f930-6777-4282-994e-3d8f3aa012d0}</FeatureId>
-    </None>
-    <None Include="Features\FBAFeature\FBAFeature.feature">
-      <FeatureId>{1ce5787d-a285-484d-8276-3430844cd5b1}</FeatureId>
-    </None>
     <None Include="key.snk" />
-    <None Include="Layouts\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{a2c9788d-ac28-4448-9d70-9934a371cb00}</SharePointProjectItemId>
-    </None>
     <None Include="Package\Package.package">
       <PackageId>{f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1}</PackageId>
     </None>
@@ -150,38 +113,17 @@ net start sptimerv4</PostDeploymentCommand>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="ADMIN\Nauplius.ADLDS.FBA\icon_32x32.png" />
-    <Content Include="FBAStsFarmListDefinition\Elements.xml" />
-    <Content Include="FBAStsFarmListDefinition\Schema.xml" />
-    <Content Include="FBAWebApplicationListDefinition\Elements.xml" />
-    <Content Include="FBAWebApplicationListDefinition\Schema.xml" />
-    <Content Include="Features\STSHealthAnalyzerFeature\STSHealthAnalyzerFeature.Template.xml">
-      <DependentUpon>STSHealthAnalyzerFeature.feature</DependentUpon>
+    <Content Include="Features\UserProfile\UserProfile.Template.xml">
+      <DependentUpon>UserProfile.feature</DependentUpon>
     </Content>
-    <Content Include="Features\STSSyncMonitorFeature\STSSyncMonitorFeature.Template.xml">
-      <DependentUpon>STSSyncMonitorFeature.feature</DependentUpon>
+    <Content Include="Features\Logging\Logging.Template.xml">
+      <DependentUpon>Logging.feature</DependentUpon>
     </Content>
-    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1-vsdoc.js" />
-    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.js" />
-    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.min.js" />
-    <Content Include="NaupliusApplicationPageLinks\Elements.xml" />
-    <Content Include="Features\AdminPagesFeature\AdminPagesFeature.Template.xml">
-      <DependentUpon>AdminPagesFeature.feature</DependentUpon>
+    <Content Include="Features\STSHealthAnalyzer\STSHealthAnalyzer.Template.xml">
+      <DependentUpon>STSHealthAnalyzer.feature</DependentUpon>
     </Content>
-    <Content Include="Features\ListsFeature\ListsFeature.Template.xml">
-      <DependentUpon>ListsFeature.feature</DependentUpon>
-    </Content>
-    <Content Include="ADMIN\Nauplius.ADLDS.FBA\FBAUserManager.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
-    <Content Include="ADMIN\Nauplius.ADLDS.FBA\FBAWebApplicationSettings.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
-    <Content Include="Features\FBAFeature\FBAFeature.Template.xml">
-      <DependentUpon>FBAFeature.feature</DependentUpon>
-    </Content>
-    <Content Include="Layouts\Nauplius.ADLDS.FBA\login.aspx">
-      <SubType>ASPXCodeBehind</SubType>
+    <Content Include="Features\STSSyncMonitor\STSSyncMonitor.Template.xml">
+      <DependentUpon>STSSyncMonitor.feature</DependentUpon>
     </Content>
   </ItemGroup>
   <PropertyGroup>
