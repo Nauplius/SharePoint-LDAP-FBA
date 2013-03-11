@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" solutionId="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" resetWebServer="true" deploymentServerType="ApplicationServer" name="Nauplius.ADLDS.FBA" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" solutionId="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" resetWebServer="true" name="Nauplius.ADLDS.FBA" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
   <features>
     <featureReference itemId="1710eacf-d1e9-4c5b-be26-c778607804e3" />
     <featureReference itemId="43f06a04-fcf2-49c8-aeb1-8a1dc15d8859" />

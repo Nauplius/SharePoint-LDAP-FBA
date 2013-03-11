@@ -17,6 +17,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <SandboxedSolution>False</SandboxedSolution>
+    <AssemblyDeploymentTarget>GlobalAssemblyCache</AssemblyDeploymentTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,19 +86,9 @@
     <Compile Include="Features\Lists\Lists.EventReceiver.cs">
       <DependentUpon>Lists.feature</DependentUpon>
     </Compile>
-    <Compile Include="Layouts\Nauplius.ADLDS.FBA\login.aspx.cs">
-      <DependentUpon>login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Layouts\Nauplius.ADLDS.FBA\login.aspx.designer.cs">
-      <DependentUpon>login.aspx.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ADLDSGlobalValueContentType\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{868df483-01b2-408c-9071-35e1d39aff47}</SharePointProjectItemId>
-    </None>
     <None Include="ADMIN\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{0af5e466-1e0f-4243-a424-d6043273b8b5}</SharePointProjectItemId>
     </None>
@@ -120,10 +111,6 @@
       <SharePointProjectItemId>{809f9eae-cbae-464f-a5ea-5b958738fe57}</SharePointProjectItemId>
     </None>
     <None Include="key.snk" />
-    <None Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.min.map" />
-    <None Include="Layouts\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{e0f26391-fb19-4403-8d32-d3e869ad0a90}</SharePointProjectItemId>
-    </None>
     <None Include="FBAApplicationPageLinks\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{e9f78b86-28bc-457d-8232-ee9b33aca671}</SharePointProjectItemId>
     </None>
@@ -134,13 +121,8 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Layouts\UI\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ADLDSGlobalValueContentType\Elements.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="ADMIN\Nauplius.ADLDS.FBA\FBAProfileGlobalSettings.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
@@ -169,12 +151,6 @@
     </Content>
     <Content Include="FBAUserProfileGlobalValuesListDefinition\Schema.xml">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1-vsdoc.js" />
-    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.js" />
-    <Content Include="Layouts\Nauplius.ADLDS.FBA\jQuery\jquery-1.9.1.min.js" />
-    <Content Include="Layouts\Nauplius.ADLDS.FBA\login.aspx">
-      <SubType>ASPXCodeBehind</SubType>
     </Content>
     <Content Include="FBAApplicationPageLinks\Elements.xml" />
   </ItemGroup>

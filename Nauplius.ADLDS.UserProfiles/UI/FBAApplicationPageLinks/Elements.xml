@@ -17,15 +17,15 @@
   -->
 	<CustomAction Id="F83E4586-6CF7-44A4-A0E1-F1910FB9B96D"
 								Title="Configure FBA Web Applications Settings"
-								Sequence="20"
+								Sequence="10"
 								GroupId="849B7142-5838-436F-9DCD-DEF6C7ED52EB"
 								Location="Microsoft.SharePoint.Administration.Applications">
 		<UrlAction Url="/_admin/Nauplius.ADLDS.FBA/FBAWebApplicationSettings.aspx"/>
 	</CustomAction>
-  <CustomAction Id="31819CDA-676A-450F-88E5-064F5A7FEA27"
+  <CustomAction Id="F83E4586-6CF7-44A4-A0E1-F1910FB9B96D"
              Title="Configure Global User Profile Settings"
-             Sequence="10"
-             GroupId="820FDE62-62F6-403F-8F85-8C6F85BCF1B7"
+             Sequence="20"
+             GroupId="849B7142-5838-436F-9DCD-DEF6C7ED52EB"
              Location="Microsoft.SharePoint.Administration.Applications">
     <UrlAction Url="/_admin/Nauplius.ADLDS.FBA/FBAProfileGlobalSettings.aspx" />
   </CustomAction>

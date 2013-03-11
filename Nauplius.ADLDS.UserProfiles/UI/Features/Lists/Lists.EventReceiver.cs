@@ -29,16 +29,16 @@ namespace UI.Features.ListsFeature
                     Guid listId1 = web.Lists.Add("Nauplius.ADLDS.FBA - StsFarm",
                         "AD LDS FBA Security Token Service Validation Fragment",
                         "Lists/Nauplius.ADLDS.FBA-StsFarm",
-                        "3e5d29da-1e38-42ce-872d-b9e87a09eb5c", 10005, "101");
+                        "f6fcbb14-b9ac-46bb-8dfd-2167ad6aae80", 50900, "101");
                     web.Update();
                     Guid listId2 = web.Lists.Add("Nauplius.ADLDS.FBA - WebApplicationSettings",
                         "AD LDS User Profile Import Web Application Settings",
                         "Lists/Nauplius.ADLDS.FBA-WebApplicationSettings",
-                        "3e5d29da-1e38-42ce-872d-b9e87a09eb5c", 10003, "101");
-                    Guid listId3 = web.Lists.Add("Nauplius.ADLDS.UserProfiles - WebAppSettings",
-                        "AD LDS User Profile Import Web Application Settings",
-                        "Lists/Nauplius.ADLDS.UserProfiles-WebAppSettings",
-                        "d81d5f6c-88ad-4f1b-bb14-05d929137637", 10002, "101");
+                        "f6fcbb14-b9ac-46bb-8dfd-2167ad6aae80", 50901, "101");
+                    Guid listId3 = web.Lists.Add("Nauplius.ADLDS.UserProfiles - GlobalSettings",
+                        "AD LDS User Profile Import Global Settings",
+                        "Lists/Nauplius.ADLDS.UserProfiles-GlobalSettings",
+                        "f6fcbb14-b9ac-46bb-8dfd-2167ad6aae80", 50910, "101");
                     web.Update();
                     web.AllowUnsafeUpdates = false;
                 }

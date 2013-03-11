@@ -3,12 +3,12 @@
     <!-- Do not change the value of the Name attribute below. If it does not match the folder name of the List project item, an error will occur when the project is run. -->
     <ListTemplate
         Name="FBAStsFarmListDefinition"
-        Type="10005"
+        Type="50900"
         BaseType="0"
         OnQuickLaunch="TRUE"
         SecurityBits="11"
         Sequence="410"
         DisplayName="FBAStsFarmListDefinition"
-        Description="My List Definition"
+        Description="AD LDS Security Token Service Xml Fragment"
         Image="/_layouts/images/itgen.png"/>
 </Elements>
