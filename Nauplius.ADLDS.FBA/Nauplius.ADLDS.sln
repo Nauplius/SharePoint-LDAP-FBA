@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBA", "Nauplius.ADLDS.FBA\FBA.csproj", "{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBA", "FBA\FBA.csproj", "{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{F358607A-4DE2-4033-B931-B2E02D798E9D}"
 EndProject
@@ -11,12 +11,12 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs03
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = Nauplius.ADLDS.FBA\\FBA.csproj
-		SccProjectName1 = Nauplius.ADLDS.FBA
-		SccLocalPath1 = Nauplius.ADLDS.FBA
-		SccProjectUniqueName2 = UI\\UI.csproj
-		SccProjectName2 = UI
-		SccLocalPath2 = UI
+		SccProjectUniqueName1 = UI\\UI.csproj
+		SccProjectName1 = UI
+		SccLocalPath1 = UI
+		SccProjectUniqueName2 = FBA\\FBA.csproj
+		SccProjectName2 = FBA
+		SccLocalPath2 = FBA
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

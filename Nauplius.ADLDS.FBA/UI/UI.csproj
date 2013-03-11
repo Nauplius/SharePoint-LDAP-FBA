@@ -155,7 +155,7 @@
     <Content Include="FBAApplicationPageLinks\Elements.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nauplius.ADLDS.FBA\FBA.csproj">
+    <ProjectReference Include="..\FBA\FBA.csproj">
       <Project>{b48a03e5-dbcf-4a58-ad9b-b5e411bd2d5b}</Project>
       <Name>FBA</Name>
     </ProjectReference>
