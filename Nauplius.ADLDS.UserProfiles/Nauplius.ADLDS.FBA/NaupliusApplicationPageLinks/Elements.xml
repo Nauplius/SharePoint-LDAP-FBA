@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+	<CustomActionGroup Id="849B7142-5838-436F-9DCD-DEF6C7ED52EB"
+							 Title="Nauplius AD LDS FBA"
+							 Location="Microsoft.SharePoint.Administration.Applications"
+							 ImageUrl="/_admin/Nauplius.ADLDS.FBA/icon_32x32.png"
+							 RequiredAdmin="Farm"
+							 Sequence="110" />
+  <!--
+	<CustomAction Id="E0416E9F-4487-4183-88EA-3E40E75AE309"
+						 Title="FBA User Manager"
+						 Sequence="10"
+						 GroupId="849B7142-5838-436F-9DCD-DEF6C7ED52EB"
+						 Location="Microsoft.SharePoint.Administration.Applications">
+		<UrlAction Url="/_admin/Nauplius.ADLDS.FBA/FBAUserManager.aspx" />
+	</CustomAction>
+  -->
+	<CustomAction Id="F83E4586-6CF7-44A4-A0E1-F1910FB9B96D"
+								Title="Configure FBA Web Applications Settings"
+								Sequence="20"
+								GroupId="849B7142-5838-436F-9DCD-DEF6C7ED52EB"
+								Location="Microsoft.SharePoint.Administration.Applications">
+		<UrlAction Url="/_admin/Nauplius.ADLDS.FBA/FBAWebApplicationSettings.aspx"/>
+	</CustomAction>
+</Elements>

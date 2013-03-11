@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7C3F563A-B138-40E2-9BF1-B652A189A47C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Nauplius.ADLDS.UserProfiles</RootNamespace>
+    <AssemblyName>Nauplius.LDS.UP</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BB1F664B-9266-4fd6-B973-E1E44974B511};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SandboxedSolution>False</SandboxedSolution>
+    <AssemblyDeploymentTarget>GlobalAssemblyCache</AssemblyDeploymentTarget>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <ActiveDeploymentConfiguration>Default</ActiveDeploymentConfiguration>
+    <PreDeploymentCommand>net stop sptimerv4</PreDeploymentCommand>
+    <PostDeploymentCommand>net start sptimerv4</PostDeploymentCommand>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Server, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Server.UserProfiles, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="Microsoft.SharePoint" />
+    <Reference Include="Microsoft.SharePoint.Security" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSGlobalSettings.aspx.cs">
+      <DependentUpon>ADLDSGlobalSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSGlobalSettings.aspx.designer.cs">
+      <DependentUpon>ADLDSGlobalSettings.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx.cs">
+      <DependentUpon>ADLDSWebApplicationSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx.designer.cs">
+      <DependentUpon>ADLDSWebApplicationSettings.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Features\ListsFeature\ListsFeature.EventReceiver.cs">
+      <DependentUpon>ListsFeature.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\LoggingFeature\LoggingFeature.EventReceiver.cs">
+      <DependentUpon>LoggingFeature.feature</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Features\TimerJobFeature\TimerJobFeature.EventReceiver.cs">
+      <DependentUpon>TimerJobFeature.feature</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Logging.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ADLDSGlobalValueContentType\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{90b4a222-dff9-4006-84d0-9d60622bc213}</SharePointProjectItemId>
+    </None>
+    <None Include="ADLDSPerWebApplicationContentType\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{14e0f518-60f7-4c8c-9e51-04e75f3e3e64}</SharePointProjectItemId>
+    </None>
+    <None Include="ADMIN\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{b8b0d6c5-d7f9-42d6-98f3-2e60223fdbc6}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\AdminPagesFeature\AdminPagesFeature.feature">
+      <FeatureId>{11cfd78e-b58d-45fa-bada-c3abbade9196}</FeatureId>
+    </None>
+    <None Include="Features\ListsFeature\ListsFeature.feature">
+      <FeatureId>{8057cc0b-65be-481b-8365-0e7836a26a41}</FeatureId>
+    </None>
+    <None Include="Features\LoggingFeature\LoggingFeature.feature">
+      <FeatureId>{978c271a-e752-49fa-8adb-1ff1d82cbb6b}</FeatureId>
+    </None>
+    <None Include="Features\TimerJobFeature\TimerJobFeature.feature">
+      <FeatureId>{fdc5811c-ac92-4968-a642-9ddf53cc460d}</FeatureId>
+    </None>
+    <None Include="GlobalValuesListDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{00092820-afaa-4529-9bde-7af26da8dce8}</SharePointProjectItemId>
+    </None>
+    <None Include="key.snk" />
+    <None Include="NaupliusApplicationPageLinks\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{6ebdf500-ea06-4c66-b5b2-3b6bd938cb79}</SharePointProjectItemId>
+    </None>
+    <None Include="PerWebAppValuesListDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e941b447-fee9-4af4-a305-3e3e02a36bd0}</SharePointProjectItemId>
+    </None>
+    <None Include="Package\Package.package">
+      <PackageId>{17874437-b9b9-4990-989d-a89d3223f767}</PackageId>
+    </None>
+    <None Include="Package\Package.Template.xml">
+      <DependentUpon>Package.package</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ADLDSGlobalValueContentType\Elements.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ADLDSPerWebApplicationContentType\Elements.xml" />
+    <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\icon_32x32.png" />
+    <Content Include="Elements.xml" />
+    <Content Include="Features\AdminPagesFeature\AdminPagesFeature.Template.xml">
+      <DependentUpon>AdminPagesFeature.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\ListsFeature\ListsFeature.Template.xml">
+      <DependentUpon>ListsFeature.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\LoggingFeature\LoggingFeature.Template.xml">
+      <DependentUpon>LoggingFeature.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\TimerJobFeature\TimerJobFeature.Template.xml">
+      <DependentUpon>TimerJobFeature.feature</DependentUpon>
+    </Content>
+    <Content Include="GlobalValuesListDefinition\Elements.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="GlobalValuesListDefinition\Schema.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSGlobalSettings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="ADMIN\Nauplius.ADLDS.UserProfiles\ADLDSWebApplicationSettings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="NaupliusApplicationPageLinks\Elements.xml" />
+    <Content Include="PerWebAppValuesListDefinition\Elements.xml" />
+    <Content Include="PerWebAppValuesListDefinition\Schema.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="false" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

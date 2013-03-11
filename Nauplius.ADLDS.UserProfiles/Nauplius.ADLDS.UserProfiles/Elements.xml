@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <ListInstance Title="Nauplius.ADLDS.UserProfiles - GlobalSettings"
+                OnQuickLaunch="FALSE"
+                TemplateType="10001"
+                FeatureId="2d529479-47b9-4fdf-8be6-05d91ae8e7fe"
+                Url="Lists/Nauplius.ADLDS.UserProfiles-GlobalSettings"
+                Description="AD LDS User Profile Import Global Settings">
+  </ListInstance>
+</Elements>

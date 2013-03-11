@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+<Field ID="{BA9B2EE1-FD01-4B7F-89B1-DE4DBF425834}"
+         Type="Text"
+         Name="GlobalDefault"
+         DisplayName="Global Values"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         Indexed="TRUE"
+         EnforceUniqueValues="TRUE"
+          >
+    <Default>GlobalDefaultValues</Default>
+  </Field>
+<!--
+  <Field ID="{094CED60-F0F1-4B8D-8181-301D02160BE1}" Type="Computed" Name="GlobalDefaultLinkToItem" LinkToItem="TRUE" ReadOnly="TRUE" Dir=""
+             DisplayNameSrcField="GlobalDefault" DisplayName="Global Default (Link To Item)"
+             ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE"
+             SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="LinkToItemGlobalDefault" Group="ADLDSGlobalValues">
+    <DisplayPattern>
+      <HTML><![CDATA[<a href="]]></HTML>
+      <URL />
+      <HTML><![CDATA[" ONCLICK="GoToLink(this);return false;" target="_self">]]></HTML>
+      <Column HTMLEncode="TRUE" Name="GlobalDefault" />
+      <HTML><![CDATA[</a>]]></HTML>
+    </DisplayPattern>
+  </Field>
+  -->
+  <Field ID="{A07A904B-2979-4818-9BB6-A4B4B0E80EDE}"
+         Type="Integer"
+         Name="ImportTimer"
+         DisplayName="Import Timer"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE" 
+         Min="5" 
+         Max="99" 
+         Percentage="FALSE" 
+         Decimals="0"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>30</Default>
+  </Field>
+  <Field ID="{E4150F5B-E1BD-4953-B253-31AA7BBE247A}"
+         Type="Text"
+         Name="ClaimsIdentifier"
+         DisplayName="Claims Identifier"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>i:0#.f</Default>
+  </Field>
+  <Field ID="{5EA0D55C-0347-4FCC-9342-DE69878B4A4A}"
+         Type="Text"
+         Name="LDAPFilter"
+         DisplayName="LDAP Filter"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>(&amp;(objectClass=user))</Default>
+  </Field>
+  <Field ID="{578BB35E-0D54-4A8F-B99C-C5E1D7D21045}"
+         Type="Boolean"
+         Name="DeleteProfiles"
+         DisplayName="Delete Profiles"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>0</Default>
+  </Field>
+  <Field ID="{2A29A2DD-4AA3-4691-AA16-18C2F510AC03}"
+         Type="Text"
+         Name="Department"
+         DisplayName="Department"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>department</Default>
+  </Field>
+  <Field ID="{59D4AF0B-19C9-4C35-9A50-4E59E3F40DA1}"
+         Type="Text"
+         Name="FirstName"
+         DisplayName="FirstName"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>givenName</Default>
+  </Field>
+  <Field ID="{DF46DF75-A7F0-46BE-8B0B-7F2C04D8F548}"
+         Type="Text"
+         Name="LastName"
+         DisplayName="LastName"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>sn</Default>
+  </Field>
+  <Field ID="{E0F20BAC-AEAD-4CC5-8847-4F3C8FB36D7D}"
+         Type="Text"
+         Name="Office"
+         DisplayName="Office"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>physicalDeliveryOfficeName</Default>
+  </Field>
+  <Field ID="{24097D01-7048-46A1-ABB9-4ADFAAE8E3E8}"
+         Type="Text"
+         Name="PreferredName"
+         DisplayName="PreferredName"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>displayName</Default>
+  </Field>
+  <Field ID="{B8D2011C-7794-4913-8C6B-2B952B5659BB}"
+         Type="Text"
+         Name="UserTitle"
+         DisplayName="User's Title"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>title</Default>
+  </Field>
+  <Field ID="{478D27E4-09D8-4403-8FFF-04E2B11270BE}"
+         Type="Text"
+         Name="WebSite"
+         DisplayName="WebSite"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>wWWHomePage</Default>
+  </Field>
+  <Field ID="{42029E05-3D0F-43B2-8FAE-BA9BDD8F1E80}"
+         Type="Text"
+         Name="WorkEmail"
+         DisplayName="WorkEmail"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>mail</Default>
+  </Field>
+  <Field ID="{7D046CDF-7165-4094-93ED-D6C4CEFA2BE6}"
+         Type="Text"
+         Name="WorkPhone"
+         DisplayName="WorkPhone"
+         ShowInDisplayForm="TRUE"
+         ShowInEditForm="TRUE"
+         ShowInNewForm="TRUE"
+         Group="ADLDSGlobalValues"
+         >
+    <Default>telephoneNumber</Default>
+  </Field>
+</Elements>

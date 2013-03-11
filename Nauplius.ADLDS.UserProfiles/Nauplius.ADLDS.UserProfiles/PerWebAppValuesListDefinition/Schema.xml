@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<List xmlns:ows="Microsoft SharePoint" Title="PerWebAppValuesListDefinition" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/PerWebAppValuesListDefinition" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/">
+  <MetaData>
+    <ContentTypes>
+      <ContentType ID="0x010052943430b5e940a780e0f618f7b7c36f" Name="ADLDSPerWebApplicationContentType" Group="Custom Content Types" Description="My Content Type" Inherits="FALSE" Version="0">
+        <FieldRefs>
+          <FieldRef ID="{EE590E8D-6009-4548-83FE-D95629C3B0B1}" Name="WebApplicationUrl" />
+          <FieldRef ID="{2284D486-D162-4093-A1C8-B360FFD8540A}" Name="ADLDSServer" />
+          <FieldRef ID="{30D92E3D-2296-4525-B0CF-830FE538DC62}" Name="ADLDSPort" />
+          <FieldRef ID="{EAC0DE21-F13A-4AAC-BD21-DB5D47D05E67}" Name="ADLDSDN" />
+          <FieldRef ID="{92F690D3-0356-486D-B687-B4B8D97AB705}" Name="ADLDSUseSSL" />
+          <FieldRef ID="{532044C0-E408-4729-A4D7-8E1E80B39670}" Name="ADLDSLoginAttrib" />
+          <RemoveFieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" Required="FALSE" Hidden="TRUE" />
+        </FieldRefs>
+      </ContentType>
+    </ContentTypes>
+    <Fields>
+      <Field ID="{ee590e8d-6009-4548-83fe-d95629c3b0b1}" Type="Text" Name="WebApplicationUrl" DisplayName="Web Application" Description="Web Application Url" ShowInDisplayForm="TRUE" ShowInEditForm="FALSE" ShowInNewForm="TRUE" Group="ADLDSPerWebValues" EnforceUniqueValues="TRUE" Indexed="TRUE">
+  </Field>
+      <Field ID="{2284d486-d162-4093-a1c8-b360ffd8540a}" Type="Text" Name="ADLDSServer" DisplayName="AD LDS Server" Description="The AD LDS NetBIOS or FQDN. If using SSL, make sure there is a trusted SSL certificate." ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSPerWebValues">
+  </Field>
+      <Field ID="{30d92e3d-2296-4525-b0cf-830fe538dc62}" Type="Integer" Name="ADLDSPort" DisplayName="Port" Description="The port number to connect to (defaults are 389 for plain-text (LDAP), and 636 for SSL (LDAPS)" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Min="389" Max="65535" Percentage="FALSE" Decimals="5" Group="ADLDSPerWebValues">
+    <Default>636</Default>
+  </Field>
+      <Field ID="{eac0de21-f13a-4aac-bd21-db5d47d05e67}" Type="Text" Name="ADLDSDN" DisplayName="Distinguished Name" Description="The distinguished name to connect to, in the format of DN=value,DC=value (http://msdn.microsoft.com/en-us/library/windows/desktop/aa366101(v=vs.85).aspx)" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSPerWebValues">
+  </Field>
+      <Field ID="{92f690d3-0356-486d-b687-b4b8d97ab705}" Type="Boolean" Name="ADLDSUseSSL" DisplayName="Connect with SSL (LDAPS)" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSPerWebValues">
+    <Default>1</Default>
+  </Field>
+      <Field ID="{532044c0-e408-4729-a4d7-8e1e80b39670}" Type="Text" Name="ADLDSLoginAttrib" DisplayName="Login Attribute" Description="The attribute users log into the Web Applciation with" ShowInDisplayForm="TRUE" ShowInEditForm="TRUE" ShowInNewForm="TRUE" Group="ADLDSPerWebValues">
+    <Default>mail</Default>
+  </Field>
+    </Fields>
+    <Views>
+      <View BaseViewID="0" Type="HTML" MobileView="TRUE" TabularView="FALSE">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          <FieldRef Name="WebApplicationUrl">
+          </FieldRef>
+        </ViewFields>
+        <Query>
+          <OrderBy>
+            <FieldRef Name="Modified" Ascending="FALSE">
+            </FieldRef>
+          </OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="AddNewAnnouncement" Location="Resource(wss,addnewitem)" />
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_ONET_HOME)" />
+        </ParameterBindings>
+      </View>
+      <View BaseViewID="1" Type="HTML" WebPartZoneID="Main" DisplayName="$Resources:core,objectiv_schema_mwsidcamlidC24;" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" SetupPath="pages\viewpage.aspx" ImageUrl="/_layouts/images/generic.png" Url="AllItems.aspx">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          <FieldRef Name="WebApplicationUrl">
+          </FieldRef>
+          <FieldRef Name="ADLDSServer">
+          </FieldRef>
+          <FieldRef Name="ADLDSPort">
+          </FieldRef>
+          <FieldRef Name="ADLDSDN">
+          </FieldRef>
+          <FieldRef Name="ADLDSUseSSL">
+          </FieldRef>
+          <FieldRef Name="ADLDSLoginAttrib">
+          </FieldRef>
+        </ViewFields>
+        <Query>
+          <OrderBy>
+            <FieldRef Name="ID">
+            </FieldRef>
+          </OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_DEFAULT)" />
+        </ParameterBindings>
+      </View>
+    </Views>
+    <Forms>
+      <Form Type="DisplayForm" Url="DispForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="EditForm" Url="EditForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="NewForm" Url="NewForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+    </Forms>
+  </MetaData>
+</List>

@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <ListInstance Title="Nauplius.ADLDS.FBA - WebApplicationSettings" OnQuickLaunch="FALSE" TemplateType="10003" Url="Lists/Nauplius.ADLDS.FBA-WebApplicationSettings" Description="AD LDS/ADAM FBA Web Application Settings"></ListInstance>
+</Elements>
