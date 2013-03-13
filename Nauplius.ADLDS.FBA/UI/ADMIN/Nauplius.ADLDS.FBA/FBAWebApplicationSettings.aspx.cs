@@ -7,7 +7,7 @@ using Microsoft.SharePoint.WebControls;
 
 //ToDo: Replace & with &amp; in all strings.
 
-namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
+namespace UI.ADMIN.Nauplius.ADLDS.FBA
 {
     public partial class FBAWebApplicationSettings : LayoutsPageBase
     {
@@ -53,7 +53,7 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                     e.IsValid = true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 e.IsValid = false;
             }
@@ -61,13 +61,13 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
 
         protected void SaveOrUpdateList(SPWebApplication selectedWebApp)
         {
-            using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))
+            using (var siteCollection = new SPSite(SPContext.Current.Site.ID))
             {
-                using (SPWeb site = siteCollection.OpenWeb())
+                using (var site = siteCollection.OpenWeb())
                 {
                     try
                     {
-                        SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - WebApplicationSettings");
+                        var list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - WebApplicationSettings");
                         if (list != null)
                         {
                             if (selectedWebApp != null)
@@ -78,7 +78,7 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                                 string grpUsrFilter = Regex.Replace(txtGrpUsrFilter.Text, "&(?!amp;)", "&amp;");
                                 string grpFilter = Regex.Replace(txtGrpFilter.Text, "&(?!amp;)", "&amp;");
 
-                                SPListItemCollection items = list.Items;
+                                var items = list.Items;
 
                                 foreach (SPListItem item in items)
                                 {
@@ -158,7 +158,7 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (SPException)
                     { }
                 }
             }
@@ -166,20 +166,20 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
 
         protected void FillItems(SPWebApplication selectedWebApp)
         {
-            using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))
+            using (var siteCollection = new SPSite(SPContext.Current.Site.ID))
             {
-                using (SPWeb site = siteCollection.OpenWeb())
+                using (var site = siteCollection.OpenWeb())
                 {
                     try
                     {
-                        SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - WebApplicationSettings");
+                        var list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - WebApplicationSettings");
                         if (list != null)
                         {
                             if (selectedWebApp != null)
                             {
                                 string webAppUrl = selectedWebApp.GetResponseUri(SPUrlZone.Default).AbsoluteUri;
 
-                                SPListItemCollection items = list.Items;
+                                var items = list.Items;
 
                                 foreach (SPListItem item in items)
                                 {
@@ -226,7 +226,7 @@ namespace Nauplius.ADLDS.FBA.Layouts.Nauplius.ADLDS.FBA
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (SPException)
                     { }
                 }
             }

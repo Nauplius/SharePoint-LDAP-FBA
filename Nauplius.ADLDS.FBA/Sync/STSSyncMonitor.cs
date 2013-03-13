@@ -8,7 +8,7 @@ using Microsoft.SharePoint.Utilities;
 namespace Nauplius.ADLDS.FBA
 {
     [Guid("DF4A0729-0577-4EFB-8C7E-857BBBDA5CCC")]
-    internal class STSSyncMonitor : SPJobDefinition
+    public class STSSyncMonitor : SPJobDefinition
     {
         private const string tJobName = "Nauplius ADLDS FBA STS Sync Monitor";
         private static readonly XmlDocument MasterXmlFragment = new XmlDocument();

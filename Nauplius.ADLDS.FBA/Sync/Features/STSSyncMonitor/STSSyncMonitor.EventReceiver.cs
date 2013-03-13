@@ -1,12 +1,14 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Utilities;
+using Nauplius.ADLDS.FBA;
 
-namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
+namespace Sync.Features.Feature1
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -15,7 +17,7 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
     /// The GUID attached to this class may be used during packaging and should not be modified.
     /// </remarks>
 
-    [Guid("7e73cd0e-89e8-4963-bd43-952e884b6320")]
+    [Guid("1a7c466c-32bc-40b4-b8b2-1d72b265552d")]
     public class STSSyncMonitorFeatureEventReceiver : SPFeatureReceiver
     {
         const string tJobName = "Nauplius ADLDS FBA STS Sync Monitor";
@@ -27,8 +29,8 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
             SPFarm local = SPFarm.Local;
 
             var services = from s in local.Services
-                          where s.Name == "SPTimerV4"
-                          select s;
+                           where s.Name == "SPTimerV4"
+                           select s;
 
             var service = services.First();
 
@@ -131,4 +133,5 @@ namespace Nauplius.ADLDS.FBA.Features.STSSyncMonitorFeature
         //{
         //}
     }
+
 }

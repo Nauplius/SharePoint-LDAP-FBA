@@ -5,7 +5,7 @@
 <%@ Register Tagprefix="asp" Namespace="System.Web.UI" Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" %>
 <%@ Import Namespace="Microsoft.SharePoint" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="FBAProfileGlobalSettings.aspx.cs" Inherits="Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles.ADLDSGlobalSettings" DynamicMasterPageFile="~masterurl/default.master" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="FBAProfileGlobalSettings.aspx.cs" Inherits="UI.ADMIN.Nauplius.ADLDS.FBA.ADLDSGlobalSettings" DynamicMasterPageFile="~masterurl/default.master" %>
 
 <%@ Register TagPrefix="wssuc" TagName="InputFormSection" src="~/_controltemplates/InputFormSection.ascx" %>
 <%@ Register TagPrefix="wssuc" TagName="InputFormControl" src="~/_controltemplates/InputFormControl.ascx" %>
@@ -98,6 +98,7 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
+    <tr>
 	  <td>
 			<wssuc:InputFormSection ID="InputFormSection5" runat="server"
 				Title="FirstName Attribute Field"
@@ -114,6 +115,7 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
+    <tr>
 	  <td>
 			<wssuc:InputFormSection ID="InputFormSection6" runat="server"
 				Title="LastName Attribute Field"
@@ -130,6 +132,7 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
+    <tr>
 	  <td>
 			<wssuc:InputFormSection ID="InputFormSection7" runat="server"
 				Title="Office Attribute Field"
@@ -146,6 +149,7 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
+    <tr>
 	  <td>
 			<wssuc:InputFormSection ID="InputFormSection8" runat="server"
 				Title="PreferredName Attribute Field"
@@ -162,6 +166,7 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
+    <tr>
 	  <td>
 			<wssuc:InputFormSection ID="InputFormSection9" runat="server"
 				Title="Title Attribute Field"
@@ -178,6 +183,7 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
+    <tr>
 	  <td>
 			<wssuc:InputFormSection ID="InputFormSection10" runat="server"
 				Title="WebSite Attribute Field"

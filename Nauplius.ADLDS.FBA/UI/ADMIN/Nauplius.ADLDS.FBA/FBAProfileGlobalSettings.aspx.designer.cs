@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles {
+namespace UI.ADMIN.Nauplius.ADLDS.FBA {
     
     
     public partial class ADLDSGlobalSettings {

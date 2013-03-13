@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" solutionId="f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1" resetWebServer="true" name="Nauplius.ADLDS.FBA" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
   <features>
-    <featureReference itemId="1710eacf-d1e9-4c5b-be26-c778607804e3" />
+    <featureReference itemId="fe471dbd-855f-4fd3-b24a-0b8e720823ed" />
+    <featureReference itemId="e0d39275-7528-41ac-9d29-fd5870248a93" projectPath="..\Sync\Sync.csproj" />
     <featureReference itemId="43f06a04-fcf2-49c8-aeb1-8a1dc15d8859" />
-    <featureReference itemId="aaad9e13-2411-4587-bf4b-ed816858038c" />
     <featureReference itemId="a53ae9bc-066f-46f6-87a5-f0d025b205ff" />
   </features>
 </package>

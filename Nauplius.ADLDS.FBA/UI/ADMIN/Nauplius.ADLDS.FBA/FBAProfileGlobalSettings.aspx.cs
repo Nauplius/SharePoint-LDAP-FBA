@@ -2,7 +2,7 @@
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.WebControls;
 
-namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles
+namespace UI.ADMIN.Nauplius.ADLDS.FBA
 {
     public partial class ADLDSGlobalSettings : LayoutsPageBase
     {
@@ -27,13 +27,13 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles
 
         protected void UpdateGlobalSettings()
         {
-            using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))
+            using (var siteCollection = new SPSite(SPContext.Current.Site.ID))
             {
-                using (SPWeb site = siteCollection.OpenWeb())
+                using (var site = siteCollection.OpenWeb())
                 { 
                     try
                     {
-                        SPList list = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
+                        var list = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
                         if (list != null)
                         {
                             if (list.ItemCount < 1)
@@ -97,7 +97,7 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (SPException)
                     { }
                 }
             }
@@ -105,14 +105,14 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles
 
         protected void LoadGlobalSettingsOrSetDefaults()
         {
-            using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))
+            using (var siteCollection = new SPSite(SPContext.Current.Site.ID))
             {
-                using (SPWeb site = siteCollection.OpenWeb())
+                using (var site = siteCollection.OpenWeb())
                 {
                     site.AllowUnsafeUpdates = true;
                     try
                     {
-                        SPList list = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
+                        var list = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - GlobalSettings");
                         if (list != null)
                         {
                             if (list.ItemCount == 0)
@@ -157,7 +157,7 @@ namespace Nauplius.ADLDS.UserProfiles.Layouts.Nauplius.ADLDS.UserProfiles
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (SPException)
                     { }
                 }
             }

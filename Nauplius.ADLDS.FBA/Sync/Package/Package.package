@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="7a95a788-a907-417d-8c77-b71201883828" solutionId="7a95a788-a907-417d-8c77-b71201883828" resetWebServer="false" deploymentServerType="ApplicationServer" name="Nauplius.ADLDS.Sync" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="e0d39275-7528-41ac-9d29-fd5870248a93" />
+  </features>
+</package>

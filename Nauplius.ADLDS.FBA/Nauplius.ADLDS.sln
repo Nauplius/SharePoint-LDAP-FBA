@@ -5,9 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBA", "FBA\FBA.csproj", "{B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{F358607A-4DE2-4033-B931-B2E02D798E9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sync", "Sync\Sync.csproj", "{BD1076D8-0739-4B16-B2EB-4AEE294489EF}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs03
 		SccLocalPath0 = .
@@ -17,6 +19,9 @@ Global
 		SccProjectUniqueName2 = FBA\\FBA.csproj
 		SccProjectName2 = FBA
 		SccLocalPath2 = FBA
+		SccProjectUniqueName3 = Sync\\Sync.csproj
+		SccProjectName3 = Sync
+		SccLocalPath3 = Sync
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +38,12 @@ Global
 		{F358607A-4DE2-4033-B931-B2E02D798E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F358607A-4DE2-4033-B931-B2E02D798E9D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F358607A-4DE2-4033-B931-B2E02D798E9D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{BD1076D8-0739-4B16-B2EB-4AEE294489EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD1076D8-0739-4B16-B2EB-4AEE294489EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD1076D8-0739-4B16-B2EB-4AEE294489EF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BD1076D8-0739-4B16-B2EB-4AEE294489EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD1076D8-0739-4B16-B2EB-4AEE294489EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD1076D8-0739-4B16-B2EB-4AEE294489EF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

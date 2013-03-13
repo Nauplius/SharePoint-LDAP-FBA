@@ -45,17 +45,10 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.SharePoint.IdentityModel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.SharePoint.IdentityModel\14.0.0.0__71e9bce111e9429c\Microsoft.SharePoint.IdentityModel.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.SharePoint" />
   </ItemGroup>
   <ItemGroup>
@@ -121,7 +114,16 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FBA\FBA.csproj">
+      <Project>{b48a03e5-dbcf-4a58-ad9b-b5e411bd2d5b}</Project>
+      <Name>FBA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sync\Sync.csproj">
+      <Project>{bd1076d8-0739-4b16-b2eb-4aee294489ef}</Project>
+      <Name>Sync</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="ADMIN\Nauplius.ADLDS.FBA\FBAProfileGlobalSettings.aspx">
       <SubType>ASPXCodeBehind</SubType>
@@ -153,12 +155,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="FBAApplicationPageLinks\Elements.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FBA\FBA.csproj">
-      <Project>{b48a03e5-dbcf-4a58-ad9b-b5e411bd2d5b}</Project>
-      <Name>FBA</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
