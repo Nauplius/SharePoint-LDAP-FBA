@@ -94,7 +94,7 @@ namespace FBA
                         }
                     }
 
-                    SPList list2 = site.Lists.TryGetList("Nauplius.ADLDS.UserProfiles - WebAppSettings");
+                    SPList list2 = site.Lists.TryGetList("Nauplius.ADLDS.FBA - WebApplicationSettings");
                     if (list2 != null)
                     {
                         if (list2.ItemCount >= 1)
@@ -103,8 +103,8 @@ namespace FBA
                             {
                                 WebApplication = SPWebApplication.Lookup(new Uri(item["WebApplicationUrl"].ToString()));
                                 ServerName = item["ADLDSServer"].ToString();
-                                PortNumber = (int)item["ADLDSPort"];
-                                DistinguishedNameRoot = item["ADLDSDN"].ToString();
+                                PortNumber = Convert.ToInt32(item["ADLDSPort"].ToString());
+                                DistinguishedNameRoot = item["ADLDSUserContainer"].ToString();
                                 UseSSL = (bool)item["ADLDSUseSSL"];
                                 LoginAttribute = item["ADLDSLoginAttrib"].ToString();
 
