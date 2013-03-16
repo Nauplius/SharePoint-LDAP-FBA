@@ -1,9 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using Microsoft.SharePoint;
 
-namespace UI.Features.ListsFeature
+namespace UI.Features.Lists
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.

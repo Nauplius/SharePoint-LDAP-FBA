@@ -1,14 +1,11 @@
-using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Utilities;
-using Nauplius.ADLDS.FBA;
 
-namespace Sync.Features.Feature1
+namespace Sync.Features.STSSync
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.

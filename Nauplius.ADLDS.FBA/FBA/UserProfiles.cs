@@ -6,9 +6,8 @@ using System.Runtime.InteropServices;
 using Microsoft.Office.Server.UserProfiles;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
-using Nauplius.ADLDS.FBA;
 
-namespace Nauplius.ADLDS.UserProfiles
+namespace FBA
 {
     [Guid("A925C800-D446-402A-9882-1956C57D3D51")]
     class ADLDSImportJob : SPJobDefinition

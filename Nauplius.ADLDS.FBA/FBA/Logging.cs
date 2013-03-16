@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.SharePoint.Administration;
 
-namespace Nauplius.ADLDS.FBA
+namespace FBA
 {
     public class Logging : SPDiagnosticsServiceBase
     {

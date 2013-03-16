@@ -1,9 +1,8 @@
-using System;
 using System.Runtime.InteropServices;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 
-namespace Nauplius.ADLDS.FBA.Features.Feature1
+namespace FBA.Features.Logging
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -31,13 +30,13 @@ namespace Nauplius.ADLDS.FBA.Features.Feature1
 
             if (farm != null)
             {
-                var log = Nauplius.ADLDS.FBA.Logging.Local;
+                var log = global::FBA.Logging.Local;
 
                 if (register)
                 {
                     if (log == null)
                     {
-                        log = new Nauplius.ADLDS.FBA.Logging();
+                        log = new global::FBA.Logging();
                         log.Update();
 
                         if (log.Status != SPObjectStatus.Offline)

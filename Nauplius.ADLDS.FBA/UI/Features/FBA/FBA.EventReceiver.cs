@@ -2,10 +2,9 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml;
+using FBA;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
-
-using Nauplius.ADLDS.FBA;
 
 namespace UI.Features.FBA
 {
@@ -164,6 +163,7 @@ namespace UI.Features.FBA
                                     try
                                     {
                                         var customUrl = item["CustomUrl"].ToString();
+
                                         webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl =
                                             new Uri(customUrl, UriKind.RelativeOrAbsolute);
                                     }
@@ -175,6 +175,8 @@ namespace UI.Features.FBA
                                     try
                                     {
                                         webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
+                                        webApp.Update();
+                                        webApp.ProvisionGlobally();
                                     }
                                     catch (ArgumentException)
                                     {
@@ -191,6 +193,7 @@ namespace UI.Features.FBA
                                         }
                                         webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
                                         webApp.Update();
+                                        webApp.ProvisionGlobally();
                                     }
 
                                     try
@@ -286,6 +289,7 @@ namespace UI.Features.FBA
                     {
                         webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
                         webApp.Update();
+                        webApp.ProvisionGlobally();
                         break;
                     }
                 }
@@ -302,6 +306,7 @@ namespace UI.Features.FBA
             {
                 webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
                 webApp.Update();
+                webApp.ProvisionGlobally();
             }
         }
 
@@ -354,6 +359,7 @@ namespace UI.Features.FBA
                     {
                         webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
                         webApp.Update();
+                        webApp.ProvisionGlobally();
                         break;
                     }
                 }
@@ -370,6 +376,7 @@ namespace UI.Features.FBA
             {
                 webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
                 webApp.Update();
+                webApp.ProvisionGlobally();
             }
         }
 
@@ -399,7 +406,7 @@ namespace UI.Features.FBA
                     item["XMLStsConfig"] = fragment.OuterXml;
                     item.Update();
                 }
-                catch (Exception)
+                catch (SPException)
                 {
                 }
             }

@@ -5,7 +5,7 @@ using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 
-namespace Nauplius.ADLDS.FBA
+namespace FBA
 {
     public static class WebModifications
     {

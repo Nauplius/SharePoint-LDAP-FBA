@@ -5,8 +5,7 @@ using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Administration.Health;
 using Microsoft.SharePoint.Utilities;
 
-
-namespace Nauplius.ADLDS.FBA
+namespace FBA
 {
     internal class STSHealthAnalysisRule : SPRepairableHealthAnalysisRule
     {

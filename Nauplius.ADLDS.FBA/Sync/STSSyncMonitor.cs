@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Xml;
+using FBA;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Utilities;
 
-namespace Nauplius.ADLDS.FBA
+namespace Sync
 {
     [Guid("DF4A0729-0577-4EFB-8C7E-857BBBDA5CCC")]
     public class STSSyncMonitor : SPJobDefinition
