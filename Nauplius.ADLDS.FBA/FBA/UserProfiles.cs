@@ -107,18 +107,18 @@ namespace FBA
                                 DistinguishedNameRoot = item["ADLDSUserContainer"].ToString();
                                 UseSSL = (bool)item["ADLDSUseSSL"];
                                 LoginAttribute = item["ADLDSLoginAttrib"].ToString();
-
+                                var zone = GetZone(item);
                                 DirectoryEntry de = DirEntry(ServerName, PortNumber, DistinguishedNameRoot);
 
                                 if (de != null)
                                 {
                                     SearchResultCollection results = ResultCollection(de);
 
-                                    Create(results, LoginAttribute, WebApplication, ServerName, PortNumber);
+                                    Create(results, LoginAttribute, WebApplication, ServerName, PortNumber, zone);
 
                                     if (DeleteProfiles)
                                     {
-                                        Delete(results, LoginAttribute, WebApplication, ServerName, PortNumber);
+                                        Delete(results, LoginAttribute, WebApplication, ServerName, PortNumber, zone);
                                     }
                                 }
                             }
@@ -187,7 +187,7 @@ namespace FBA
             return null;
         }
 
-        public static void Create(SearchResultCollection users, string loginAttribute, SPWebApplication webApplication, string serverName, int portNumber)
+        public static void Create(SearchResultCollection users, string loginAttribute, SPWebApplication webApplication, string serverName, int portNumber, SPUrlZone zone)
         {
             foreach (SearchResult user in users)
             {
@@ -195,13 +195,13 @@ namespace FBA
                 SPSite site = null;
                 try
                 {
-                    site = new SPSite(WebApplication.GetResponseUri(SPUrlZone.Default).AbsoluteUri);
+                    site = new SPSite(WebApplication.GetResponseUri(zone).AbsoluteUri);
 
-                    SPIisSettings iisSettings = webApplication.GetIisSettingsWithFallback(SPUrlZone.Default);
+                    SPIisSettings iisSettings = webApplication.GetIisSettingsWithFallback(zone);
 
                     foreach (SPAuthenticationProvider provider in iisSettings.ClaimsAuthenticationProviders)
                     {
-                        if (provider.GetType() == typeof(SPFormsAuthenticationProvider))
+                        if (provider is SPFormsAuthenticationProvider)
                         {
                             SPFormsAuthenticationProvider formsProvider = provider as SPFormsAuthenticationProvider;
                             SPServiceContext serviceContext = SPServiceContext.GetContext(site);
@@ -317,19 +317,19 @@ namespace FBA
             }
         }
 
-        public static void Delete(SearchResultCollection users, string loginAttribute, SPWebApplication webApplication, string serverName, int portNumber)
+        public static void Delete(SearchResultCollection users, string loginAttribute, SPWebApplication webApplication, string serverName, int portNumber, SPUrlZone zone)
         {
             SPSite site = null;
 
             try
             {
-                site = new SPSite(WebApplication.GetResponseUri(SPUrlZone.Default).AbsoluteUri);
+                site = new SPSite(WebApplication.GetResponseUri(zone).AbsoluteUri);
 
-                SPIisSettings iisSettings = webApplication.GetIisSettingsWithFallback(SPUrlZone.Default);
+                SPIisSettings iisSettings = webApplication.GetIisSettingsWithFallback(zone);
 
                 foreach (SPAuthenticationProvider provider in iisSettings.ClaimsAuthenticationProviders)
                 {
-                    if (provider.GetType() == typeof(SPFormsAuthenticationProvider))
+                    if (provider is SPFormsAuthenticationProvider)
                     {
                         SPFormsAuthenticationProvider formsProvider = provider as SPFormsAuthenticationProvider;
 
@@ -384,6 +384,23 @@ namespace FBA
                 {
                     site.Dispose();
                 }
+            }
+        }
+
+        protected SPUrlZone GetZone(SPListItem item)
+        {
+            var zone = (item["WebApplicationZone"] == null)
+                           ? String.Empty
+                           : item["WebApplicationZone"].ToString();
+
+            switch (zone)
+            {
+                case "Default": return SPUrlZone.Default;
+                case "Intranet": return SPUrlZone.Intranet;
+                case "Internet": return SPUrlZone.Internet;
+                case "Extranet": return SPUrlZone.Extranet;
+                case "Custom": return SPUrlZone.Custom;
+                default: return SPUrlZone.Default;
             }
         }
     }

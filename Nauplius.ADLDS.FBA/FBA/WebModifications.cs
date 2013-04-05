@@ -18,12 +18,12 @@ namespace FBA
         private const string ProviderRoleType =
             @"Microsoft.Office.Server.Security.LdapRoleProvider, Microsoft.Office.Server, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c";
 
-        public static void CreateWildcardNode(bool removeModification, SPWebApplication webApp)
+        public static void CreateWildcardNode(bool removeModification, SPWebApplication webApp, SPUrlZone zone)
         {
             if (webApp.UseClaimsAuthentication)
             {
                 string name1, xpath1, value1, name2, value2;
-                SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
+                SPListItem provider = GetClaimProvider(webApp, zone);
 
                 xpath1 = "configuration/SharePoint/PeoplePickerWildcards";
                 name1 = String.Format("add[@key='{0}']", provider["WebApplicationMembershipProvider"]);
@@ -65,12 +65,12 @@ namespace FBA
             }
         }
 
-        public static void CreateProviderNode(bool removeModification, SPWebApplication webApp)
+        public static void CreateProviderNode(bool removeModification, SPWebApplication webApp, SPUrlZone zone)
         {
             if (webApp.UseClaimsAuthentication)
             {
                 string name1, xpath1, value1, name2, xpath2, value2;
-                SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
+                SPListItem provider = GetClaimProvider(webApp, zone);
 
                 name1 = string.Format("add[@name='{0}']", provider["WebApplicationMembershipProvider"]);
                 xpath1 = "configuration/system.web/membership/providers";
@@ -131,12 +131,12 @@ namespace FBA
             }
         }
 
-        public static void CreateAdminWildcardNode(bool removeModification, SPWebApplication webApp)
+        public static void CreateAdminWildcardNode(bool removeModification, SPWebApplication webApp, SPUrlZone zone)
         {
             var adminWebApplication = SPAdministrationWebApplication.Local;
 
             string name1, xpath1, value1, name2, value2;
-            SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
+            SPListItem provider = GetClaimProvider(webApp, zone);
 
             xpath1 = "configuration/SharePoint/PeoplePickerWildcards";
             name1 = String.Format("add[@key='{0}']", provider["WebApplicationMembershipProvider"]);
@@ -177,12 +177,12 @@ namespace FBA
             }
         }
 
-        public static void CreateAdminProviderNode(bool removeModification, SPWebApplication webApp)
+        public static void CreateAdminProviderNode(bool removeModification, SPWebApplication webApp, SPUrlZone zone)
         {
             var adminWebApplication = SPAdministrationWebApplication.Local;
 
             string name1, xpath1, value1, name2, xpath2, value2;
-            SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
+            SPListItem provider = GetClaimProvider(webApp, zone);
 
             name1 = string.Format("add[@name='{0}']", provider["WebApplicationMembershipProvider"]);
             xpath1 = "configuration/system.web/membership/providers";
@@ -362,7 +362,7 @@ namespace FBA
             return null;
         }
 
-        public static bool CreateStsProviderNode(bool removeModification, SPFeatureReceiverProperties properties)
+        public static bool CreateStsProviderNode(bool removeModification, SPFeatureReceiverProperties properties, SPUrlZone zone)
         {
             string featureId = properties.Feature.DefinitionId.ToString();
             SPWebApplication webApp = properties.Feature.Parent as SPWebApplication;
@@ -370,7 +370,7 @@ namespace FBA
             if (webApp.UseClaimsAuthentication)
             {
 
-                SPListItem provider = GetClaimProvider(webApp, SPUrlZone.Default);
+                SPListItem provider = GetClaimProvider(webApp, zone);
 
                 string value = String.Format("<add name='{0}' type='{1}' server='{2}' port='{3}' " +
                                         "useSSL='{4}' userDNAttribute='{5}' useDNAttribute='{6}' userNameAttribute='{7}' " +

@@ -49,6 +49,24 @@ namespace UI.ADMIN.Nauplius.ADLDS.FBA {
         protected global::Microsoft.SharePoint.WebControls.WebApplicationSelector ddlWebApp;
         
         /// <summary>
+        /// InputFormSection30 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl InputFormSection30;
+        
+        /// <summary>
+        /// ddlZonePicker control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.SharePoint.WebControls.UrlZonePicker ddlZonePicker;
+        
+        /// <summary>
         /// InputFormSection3 control.
         /// </summary>
         /// <remarks>

@@ -152,8 +152,9 @@ namespace UI.Features.FBA
 
                             foreach (SPListItem item in items)
                             {
+                                var zone = GetZone(item);
                                 if (item["WebApplicationUrl"].ToString() ==
-                                    webApp.GetResponseUri(SPUrlZone.Default).ToString())
+                                    webApp.GetResponseUri(zone).ToString())
                                 {
                                     //Set the Membership and Role providers for the Web Application
                                     var ap = new SPFormsAuthenticationProvider(
@@ -163,8 +164,7 @@ namespace UI.Features.FBA
                                     try
                                     {
                                         var customUrl = item["CustomUrl"].ToString();
-
-                                        webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl =
+                                        webApp.IisSettings[zone].ClaimsAuthenticationRedirectionUrl =
                                             new Uri(customUrl, UriKind.RelativeOrAbsolute);
                                     }
                                     catch (NullReferenceException)
@@ -174,7 +174,7 @@ namespace UI.Features.FBA
 
                                     try
                                     {
-                                        webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
+                                        webApp.IisSettings[zone].AddClaimsAuthenticationProvider(ap);
                                         webApp.Update();
                                         webApp.ProvisionGlobally();
                                     }
@@ -182,27 +182,27 @@ namespace UI.Features.FBA
                                     {
                                         foreach (
                                             var provider in
-                                                webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationProviders)
+                                                webApp.IisSettings[zone].ClaimsAuthenticationProviders)
                                         {
                                             if (provider.ClaimProviderName == "Forms")
                                             {
-                                                webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
+                                                webApp.IisSettings[zone].DeleteClaimsAuthenticationProvider(provider);
                                                 webApp.Update();
                                                 break;
                                             }
                                         }
-                                        webApp.IisSettings[SPUrlZone.Default].AddClaimsAuthenticationProvider(ap);
+                                        webApp.IisSettings[zone].AddClaimsAuthenticationProvider(ap);
                                         webApp.Update();
                                         webApp.ProvisionGlobally();
                                     }
 
                                     try
                                     {
-                                        WebModifications.CreateWildcardNode(false, webApp);
-                                        WebModifications.CreateProviderNode(false, webApp);
-                                        WebModifications.CreateStsProviderNode(false, properties);
-                                        WebModifications.CreateAdminWildcardNode(false, webApp);
-                                        WebModifications.CreateAdminProviderNode(false, webApp);
+                                        WebModifications.CreateWildcardNode(false, webApp, zone);
+                                        WebModifications.CreateProviderNode(false, webApp, zone);
+                                        WebModifications.CreateStsProviderNode(false, properties, zone);
+                                        WebModifications.CreateAdminWildcardNode(false, webApp, zone);
+                                        WebModifications.CreateAdminProviderNode(false, webApp, zone);
 
                                         var local = SPFarm.Local;
 
@@ -253,61 +253,7 @@ namespace UI.Features.FBA
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
             var webApp = properties.Feature.Parent as SPWebApplication;
-
-            WebModifications.CreateWildcardNode(true, webApp);
-            WebModifications.CreateProviderNode(true, webApp);
-            WebModifications.CreateStsProviderNode(true, properties);
-            WebModifications.CreateAdminWildcardNode(true, webApp);
-            WebModifications.CreateAdminProviderNode(true, webApp);
-
-            var local = SPFarm.Local;
-
-            var services = from s in local.Services
-                           where s.Name == "SPTimerV4"
-                           select s;
-
-            var service = services.First();
-
-            foreach (var job in service.JobDefinitions)
-            {
-                if (job.Name == tJobName)
-                {
-                    if (job.IsDisabled)
-                        job.IsDisabled = false;
-                    job.Update();
-                    job.RunNow();
-                }
-            }
-
-            //Remove the Forms Authentication provider for the Web Application
-            try
-            {
-                foreach (var provider in
-                    webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationProviders)
-                {
-                    if (provider.ClaimProviderName == "Forms")
-                    {
-                        webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
-                        webApp.Update();
-                        webApp.ProvisionGlobally();
-                        break;
-                    }
-                }
-            }
-            catch (ArgumentNullException)
-            {
-                //Forms provider already removed
-            }
-            catch (ArgumentException)
-            {
-                //Claims provider is null
-            }
-            finally
-            {
-                webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
-                webApp.Update();
-                webApp.ProvisionGlobally();
-            }
+            RemoveFbaSettings(webApp, properties);
         }
 
 
@@ -323,61 +269,7 @@ namespace UI.Features.FBA
         public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
         {
             var webApp = properties.Feature.Parent as SPWebApplication;
-
-            WebModifications.CreateWildcardNode(true, webApp);
-            WebModifications.CreateProviderNode(true, webApp);
-            WebModifications.CreateStsProviderNode(true, properties);
-            WebModifications.CreateAdminWildcardNode(true, webApp);
-            WebModifications.CreateAdminProviderNode(true, webApp);
-
-            var local = SPFarm.Local;
-
-            var services = from s in local.Services
-                           where s.Name == "SPTimerV4"
-                           select s;
-
-            var service = services.First();
-
-            foreach (var job in service.JobDefinitions)
-            {
-                if (job.Name == tJobName)
-                {
-                    if (job.IsDisabled)
-                        job.IsDisabled = false;
-                    job.Update();
-                    job.RunNow();
-                }
-            }
-
-            //Remove the Forms Authentication provider for the Web Application
-            try
-            {
-                foreach (var provider in
-                    webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationProviders)
-                {
-                    if (provider.ClaimProviderName == "Forms")
-                    {
-                        webApp.IisSettings[SPUrlZone.Default].DeleteClaimsAuthenticationProvider(provider);
-                        webApp.Update();
-                        webApp.ProvisionGlobally();
-                        break;
-                    }
-                }
-            }
-            catch (ArgumentNullException)
-            {
-                //Forms provider already removed
-            }
-            catch (ArgumentException)
-            {
-                //Claims provider is null
-            }
-            finally
-            {
-                webApp.IisSettings[SPUrlZone.Default].ClaimsAuthenticationRedirectionUrl = null;
-                webApp.Update();
-                webApp.ProvisionGlobally();
-            }
+            RemoveFbaSettings(webApp, properties);
         }
 
         // Uncomment the method below to handle the event raised when a feature is upgrading.
@@ -410,6 +302,113 @@ namespace UI.Features.FBA
                 {
                 }
             }
+        }
+
+        protected SPUrlZone GetZone(SPListItem item)
+        {
+            var zone = (item["WebApplicationZone"] == null)
+                           ? String.Empty
+                           : item["WebApplicationZone"].ToString();
+
+            switch (zone)
+            {
+                case "Default" : return SPUrlZone.Default;
+                case "Intranet" : return SPUrlZone.Intranet;
+                case "Internet" : return SPUrlZone.Internet;
+                case "Extranet" : return SPUrlZone.Extranet;
+                case "Custom" : return SPUrlZone.Custom;
+                default: return SPUrlZone.Default;
+            }
+        }
+
+        protected void RemoveFbaSettings(SPWebApplication webApp, SPFeatureReceiverProperties properties)
+        {
+            var local = SPFarm.Local;
+
+            var services = from s in local.Services
+                           where s.Name == "SPTimerV4"
+                           select s;
+
+            var service = services.First();
+
+            foreach (var job in service.JobDefinitions)
+            {
+                if (job.Name == tJobName)
+                {
+                    if (job.IsDisabled)
+                        job.IsDisabled = false;
+                    job.Update();
+                    job.RunNow();
+                }
+            }
+
+            using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))
+            {
+                using (SPWeb site = siteCollection.OpenWeb())
+                {
+                    try
+                    {
+                        SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - WebApplicationSettings");
+
+                        if (list != null)
+                        {
+                            SPListItemCollection items = list.Items;
+
+                            foreach (SPListItem item in items)
+                            {
+                                var zone = GetZone(item);
+
+                                if (item["WebApplicationUrl"].ToString() == webApp.GetResponseUri(zone).AbsoluteUri)
+                                {
+                                    //Remove the Forms Authentication provider for the Web Application
+                                    try
+                                    {
+                                        foreach (var provider in
+                                            webApp.IisSettings[zone].ClaimsAuthenticationProviders)
+                                        {
+                                            if (provider.ClaimProviderName == "Forms")
+                                            {
+                                                webApp.IisSettings[zone].DeleteClaimsAuthenticationProvider(provider);
+                                                webApp.Update();
+                                                webApp.ProvisionGlobally();
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    catch (ArgumentNullException)
+                                    {
+                                        //Forms provider already removed
+                                    }
+                                    catch (ArgumentException)
+                                    {
+                                        //Claims provider is null
+                                    }
+                                    finally
+                                    {
+                                        webApp.IisSettings[zone].ClaimsAuthenticationRedirectionUrl = null;
+                                        webApp.Update();
+                                        webApp.ProvisionGlobally();
+                                    }
+
+                                    WebModifications.CreateWildcardNode(true, webApp, zone);
+                                    WebModifications.CreateProviderNode(true, webApp, zone);
+                                    WebModifications.CreateStsProviderNode(true, properties, zone);
+                                    WebModifications.CreateAdminWildcardNode(true, webApp, zone);
+                                    WebModifications.CreateAdminProviderNode(true, webApp, zone);
+                                }
+                            }
+                        }
+                    }
+                    catch (SPException ex)
+                    {
+                        Logging.LogMessage(951, Logging.LogCategories.STSXML, TraceSeverity.Unexpected,
+                                            String.Format("Unable to update the WebApplicationSettings List in Central Administration. {0}",
+                                            ex.StackTrace),
+                                            new object[] { null });
+                        throw new SPException(@"Unable to update the WebApplicationSettings List in Central Administration.  Validate the list exists.");
+                    }
+                }
+            }            
         }
     }
 }

@@ -45,6 +45,24 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
+    <!-- SPUrl Zone -->
+    <tr>
+        <td>
+            <wssuc:InputFormSection ID="InputFormSection30" runat="server"
+                Title="Zone"
+                Description="The zone to be configured.">
+                <template_inputformcontrols>
+                    <wssuc:InputFormControl runat="server" LabelText="Zone:">
+                        <template_control>
+                            <div class="ms-authoringcontrols">
+                                <SharePoint:UrlZonePicker runat="server" ID="ddlZonePicker" OnLoad="ZoneSelector_OnLoad" AutoPostBack="True" OnTextChanged="WebAppSelector_OnChanged"/>
+                            </div>
+                        </template_control>
+                    </wssuc:InputFormControl>
+                </template_inputformcontrols>
+            </wssuc:InputFormSection>
+        </td>
+    </tr>
     <!-- Membership Provider -->
     <tr>
         <td>
@@ -55,7 +73,7 @@
                     <wssuc:InputFormControl runat="server" LabelText="Name of the Membership provider:" ExampleText="ExampleMembership">
                         <template_control>
                             <div class="ms-authoringcontrols">
-                                <SharePoint:InputFormTextBox runat="server" ID="txtMemProv" TextMode="SingleLine" Width="40%"/>
+                                <SharePoint:InputFormTextBox runat="server" ID="txtMemProv" TextMode="SingleLine" Width="40%" OnLoad="ZoneSelector_OnLoad"/>
                             </div>
                         </template_control>
                     </wssuc:InputFormControl>
@@ -234,7 +252,7 @@
         </td>
     </tr>
     <!-- AD LDS User Scope -->
-    <!-- ToDo: CONVERT TO DROPDOWN: Base, Subtree, OneLevel (??? -->
+    <!-- ToDo: CONVERT TO DROPDOWN: Base, Subtree, OneLevel (???) -->
     <tr>
         <td>
             <wssuc:InputFormSection ID="InputFormSection15" runat="server"
