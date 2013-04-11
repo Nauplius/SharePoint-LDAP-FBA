@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Xml;
 using FBA;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Utilities;
+using Sync.ListWR;
 
 namespace Sync
 {
@@ -36,57 +38,57 @@ namespace Sync
                                new object[] {null});
 
             SPAdministrationWebApplication adminWebApp = SPAdministrationWebApplication.Local;
-            using (SPSite siteCollection = new SPSite(adminWebApp.Sites[0].Url))
+
+            try
             {
-                using (SPWeb site = siteCollection.OpenWeb())
-                {
-                    SPList list = site.Lists.TryGetList("Nauplius.ADLDS.FBA - StsFarm");
-                    if (list != null)
-                    {
-                        if (list.ItemCount >= 1)
-                        {
-                            foreach (SPListItem item in list.Items)
-                            {
-                                if (item["StsConfig"].ToString() == "MasterXmlFragment")
+                var lists = new Lists
                                 {
-                                    MasterXmlFragment.LoadXml(item["XMLStsConfig"].ToString());
+                                    Url = adminWebApp.Sites[0].Url + "/_vti_bin/Lists.asmx",
+                                    Credentials = CredentialCache.DefaultNetworkCredentials
+                                };
 
-                                    if (MasterXmlFragment == null)
+                var listName = "Nauplius.ADLDS.FBA - StsFarm";
+                var rowLimit = "25";
+
+                var document = new XmlDocument();
+                XmlElement query = document.CreateElement("Query");
+                XmlElement viewFields = document.CreateElement("ViewFields");
+
+                query.InnerXml =
+                    "<Query><Where><And><BeginsWith><FieldRef Name='Title'></FieldRef><Value Type='Text'>MasterXmlFragment</Value></BeginsWith><IsNotNull><FieldRef Name='Title'></FieldRef></IsNotNull></And></Where></Query>";
+                viewFields.InnerXml = "<FieldRef Name='XMLStsConfig' />";
+
+                var listItem = lists.GetListItems(listName, null, query, viewFields, rowLimit, null, null);
+
+                foreach (XmlNode node in listItem)
+                {
+                    if (node.Name == "rs:data")
+                    {
+                        for (int i = 0; i < node.ChildNodes.Count; i++)
+                        {
+                            if (node.ChildNodes[i].Name == "z:row")
+                            {
+                                MasterXmlFragment.LoadXml(node.ChildNodes[i].Attributes["ows_XMLStsConfig"].Value);
+
+                                if (MasterXmlFragment == null)
+                                {
+                                    Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
+                                                       "AD LDS/ADAM Forms Based Authentication not configured.",
+                                                       new object[] {null});
+                                }
+                                else if (MasterXmlFragment != null)
+                                {
+                                    string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
+                                    var config = new XmlDocument();
+                                    config.Load(path);
+
+                                    XmlNode systemwebChild =
+                                        config.SelectSingleNode("configuration/system.web");
+
+                                    if (systemwebChild != null)
                                     {
-                                        Logging.LogMessage(902, Logging.LogCategories.Health, TraceSeverity.Verbose,
-                                                           "AD LDS/ADAM Forms Based Authentication not configured.",
-                                                           new object[] {null});
-                                    }
-                                    else if (MasterXmlFragment != null)
-                                    {
-                                        string path = SPUtility.GetGenericSetupPath(@"WebServices\SecurityToken\web.config");
-                                        var config = new XmlDocument();
-                                        config.Load(path);
-
-                                        XmlNode systemwebChild =
-                                            config.SelectSingleNode("configuration/system.web");
-
-                                        if (systemwebChild != null)
-                                        {
-                                            if (systemwebChild.ParentNode != null)
-                                                systemwebChild.ParentNode.RemoveChild(systemwebChild);
-                                            try
-                                            {
-                                                config.Save(path);
-                                            }
-                                            catch (Exception)
-                                            {
-                                                Logging.LogMessage(902, Logging.LogCategories.Health,
-                                                                    TraceSeverity.Verbose,
-                                                                    "Failed to save removal of child node to Security Token Service web.config on {0}.",
-                                                                    new object[] {SPServer.Local.DisplayName});
-                                            }
-                                        }
-
-                                        XmlNode importNode = config.ImportNode(MasterXmlFragment.SelectSingleNode("system.web"), true);
-                                        if (config.DocumentElement != null)
-                                            config.DocumentElement.AppendChild(importNode);
-
+                                        if (systemwebChild.ParentNode != null)
+                                            systemwebChild.ParentNode.RemoveChild(systemwebChild);
                                         try
                                         {
                                             config.Save(path);
@@ -95,9 +97,26 @@ namespace Sync
                                         {
                                             Logging.LogMessage(902, Logging.LogCategories.Health,
                                                                TraceSeverity.Verbose,
-                                                               "Failed to save updates to Security Token Service web.config on {0}.",
+                                                               "Failed to save removal of child node to Security Token Service web.config on {0}.",
                                                                new object[] {SPServer.Local.DisplayName});
                                         }
+                                    }
+
+                                    XmlNode importNode =
+                                        config.ImportNode(MasterXmlFragment.SelectSingleNode("system.web"), true);
+                                    if (config.DocumentElement != null)
+                                        config.DocumentElement.AppendChild(importNode);
+
+                                    try
+                                    {
+                                        config.Save(path);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        Logging.LogMessage(902, Logging.LogCategories.Health,
+                                                           TraceSeverity.Verbose,
+                                                           "Failed to save updates to Security Token Service web.config on {0}.",
+                                                           new object[] {SPServer.Local.DisplayName});
                                     }
                                 }
                             }
@@ -105,8 +124,15 @@ namespace Sync
                     }
                 }
             }
+            catch (Exception exception)
+            {
+                Logging.LogMessage(903, Logging.LogCategories.Health,
+                                   TraceSeverity.Unexpected,
+                                   "Error calling Lists SOAP service {0}.",
+                                   new object[] { SPServer.Local.DisplayName });
+            }
             Logging.LogMessage(900, Logging.LogCategories.TimerJob, TraceSeverity.Medium, "Leaving " + tJobName,
-                   new object[] { null });
+                               new object[] { null });
             IsDisabled = true;
             Update();
         }
