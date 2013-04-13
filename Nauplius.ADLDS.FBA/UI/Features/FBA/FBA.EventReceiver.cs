@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml;
-using FBA;
+using Sync;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 

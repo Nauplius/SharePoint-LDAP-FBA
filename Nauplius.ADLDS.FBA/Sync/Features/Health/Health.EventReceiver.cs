@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration.Health;
 
-namespace FBA.Features.Health
+namespace Sync.Features.Health
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -14,7 +15,7 @@ namespace FBA.Features.Health
     /// The GUID attached to this class may be used during packaging and should not be modified.
     /// </remarks>
 
-    [Guid("274ef422-ec6f-4eba-b785-b7ec94def186")]
+    [Guid("f6687410-adc0-490c-acaa-331cac697b1a")]
     public class STSHealthAnalyzer : SPFeatureReceiver
     {
         // Uncomment the method below to handle the event raised after a feature has been activated.

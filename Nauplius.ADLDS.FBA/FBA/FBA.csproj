@@ -60,31 +60,9 @@
     <Reference Include="Microsoft.SharePoint" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\Logging\Logging.EventReceiver.cs">
-      <DependentUpon>Logging.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\Health\Health.EventReceiver.cs">
-      <DependentUpon>Health.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\UserProfile\UserProfile.EventReceiver.cs">
-      <DependentUpon>UserProfile.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Logging.cs" />
-    <Compile Include="UserProfiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="STSHealthAnalysisRule.cs" />
-    <Compile Include="WebModifications.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Features\Logging\Logging.feature">
-      <FeatureId>{fe471dbd-855f-4fd3-b24a-0b8e720823ed}</FeatureId>
-    </None>
-    <None Include="Features\UserProfile\UserProfile.feature">
-      <FeatureId>{a53ae9bc-066f-46f6-87a5-f0d025b205ff}</FeatureId>
-    </None>
-    <None Include="Features\Health\Health.feature">
-      <FeatureId>{43f06a04-fcf2-49c8-aeb1-8a1dc15d8859}</FeatureId>
-    </None>
     <None Include="key.snk" />
     <None Include="Package\Package.package">
       <PackageId>{f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1}</PackageId>
@@ -94,16 +72,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Logging\Logging.Template.xml">
-      <DependentUpon>Logging.feature</DependentUpon>
-    </Content>
-    <Content Include="Features\UserProfile\UserProfile.Template.xml">
-      <DependentUpon>UserProfile.feature</DependentUpon>
-    </Content>
-    <Content Include="Features\Health\Health.Template.xml">
-      <DependentUpon>Health.feature</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
+    <Folder Include="Features\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

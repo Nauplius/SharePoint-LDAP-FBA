@@ -5,7 +5,7 @@ using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 
-namespace FBA
+namespace Sync
 {
     public static class WebModifications
     {

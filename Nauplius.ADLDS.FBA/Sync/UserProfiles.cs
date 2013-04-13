@@ -7,7 +7,7 @@ using Microsoft.Office.Server.UserProfiles;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 
-namespace FBA
+namespace Sync
 {
     [Guid("A925C800-D446-402A-9882-1956C57D3D51")]
     class ADLDSImportJob : SPJobDefinition

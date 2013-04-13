@@ -1,8 +1,10 @@
+using System;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 
-namespace FBA.Features.Logging
+namespace Sync.Features.Logging
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -11,7 +13,7 @@ namespace FBA.Features.Logging
     /// The GUID attached to this class may be used during packaging and should not be modified.
     /// </remarks>
 
-    [Guid("cbb4dd4d-cb8b-4a0e-934d-123abbb78eff")]
+    [Guid("487b63c0-b85f-4189-bdb1-ff488a219eb4")]
     public class ULSLog : SPFeatureReceiver
     {
         public override void FeatureInstalled(SPFeatureReceiverProperties properties)
@@ -30,13 +32,13 @@ namespace FBA.Features.Logging
 
             if (farm != null)
             {
-                var log = global::FBA.Logging.Local;
+                var log = Sync.Logging.Local;
 
                 if (register)
                 {
                     if (log == null)
                     {
-                        log = new global::FBA.Logging();
+                        log = new Sync.Logging();
                         log.Update();
 
                         if (log.Status != SPObjectStatus.Offline)

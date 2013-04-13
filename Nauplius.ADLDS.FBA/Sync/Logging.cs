@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.SharePoint.Administration;
 
-namespace FBA
+namespace Sync
 {
     public class Logging : SPDiagnosticsServiceBase
     {

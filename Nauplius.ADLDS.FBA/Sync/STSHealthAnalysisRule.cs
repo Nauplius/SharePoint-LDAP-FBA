@@ -5,7 +5,7 @@ using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Administration.Health;
 using Microsoft.SharePoint.Utilities;
 
-namespace FBA
+namespace Sync
 {
     internal class STSHealthAnalysisRule : SPRepairableHealthAnalysisRule
     {

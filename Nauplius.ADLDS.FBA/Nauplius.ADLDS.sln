@@ -2,10 +2,18 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBA", "FBA\FBA.csproj", "{B48A03E5-DBCF-4A58-AD9B-B5E411BD2D5B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BD1076D8-0739-4B16-B2EB-4AEE294489EF} = {BD1076D8-0739-4B16-B2EB-4AEE294489EF}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{F358607A-4DE2-4033-B931-B2E02D798E9D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sync", "Sync\Sync.csproj", "{BD1076D8-0739-4B16-B2EB-4AEE294489EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E733AA95-A13C-4B40-8357-460D6367CB41}"
+	ProjectSection(SolutionItems) = preProject
+		CodeMap.dgml = CodeMap.dgml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution

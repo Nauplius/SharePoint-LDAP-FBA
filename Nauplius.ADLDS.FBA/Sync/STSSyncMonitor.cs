@@ -2,7 +2,6 @@
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Xml;
-using FBA;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Utilities;
@@ -124,7 +123,7 @@ namespace Sync
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 Logging.LogMessage(903, Logging.LogCategories.Health,
                                    TraceSeverity.Unexpected,

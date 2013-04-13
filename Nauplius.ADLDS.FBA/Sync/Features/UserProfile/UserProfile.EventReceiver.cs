@@ -1,9 +1,11 @@
+using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 
-namespace FBA.Features.UserProfile
+namespace Sync.Features.UserProfile
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -12,7 +14,7 @@ namespace FBA.Features.UserProfile
     /// The GUID attached to this class may be used during packaging and should not be modified.
     /// </remarks>
 
-    [Guid("b29a2dc1-fe93-4812-831d-173234ce54cb")]
+    [Guid("d29ae24f-0960-4f7e-84cc-8ec62fb50be3")]
     public class Timer : SPFeatureReceiver
     {
         const string tJobName = "Nauplius ADLDS User Profile Import";
@@ -26,7 +28,7 @@ namespace FBA.Features.UserProfile
                            select s;
 
             var service = services.First();
-            
+
             foreach (var job in service.JobDefinitions)
             {
                 if (job.Name == tJobName)
@@ -37,7 +39,7 @@ namespace FBA.Features.UserProfile
 
             var newTimerJob = new ADLDSImportJob(tJobName, service);
 
-            var jobSchedule = new SPHourlySchedule {BeginMinute = 0, EndMinute = 59};
+            var jobSchedule = new SPHourlySchedule { BeginMinute = 0, EndMinute = 59 };
             newTimerJob.Schedule = jobSchedule;
             newTimerJob.Update();
         }
