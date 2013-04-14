@@ -135,10 +135,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://sharepoint:55555/_vti_bin/Lists.asmx">
+    <WebReferenceUrl Include="http://sp01:55555/_vti_bin/Lists.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\ListWR\</RelPath>
-      <UpdateFromURL>http://sharepoint:55555/_vti_bin/Lists.asmx</UpdateFromURL>
+      <UpdateFromURL>http://sp01:55555/_vti_bin/Lists.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
