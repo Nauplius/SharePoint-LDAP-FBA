@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
+using Sync;
 
-namespace Sync.Features.UserProfile
+namespace FBA.Features.UserProfile
 {
     /// <summary>
     /// This class handles events raised during feature activation, deactivation, installation, uninstallation, and upgrade.
@@ -14,7 +14,7 @@ namespace Sync.Features.UserProfile
     /// The GUID attached to this class may be used during packaging and should not be modified.
     /// </remarks>
 
-    [Guid("d29ae24f-0960-4f7e-84cc-8ec62fb50be3")]
+    [Guid("7980f44e-ae5f-43a3-818b-6f5e94d6f248")]
     public class Timer : SPFeatureReceiver
     {
         const string tJobName = "Nauplius ADLDS User Profile Import";

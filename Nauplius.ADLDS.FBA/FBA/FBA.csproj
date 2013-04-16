@@ -60,9 +60,16 @@
     <Reference Include="Microsoft.SharePoint" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\UserProfile\UserProfile.EventReceiver.cs">
+      <DependentUpon>UserProfile.feature</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserProfiles.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\UserProfile\UserProfile.feature">
+      <FeatureId>{f0fbfb62-95ab-4e7e-9794-1acd08e842ee}</FeatureId>
+    </None>
     <None Include="key.snk" />
     <None Include="Package\Package.package">
       <PackageId>{f42c6c6d-e114-4fbb-92cd-fe2074f0a9d1}</PackageId>
@@ -71,8 +78,17 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Features\" />
+    <Content Include="Features\UserProfile\UserProfile.Template.xml">
+      <DependentUpon>UserProfile.feature</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sync\Sync.csproj">
+      <Project>{BD1076D8-0739-4B16-B2EB-4AEE294489EF}</Project>
+      <Name>Sync</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

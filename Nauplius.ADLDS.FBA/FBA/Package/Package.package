@@ -4,6 +4,6 @@
     <featureReference itemId="45956070-718c-44eb-86f8-c2431ba44edd" projectPath="..\Sync\Sync.csproj" />
     <featureReference itemId="e0d39275-7528-41ac-9d29-fd5870248a93" projectPath="..\Sync\Sync.csproj" />
     <featureReference itemId="c4441603-310d-4c5f-a799-1531802e8afc" projectPath="..\Sync\Sync.csproj" />
-    <featureReference itemId="cbbc0e93-876a-41f9-9d51-0df5e751efe7" projectPath="..\Sync\Sync.csproj" />
+    <featureReference itemId="f0fbfb62-95ab-4e7e-9794-1acd08e842ee" />
   </features>
 </package>

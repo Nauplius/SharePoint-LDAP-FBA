@@ -323,25 +323,6 @@ namespace UI.Features.FBA
 
         protected void RemoveFbaSettings(SPWebApplication webApp, SPFeatureReceiverProperties properties)
         {
-            var local = SPFarm.Local;
-
-            var services = from s in local.Services
-                           where s.Name == "SPTimerV4"
-                           select s;
-
-            var service = services.First();
-
-            foreach (var job in service.JobDefinitions)
-            {
-                if (job.Name == tJobName)
-                {
-                    if (job.IsDisabled)
-                        job.IsDisabled = false;
-                    job.Update();
-                    job.RunNow();
-                }
-            }
-
             using (SPSite siteCollection = new SPSite(SPContext.Current.Site.ID))
             {
                 using (SPWeb site = siteCollection.OpenWeb())
@@ -395,6 +376,25 @@ namespace UI.Features.FBA
                                     WebModifications.CreateStsProviderNode(true, properties, zone);
                                     WebModifications.CreateAdminWildcardNode(true, webApp, zone);
                                     WebModifications.CreateAdminProviderNode(true, webApp, zone);
+
+                                    var local = SPFarm.Local;
+
+                                    var services = from s in local.Services
+                                                   where s.Name == "SPTimerV4"
+                                                   select s;
+
+                                    var service = services.First();
+
+                                    foreach (var job in service.JobDefinitions)
+                                    {
+                                        if (job.Name == tJobName)
+                                        {
+                                            if (job.IsDisabled)
+                                                job.IsDisabled = false;
+                                            job.Update();
+                                            job.RunNow();
+                                        }
+                                    }
                                 }
                             }
                         }

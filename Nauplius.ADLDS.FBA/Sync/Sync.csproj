@@ -72,14 +72,10 @@
     <Compile Include="Features\STSSyncMonitor\STSSyncMonitor.EventReceiver.cs">
       <DependentUpon>STSSyncMonitor.feature</DependentUpon>
     </Compile>
-    <Compile Include="Features\UserProfile\UserProfile.EventReceiver.cs">
-      <DependentUpon>UserProfile.feature</DependentUpon>
-    </Compile>
     <Compile Include="Logging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="STSHealthAnalysisRule.cs" />
     <Compile Include="STSSyncMonitor.cs" />
-    <Compile Include="UserProfiles.cs" />
     <Compile Include="Web References\ListWR\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,9 +84,6 @@
     <Compile Include="WebModifications.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Features\UserProfile\UserProfile.feature">
-      <FeatureId>{cbbc0e93-876a-41f9-9d51-0df5e751efe7}</FeatureId>
-    </None>
     <None Include="Features\Logging\Logging.feature">
       <FeatureId>{45956070-718c-44eb-86f8-c2431ba44edd}</FeatureId>
     </None>
@@ -114,9 +107,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\UserProfile\UserProfile.Template.xml">
-      <DependentUpon>UserProfile.feature</DependentUpon>
-    </Content>
     <Content Include="Features\Logging\Logging.Template.xml">
       <DependentUpon>Logging.feature</DependentUpon>
     </Content>

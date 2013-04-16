@@ -137,6 +137,7 @@ namespace UI.ADMIN.Nauplius.ADLDS.FBA
                                         updateItem["ADLDSGroupUserFilter"] = grpUsrFilter;
                                         updateItem["ADLDSGroupFilter"] = grpFilter;
                                         updateItem["ADLDSGroupScope"] = txtGrpScope.Text;
+                                        updateItem["ADLDSGroupUserDNAttrib"] = txtGrpUsrDnAttrib.Text;
 
                                         updateItem.Update();
                                         return;
@@ -174,6 +175,7 @@ namespace UI.ADMIN.Nauplius.ADLDS.FBA
                                 newItem["ADLDSGroupUserFilter"] = grpUsrFilter;
                                 newItem["ADLDSGroupFilter"] = grpFilter;
                                 newItem["ADLDSGroupScope"] = txtGrpScope.Text;
+                                newItem["ADLDSGroupUserDNAttrib"] = txtGrpUsrDnAttrib.Text;
 
                                 newItem.Update();
                             }
@@ -254,50 +256,53 @@ namespace UI.ADMIN.Nauplius.ADLDS.FBA
                                                                  ? String.Empty
                                                                  : item["ADLDSLoginAttrib"].ToString();
                                         txtUsrDNAttrib.Text = (item["ADLDSUserDNAttrib"] == null)
-                                                                  ? String.Empty
+                                                                  ? string.Empty
                                                                   : item["ADLDSUserDNAttrib"].ToString();
                                         txtUsrContainer.Text = (item["ADLDSUserContainer"] == null)
-                                                                   ? String.Empty
+                                                                   ? string.Empty
                                                                    : item["ADLDSUserContainer"].ToString();
                                         txtUsrObjClass.Text = (item["ADLDSUserObjectClass"] == null)
-                                                                  ? String.Empty
+                                                                  ? string.Empty
                                                                   : item["ADLDSUserObjectClass"].ToString();
                                         txtUsrFilter.Text = (item["ADLDSUserFilter"] == null)
-                                                                ? String.Empty
+                                                                ? string.Empty
                                                                 : item["ADLDSUserFilter"].ToString();
                                         txtUsrScope.Text = (item["ADLDSUserScope"] == null)
-                                                               ? String.Empty
+                                                               ? string.Empty
                                                                : item["ADLDSUserScope"].ToString();
                                         txtUsrOtherAttribs.Text = (item["ADLDSUserOtherReqAttrib"] == null)
-                                                                      ? String.Empty
+                                                                      ? string.Empty
                                                                       : item["ADLDSUserOtherReqAttrib"].ToString();
 
                                         //Group
                                         txtGrpContainer.Text = (item["ADLDSGroupContainer"] == null)
-                                                                   ? String.Empty
+                                                                   ? string.Empty
                                                                    : item["ADLDSGroupContainer"].ToString();
                                         txtGrpNameAttrib.Text = (item["ADLDSGroupNameAttrib"] == null)
-                                                                    ? String.Empty
+                                                                    ? string.Empty
                                                                     : item["ADLDSGroupNameAttrib"].ToString();
                                         txtGrpAltSearchAttrib.Text = (item["ADLDSGroupNameAltSearchAttrib"] == null)
-                                                                         ? String.Empty
+                                                                         ? string.Empty
                                                                          : item["ADLDSGroupNameAltSearchAttrib"]
                                                                                .ToString();
                                         txtGrpMemAttrib.Text = (item["ADLDSGroupMemAttrib"] == null)
-                                                                   ? String.Empty
+                                                                   ? string.Empty
                                                                    : item["ADLDSGroupMemAttrib"].ToString();
                                         txtGrpDNAttrib.Text = (item["ADLDSGroupDNAttrib"] == null)
-                                                                  ? String.Empty
+                                                                  ? string.Empty
                                                                   : item["ADLDSGroupDNAttrib"].ToString();
                                         txtGrpUsrFilter.Text = (item["ADLDSGroupUserFilter"] == null)
-                                                                   ? String.Empty
+                                                                   ? string.Empty
                                                                    : item["ADLDSGroupUserFilter"].ToString();
                                         txtGrpFilter.Text = (item["ADLDSGroupFilter"] == null)
-                                                                ? String.Empty
+                                                                ? string.Empty
                                                                 : item["ADLDSGroupFilter"].ToString();
                                         txtGrpScope.Text = (item["ADLDSGroupScope"] == null)
-                                                               ? String.Empty
+                                                               ? string.Empty
                                                                : item["ADLDSGroupScope"].ToString();
+                                        txtGrpUsrDnAttrib.Text = (item["ADLDSGroupUserDNAttrib"] == null)
+                                                                     ? string.Empty
+                                                                     : item["ADLDSGroupUserDNAttrib"].ToString();
                                     }
                                     else
                                     {
@@ -308,19 +313,20 @@ namespace UI.ADMIN.Nauplius.ADLDS.FBA
                                         tBPrtNo.Text = string.Empty;
                                         cBUseSSL.Checked = false;
                                         tBLoginAttrib.Text = string.Empty;
-                                        txtUsrDNAttrib.Text = string.Empty;
+                                        txtUsrDNAttrib.Text = "distinguishedName";
                                         txtUsrContainer.Text = string.Empty;
-                                        txtUsrObjClass.Text = string.Empty;
-                                        txtUsrFilter.Text = string.Empty;
-                                        txtUsrScope.Text = string.Empty;
-                                        txtUsrOtherAttribs.Text = string.Empty;
+                                        txtUsrObjClass.Text = "user";
+                                        txtUsrFilter.Text = "(ObjectClass=*)";
+                                        txtUsrScope.Text = "Subtree";
+                                        txtUsrOtherAttribs.Text = "sn,givenname,cn";
                                         txtGrpContainer.Text = string.Empty;
-                                        txtGrpNameAttrib.Text = string.Empty;
-                                        txtGrpAltSearchAttrib.Text = string.Empty;
-                                        txtGrpMemAttrib.Text = string.Empty;
-                                        txtGrpDNAttrib.Text = string.Empty;
-                                        txtGrpUsrFilter.Text = string.Empty;
-                                        txtGrpScope.Text = string.Empty;
+                                        txtGrpNameAttrib.Text = "cn";
+                                        txtGrpAltSearchAttrib.Text = "cn";
+                                        txtGrpMemAttrib.Text = "member";
+                                        txtGrpDNAttrib.Text = "distinguishedName";
+                                        txtGrpUsrFilter.Text = @"&amp;(objectCategory=Group)(objectClass=group)";
+                                        txtGrpScope.Text = "Subtree";
+                                        txtGrpUsrDnAttrib.Text = "distinguishedName";
                                     }
                                 }
                             }
