@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="Nauplius.ADLDS.Provider.2013" Language="1033" Version="1.0.0.0" Manufacturer="Nauplius"
+           UpgradeCode="514d574c-4a5f-48bf-a76b-e6244800e79e">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLLOCATION" Name="GACInstaller">
+          <Component Id="ProductComponent" Guid="CF786DE7-686E-488F-AA2E-FE0473DB96FF">
+            <File Id='Nauplius.ADLDS.Provider.2013.dll' Name='Nauplius.ADLDS.Provider.2013.dll' KeyPath='yes' Assembly='.net'
+                  ProcessorArchitecture='msil' Source='$(var.Nauplius.ADLDS.Provider.2013.TargetPath)' />
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="GACInstaller" Level="1">
+      <ComponentRef Id="ProductComponent" />
+    </Feature>
+
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+    <UIRef Id="WixUI_Minimal" />
+  </Product>
+</Wix>
