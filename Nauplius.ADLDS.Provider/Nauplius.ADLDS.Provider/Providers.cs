@@ -5,10 +5,10 @@ using System.DirectoryServices.ActiveDirectory;
 using System.DirectoryServices.Protocols;
 using System.IO;
 using System.Net;
-using System.Net.Sockets;
 using System.Web.Security;
 using System.Xml;
 using Microsoft.SharePoint;
+using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Utilities;
 using SearchScope = System.DirectoryServices.SearchScope;
 
@@ -21,7 +21,7 @@ namespace Nauplius.ADLDS.Provider
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
         {
-            if (LdapManager.ValidateServer(LdapMembershipManager.Server, LdapMembershipManager.Port))
+            try
             {
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
@@ -29,14 +29,14 @@ namespace Nauplius.ADLDS.Provider
                                                          LdapMembershipManager.UserName, LdapMembershipManager.Password);
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
-                                            {
-                                                Filter =
-                                                    String.Format("(&(&(&(ObjectClass={0})({1}=*{2}*))))",
-                                                                  LdapMembershipManager.UserObjectClass,
-                                                                  LdapMembershipManager.UserNameAttribute,
-                                                                  providerUserKey),
-                                                SearchScope = LdapMembershipManager.Scope
-                                            };
+                    {
+                        Filter =
+                            String.Format("(&(&(&(ObjectClass={0})({1}=*{2}*))))",
+                                          LdapMembershipManager.UserObjectClass,
+                                          LdapMembershipManager.UserNameAttribute,
+                                          providerUserKey),
+                        SearchScope = LdapMembershipManager.Scope
+                    };
 
                 var result = directorySearcher.FindOne();
 
@@ -46,9 +46,24 @@ namespace Nauplius.ADLDS.Provider
                     return user;
                 }
             }
-            else
+            catch (ActiveDirectoryServerDownException exception)
             {
-                throw new ActiveDirectoryServerDownException();
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.High,
+                                                      "AD LDS Server is not responding " +
+                                                      exception.StackTrace);
+
+            }
+            catch (Exception exception2)
+            {
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.High,
+                                                      "Unexpected exception " +
+                                                      exception2.StackTrace);
             }
 
             return null;
@@ -56,7 +71,7 @@ namespace Nauplius.ADLDS.Provider
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-            if (LdapManager.ValidateServer(LdapMembershipManager.Server, LdapMembershipManager.Port))
+            try
             {
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
@@ -81,9 +96,24 @@ namespace Nauplius.ADLDS.Provider
                     return user;
                 }
             }
-            else
+            catch (ActiveDirectoryServerDownException exception)
             {
-                throw new ActiveDirectoryServerDownException();
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.High,
+                                                      "AD LDS Server is not responding " +
+                                                      exception.StackTrace);
+
+            }
+            catch (Exception exception2)
+            {
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.High,
+                                                      "Unexpected exception " +
+                                                      exception2.StackTrace);
             }
 
             return null;
@@ -91,7 +121,7 @@ namespace Nauplius.ADLDS.Provider
 
         public override string GetUserNameByEmail(string email)
         {
-            if (LdapManager.ValidateServer(LdapMembershipManager.Server, LdapMembershipManager.Port))
+            try
             {
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
@@ -117,10 +147,26 @@ namespace Nauplius.ADLDS.Provider
                     return user.UserName;
                 }
             }
-            else
+            catch (ActiveDirectoryServerDownException exception)
             {
-                throw new ActiveDirectoryServerDownException();
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.High,
+                                                      "AD LDS Server is not responding " +
+                                                      exception.StackTrace);
+
             }
+            catch (Exception exception2)
+            {
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.Unexpected,
+                                                      "Unexpected exception " +
+                                                      exception2.StackTrace);
+            }
+
 
             return null;
         }
@@ -129,7 +175,8 @@ namespace Nauplius.ADLDS.Provider
         {
             var users = new MembershipUserCollection();
             totalRecords = 0;
-            if (LdapManager.ValidateServer(LdapMembershipManager.Server, LdapMembershipManager.Port))
+
+            try
             {
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
@@ -164,9 +211,24 @@ namespace Nauplius.ADLDS.Provider
                     }
                 }
             }
-            else
+            catch (ActiveDirectoryServerDownException exception)
             {
-                throw new ActiveDirectoryServerDownException();
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.High,
+                                                      "AD LDS Server is not responding " +
+                                                      exception.StackTrace);
+
+            }
+            catch (Exception exception2)
+            {
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.Unexpected,
+                                                      "Unexpected exception " +
+                                                      exception2.StackTrace);
             }
 
             return users;
@@ -177,7 +239,7 @@ namespace Nauplius.ADLDS.Provider
             var users = new MembershipUserCollection();
             totalRecords = 0;
 
-            if (LdapManager.ValidateServer(LdapMembershipManager.Server, LdapMembershipManager.Port))
+            try
             {
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
@@ -185,15 +247,15 @@ namespace Nauplius.ADLDS.Provider
                                                          LdapMembershipManager.UserName, LdapMembershipManager.Password);
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
-                                            {
-                                                Filter =
-                                                    String.Format("(&(&(&(ObjectClass={0})({1}=*{2}*))))",
-                                                                  LdapMembershipManager.UserObjectClass,
-                                                                  LdapMembershipManager.UserNameAttribute,
-                                                                  usernameToMatch),
-                                                SearchScope = LdapMembershipManager.Scope,
-                                                PageSize = pageSize
-                                            };
+                {
+                    Filter =
+                        String.Format("(&(&(&(ObjectClass={0})({1}=*{2}*))))",
+                                      LdapMembershipManager.UserObjectClass,
+                                      LdapMembershipManager.UserNameAttribute,
+                                      usernameToMatch),
+                    SearchScope = LdapMembershipManager.Scope,
+                    PageSize = pageSize
+                };
                 var results = directorySearcher.FindAll();
                 totalRecords = results.Count;
 
@@ -213,9 +275,24 @@ namespace Nauplius.ADLDS.Provider
                     }
                 }
             }
-            else
+            catch (ActiveDirectoryServerDownException exception)
             {
-                throw new ActiveDirectoryServerDownException();
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.High,
+                                                      "AD LDS Server is not responding " +
+                                                      exception.StackTrace);
+
+            }
+            catch (Exception exception2)
+            {
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.Unexpected,
+                                                      "Unexpected exception " +
+                                                      exception2.StackTrace);
             }
 
             return users;
@@ -226,7 +303,7 @@ namespace Nauplius.ADLDS.Provider
             var users = new MembershipUserCollection();
             totalRecords = 0;
 
-            if (LdapManager.ValidateServer(LdapMembershipManager.Server, LdapMembershipManager.Port))
+            try
             {
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
@@ -234,17 +311,17 @@ namespace Nauplius.ADLDS.Provider
                                                          LdapMembershipManager.UserName, LdapMembershipManager.Password);
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
-                                            {
-                                                Filter =
-                                                    String.Format(
-                                                        "(&(&(&(ObjectClass={0})(mail=*{1}*))))",
-                                                        LdapMembershipManager
-                                                            .UserObjectClass,
-                                                        emailToMatch),
-                                                SearchScope =
-                                                    LdapMembershipManager.Scope,
-                                                PageSize = pageSize
-                                            };
+                {
+                    Filter =
+                        String.Format(
+                            "(&(&(&(ObjectClass={0})(mail=*{1}*))))",
+                            LdapMembershipManager
+                                .UserObjectClass,
+                            emailToMatch),
+                    SearchScope =
+                        LdapMembershipManager.Scope,
+                    PageSize = pageSize
+                };
                 var results = directorySearcher.FindAll();
                 totalRecords = results.Count;
 
@@ -264,9 +341,24 @@ namespace Nauplius.ADLDS.Provider
                     }
                 }
             }
-            else
+            catch (ActiveDirectoryServerDownException exception)
             {
-                throw new ActiveDirectoryServerDownException();
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.High,
+                                                      "AD LDS Server is not responding " +
+                                                      exception.StackTrace);
+
+            }
+            catch (Exception exception2)
+            {
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.Unexpected,
+                                                      "Unexpected exception " +
+                                                      exception2.StackTrace);
             }
 
             return users;
@@ -308,10 +400,27 @@ namespace Nauplius.ADLDS.Provider
                 connection.Bind(credential);
                 isValid = true;
             }
-            catch (Exception)
+            catch (ActiveDirectoryServerDownException exception)
+            {
+                isValid = false;
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.High,
+                                                      "AD LDS Server is not responding " +
+                                                      exception.StackTrace);
+
+            }
+            catch (Exception exception2)
             {
                 //No result code mapping available
                 isValid = false;
+                SPDiagnosticsService.Local.WriteTrace(100,
+                                                      new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                                                                TraceSeverity.High, EventSeverity.Error,
+                                                                                0, 100), TraceSeverity.Unexpected,
+                                                      "Unexpected exception " +
+                                                      exception2.StackTrace);
             }
 
             return isValid;
@@ -797,10 +906,6 @@ namespace Nauplius.ADLDS.Provider
                     {
                         return SearchScope.OneLevel;
                     }
-                    if (_scope == "SUBTREE")
-                    {
-                        return SearchScope.Subtree;
-                    }
                     return SearchScope.Subtree;
                 }
                 catch (NullReferenceException)
@@ -1099,10 +1204,6 @@ namespace Nauplius.ADLDS.Provider
                 {
                     return SearchScope.OneLevel;
                 }
-                if (_scope == "SUBTREE")
-                {
-                    return SearchScope.Subtree;
-                }
                 return SearchScope.Subtree;
                 }
                 catch (NullReferenceException)
@@ -1270,6 +1371,16 @@ namespace Nauplius.ADLDS.Provider
                 _password = string.Empty;
             }
 
+            try
+            {
+                //_simpleBind = provider.Attributes["openLdap"].Value ?? false;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+
             if (IsProviderMembership)
             {
                 try
@@ -1342,37 +1453,40 @@ namespace Nauplius.ADLDS.Provider
         public static DirectoryEntry Connect(string server, int port, bool useSSL, 
             string dn, string username, string password)
         {
+            bool simpleBind = false;
+
             var ldapPath = LdapPath(server, port, dn);
 
             var directoryEntry = new DirectoryEntry(ldapPath.ToUpper());
 
             if (username != string.Empty && password != string.Empty)
             {
-                directoryEntry.AuthenticationType = LdapAuthentication(useSSL);
+                directoryEntry.AuthenticationType = LdapAuthentication(useSSL, simpleBind);
                 directoryEntry.Username = username;
                 directoryEntry.Password = password;
             }
             else
             {
-                directoryEntry.AuthenticationType = LdapAuthentication(useSSL);
+                directoryEntry.AuthenticationType = LdapAuthentication(useSSL, simpleBind);
             }
 
             return directoryEntry;
         }
 
-        public static bool ValidateServer(string server, int port)
+        public static AuthenticationTypes LdapAuthentication(bool UseSSL, bool simpleBind)
         {
-            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, false);
-            var result = socket.BeginConnect(server, port, null, null);
-            var connected = result.AsyncWaitHandle.WaitOne(200, true);
-            return connected;
-        }
+            AuthenticationTypes types;
 
-        public static AuthenticationTypes LdapAuthentication(bool UseSSL)
-        {
-            var types = AuthenticationTypes.ServerBind | AuthenticationTypes.FastBind |
-                                        AuthenticationTypes.ReadonlyServer;
+            if (!simpleBind)
+            {
+                types = AuthenticationTypes.ServerBind | AuthenticationTypes.FastBind |
+                                            AuthenticationTypes.ReadonlyServer;                
+            }
+            else
+            {
+                types = AuthenticationTypes.None;
+            }
+
 
             if (UseSSL)
             {
