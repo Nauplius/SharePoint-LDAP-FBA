@@ -26,7 +26,8 @@ namespace Nauplius.ADLDS.Provider
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
                                                          LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password);
+                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
+                                                         LdapMembershipManager.SimpleBind);
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
                     {
@@ -76,7 +77,8 @@ namespace Nauplius.ADLDS.Provider
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
                                                          LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password);
+                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
+                                                         LdapMembershipManager.SimpleBind);
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
                                             {
@@ -126,7 +128,8 @@ namespace Nauplius.ADLDS.Provider
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
                                                          LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password);
+                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
+                                                         LdapMembershipManager.SimpleBind);
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
                                             {
@@ -181,7 +184,8 @@ namespace Nauplius.ADLDS.Provider
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
                                                          LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password);
+                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
+                                                         LdapMembershipManager.SimpleBind);
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
                                             {
@@ -244,7 +248,8 @@ namespace Nauplius.ADLDS.Provider
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
                                                          LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password);
+                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
+                                                         LdapMembershipManager.SimpleBind);
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
                 {
@@ -308,7 +313,8 @@ namespace Nauplius.ADLDS.Provider
                 var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
                                                          LdapMembershipManager.UseSSL,
                                                          LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password);
+                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
+                                                         LdapMembershipManager.SimpleBind);
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
                 {
@@ -376,9 +382,10 @@ namespace Nauplius.ADLDS.Provider
             var _password = string.Empty;
             var _userNameAttribute = string.Empty;
             var _scope = new SearchScope();
+            var _simpleBind = false;
 
             var directoryEntry = StsManager.ProviderNode(Name, true, out _server, out _port, out _useSSL, out _path, out _username,
-                                                         out _password, out _userNameAttribute, out _scope);
+                                                         out _password, out _userNameAttribute, out _scope, out _simpleBind);
 
             var connection = new LdapConnection(String.Format("{0}:{1}", _server, _port));
 
@@ -555,9 +562,10 @@ namespace Nauplius.ADLDS.Provider
             var _password = string.Empty;
             var _userNameAttribute = string.Empty;
             var _scope = new SearchScope();
+            var _simpleBind = false;
 
             var directoryEntry = StsManager.ProviderNode(Name, false, out _server, out _port, out _useSSL, 
-                out _path, out _username, out _password, out _userNameAttribute, out _scope);
+                out _path, out _username, out _password, out _userNameAttribute, out _scope, out _simpleBind);
 
             var directorySearcher = new DirectorySearcher(directoryEntry)
             {
@@ -582,7 +590,7 @@ namespace Nauplius.ADLDS.Provider
         {         
             var directoryEntry = LdapManager.Connect(LdapRoleManager.Server, LdapRoleManager.Port, 
                 LdapRoleManager.UseSSL, LdapRoleManager.GroupContainer,
-                LdapRoleManager.UserName, LdapRoleManager.Password);
+                LdapRoleManager.UserName, LdapRoleManager.Password, LdapRoleManager.SimpleBind);
 
             var directorySearcher = new DirectorySearcher(directoryEntry);
             directorySearcher.Filter = String.Format("(&(&(&(ObjectClass=group)({0}={1}))))",
@@ -605,7 +613,7 @@ namespace Nauplius.ADLDS.Provider
 
             var directoryEntry = LdapManager.Connect(LdapRoleManager.Server, LdapRoleManager.Port,
                 LdapRoleManager.UseSSL, LdapRoleManager.GroupContainer,
-                LdapRoleManager.UserName, LdapRoleManager.Password);
+                LdapRoleManager.UserName, LdapRoleManager.Password, LdapRoleManager.SimpleBind);
 
             var directorySearcher = new DirectorySearcher(directoryEntry);
             directorySearcher.Filter = String.Format("(&(&(&(ObjectClass=group)({0}={1}))))",
@@ -976,6 +984,26 @@ namespace Nauplius.ADLDS.Provider
                 }
             }
         }
+
+        public static bool SimpleBind
+        {
+            get
+            {
+                var membershipProvider = MembershipProviderNode();
+                var _simpleBind = "true";
+
+                try
+                {
+                    _simpleBind = (membershipProvider.Attributes["simpleBind"].Value == null) ? "true" :
+                        membershipProvider.Attributes["simpleBind"].Value;
+                    return Convert.ToBoolean(_simpleBind);
+                }
+                catch (NullReferenceException)
+                {
+                    return Convert.ToBoolean(_simpleBind);
+                }
+            }
+        }
     }
 
     class LdapRoleManager
@@ -1292,12 +1320,32 @@ namespace Nauplius.ADLDS.Provider
                 }
             }
         }
+
+        public static bool SimpleBind
+        {
+            get
+            {
+                var roleProvider = RoleProviderNode();
+                var _simpleBind = "true";
+
+                try
+                {
+                    _simpleBind = (roleProvider.Attributes["simpleBind"].Value == null) ? "true" :
+                        roleProvider.Attributes["simpleBind"].Value;
+                    return Convert.ToBoolean(_simpleBind);
+                }
+                catch (NullReferenceException)
+                {
+                    return Convert.ToBoolean(_simpleBind);
+                }
+            }
+        }
     }
 
     class StsManager
     {
         public static DirectoryEntry ProviderNode(string providerName, bool IsProviderMembership, out string _server, out int _port, out bool _useSSL, out string _path,
-            out string _username, out string _password, out string _userNameAttribute, out SearchScope _scope)
+            out string _username, out string _password, out string _userNameAttribute, out SearchScope _scope, out bool _simpleBind)
         {
             XmlNode provider = new XmlDocument();
             var ldapPath = string.Empty;
@@ -1373,12 +1421,11 @@ namespace Nauplius.ADLDS.Provider
 
             try
             {
-                //_simpleBind = provider.Attributes["openLdap"].Value ?? false;
+                _simpleBind = (provider.Attributes["simpleBind"].Value != null) && Convert.ToBoolean(provider.Attributes["simpleBind"].Value);
             }
-            catch (Exception)
+            catch (NullReferenceException)
             {
-                
-                throw;
+                _simpleBind = false;
             }
 
             if (IsProviderMembership)
@@ -1442,7 +1489,7 @@ namespace Nauplius.ADLDS.Provider
             }
 
 
-            var directoryEntry = LdapManager.Connect(_server, _port, _useSSL, _path, _username, _password);
+            var directoryEntry = LdapManager.Connect(_server, _port, _useSSL, _path, _username, _password, _simpleBind);
 
             return directoryEntry;
         }
@@ -1451,10 +1498,8 @@ namespace Nauplius.ADLDS.Provider
     class LdapManager
     {
         public static DirectoryEntry Connect(string server, int port, bool useSSL, 
-            string dn, string username, string password)
+            string dn, string username, string password, bool simpleBind)
         {
-            bool simpleBind = false;
-
             var ldapPath = LdapPath(server, port, dn);
 
             var directoryEntry = new DirectoryEntry(ldapPath.ToUpper());
@@ -1479,8 +1524,7 @@ namespace Nauplius.ADLDS.Provider
 
             if (!simpleBind)
             {
-                types = AuthenticationTypes.ServerBind | AuthenticationTypes.FastBind |
-                                            AuthenticationTypes.ReadonlyServer;                
+                types = AuthenticationTypes.Secure;
             }
             else
             {
