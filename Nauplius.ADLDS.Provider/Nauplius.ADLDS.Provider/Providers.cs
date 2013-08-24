@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.DirectoryServices;
 using System.DirectoryServices.ActiveDirectory;
 using System.DirectoryServices.Protocols;
-using System.IO;
 using System.Net;
 using System.Web.Security;
 using System.Xml;
@@ -11,33 +10,39 @@ using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Utilities;
 using SearchScope = System.DirectoryServices.SearchScope;
-
+using System.Globalization;
 
 namespace Nauplius.ADLDS.Provider
 {
     public sealed class LdapMembership : MembershipProvider
     {
-        public string memProvider = null;
-
+        public string MemProvider;
+        public string AppName;
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
         {
             try
             {
-                var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
-                                                         LdapMembershipManager.UseSSL,
-                                                         LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
-                                                         LdapMembershipManager.SimpleBind);
+                var directoryEntry = LdapManager.Connect(_ldapServer, _ldapPort,
+                                                         _ldapUseSsl,
+                                                         _ldapUserContainer,
+                                                         _ldapUserName, _ldapPassword,
+                                                         _ldapSimpleBind);
+
+                if (!string.IsNullOrEmpty(_ldapUserName) && !string.IsNullOrEmpty(_ldapPassword))
+                {
+                    directoryEntry.Username = _ldapUserName;
+                    directoryEntry.Password = _ldapPassword;
+                }
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
-                    {
-                        Filter =
-                            String.Format("(&(&(&(ObjectClass={0})({1}=*{2}*))))",
-                                          LdapMembershipManager.UserObjectClass,
-                                          LdapMembershipManager.UserNameAttribute,
-                                          providerUserKey),
-                        SearchScope = LdapMembershipManager.Scope
-                    };
+                {
+                    Filter =
+                        String.Format("(&(ObjectClass={0})({1}=*{2}*))",
+                                      _ldapUserObjectClass,
+                                      _ldapUserNameAttribute,
+                                      providerUserKey),
+                    SearchScope = _ldapUserSearchScope
+                };
 
                 var result = directorySearcher.FindOne();
 
@@ -63,7 +68,7 @@ namespace Nauplius.ADLDS.Provider
                                                       new SPDiagnosticsCategory("NaupliusADLDSProvider",
                                                                                 TraceSeverity.High, EventSeverity.Error,
                                                                                 0, 100), TraceSeverity.High,
-                                                      "Unexpected exception " +
+                                                      "Unexpected exception in GetUser(ob) " +
                                                       exception2.StackTrace);
             }
 
@@ -74,21 +79,25 @@ namespace Nauplius.ADLDS.Provider
         {
             try
             {
-                var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
-                                                         LdapMembershipManager.UseSSL,
-                                                         LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
-                                                         LdapMembershipManager.SimpleBind);
+                var directoryEntry = LdapManager.Connect(_ldapServer, _ldapPort,
+                                                         _ldapUseSsl,
+                                                         _ldapUserContainer,
+                                                         _ldapUserName, _ldapPassword,
+                                                         _ldapSimpleBind);
+
+                directoryEntry.Username = _ldapUserName;
+                directoryEntry.Password = _ldapPassword;
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
-                                            {
-                                                Filter =
-                                                    String.Format("(&(&(&(ObjectClass={0})({1}=*{2}*))))",
-                                                                  LdapMembershipManager.UserObjectClass,
-                                                                  LdapMembershipManager.UserNameAttribute,
-                                                                  username),
-                                                SearchScope = LdapMembershipManager.Scope
-                                            };
+                {
+                    Filter =
+                        String.Format("(&(ObjectClass={0})({1}=*{2}*))",
+                                      _ldapUserObjectClass,
+                                      _ldapUserNameAttribute,
+                                      username),
+                    SearchScope = _ldapUserSearchScope
+                };
+
 
                 var result = directorySearcher.FindOne();
 
@@ -104,7 +113,7 @@ namespace Nauplius.ADLDS.Provider
                                                       new SPDiagnosticsCategory("NaupliusADLDSProvider",
                                                                                 TraceSeverity.High, EventSeverity.Error,
                                                                                 0, 100), TraceSeverity.High,
-                                                      "AD LDS Server is not responding " +
+                                                      "AD LDS Server is not responding " + exception.Message +
                                                       exception.StackTrace);
 
             }
@@ -114,7 +123,7 @@ namespace Nauplius.ADLDS.Provider
                                                       new SPDiagnosticsCategory("NaupliusADLDSProvider",
                                                                                 TraceSeverity.High, EventSeverity.Error,
                                                                                 0, 100), TraceSeverity.High,
-                                                      "Unexpected exception " +
+                                                      "Unexpected exception in GetUser(sb) " + exception2.Message +
                                                       exception2.StackTrace);
             }
 
@@ -125,22 +134,24 @@ namespace Nauplius.ADLDS.Provider
         {
             try
             {
-                var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
-                                                         LdapMembershipManager.UseSSL,
-                                                         LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
-                                                         LdapMembershipManager.SimpleBind);
+                var directoryEntry = LdapManager.Connect(_ldapServer, _ldapPort,
+                                                         _ldapUseSsl,
+                                                         _ldapUserContainer,
+                                                         _ldapUserName, _ldapPassword,
+                                                         _ldapSimpleBind);
+
+                directoryEntry.Username = _ldapUserName;
+                directoryEntry.Password = _ldapPassword;
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
-                                            {
-                                                Filter =
-                                                    String.Format(
-                                                        "(&(&(&(ObjectClass={0})(mail={1}))))",
-                                                        LdapMembershipManager
-                                                            .UserObjectClass, email),
-                                                SearchScope =
-                                                    LdapMembershipManager.Scope
-                                            };
+                {
+                    Filter =
+                        String.Format(
+                            "(&(ObjectClass={0})(mail={1}))",
+                            _ldapUserObjectClass, email),
+                    SearchScope =
+                        _ldapUserSearchScope
+                };
 
                 var result = directorySearcher.FindOne();
 
@@ -166,10 +177,9 @@ namespace Nauplius.ADLDS.Provider
                                                       new SPDiagnosticsCategory("NaupliusADLDSProvider",
                                                                                 TraceSeverity.High, EventSeverity.Error,
                                                                                 0, 100), TraceSeverity.Unexpected,
-                                                      "Unexpected exception " +
+                                                      "Unexpected exception in GetUserNameByEmail(s) " +
                                                       exception2.StackTrace);
             }
-
 
             return null;
         }
@@ -181,21 +191,27 @@ namespace Nauplius.ADLDS.Provider
 
             try
             {
-                var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
-                                                         LdapMembershipManager.UseSSL,
-                                                         LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
-                                                         LdapMembershipManager.SimpleBind);
+                var directoryEntry = LdapManager.Connect(_ldapServer, _ldapPort,
+                                                         _ldapUseSsl,
+                                                         _ldapUserContainer,
+                                                         _ldapUserName, _ldapPassword,
+                                                         _ldapSimpleBind);
+
+                if (!string.IsNullOrEmpty(_ldapUserName) && !string.IsNullOrEmpty(_ldapPassword))
+                {
+                    directoryEntry.Username = _ldapUserName;
+                    directoryEntry.Password = _ldapPassword;
+                }
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
-                                            {
-                                                Filter =
-                                                    String.Format("(&(&(&(ObjectClass={0})({1}=*))))",
-                                                                  LdapMembershipManager.UserObjectClass,
-                                                                  LdapMembershipManager.UserNameAttribute),
-                                                SearchScope = LdapMembershipManager.Scope,
-                                                PageSize = pageSize
-                                            };
+                {
+                    Filter =
+                        String.Format("(&(ObjectClass={0})({1}=*))",
+                                      _ldapUserObjectClass,
+                                      _ldapUserNameAttribute),
+                    SearchScope = _ldapUserSearchScope,
+                    PageSize = pageSize
+                };
 
                 var results = directorySearcher.FindAll();
 
@@ -207,7 +223,7 @@ namespace Nauplius.ADLDS.Provider
                         pageSize = totalRecords;
                     }
 
-                    var i = pageIndex*pageSize;
+                    var i = pageIndex * pageSize;
 
                     for (var n = i; (n < (i + pageSize)) && (n < totalRecords); n++)
                     {
@@ -231,7 +247,7 @@ namespace Nauplius.ADLDS.Provider
                                                       new SPDiagnosticsCategory("NaupliusADLDSProvider",
                                                                                 TraceSeverity.High, EventSeverity.Error,
                                                                                 0, 100), TraceSeverity.Unexpected,
-                                                      "Unexpected exception " +
+                                                      "Unexpected exception in GetAllUsers(ii) " +
                                                       exception2.StackTrace);
             }
 
@@ -245,20 +261,23 @@ namespace Nauplius.ADLDS.Provider
 
             try
             {
-                var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
-                                                         LdapMembershipManager.UseSSL,
-                                                         LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
-                                                         LdapMembershipManager.SimpleBind);
+                var directoryEntry = LdapManager.Connect(_ldapServer, _ldapPort,
+                                                         _ldapUseSsl,
+                                                         _ldapUserContainer,
+                                                         _ldapUserName, _ldapPassword,
+                                                         _ldapSimpleBind);
+
+                directoryEntry.Username = _ldapUserName;
+                directoryEntry.Password = _ldapPassword;
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
                 {
                     Filter =
-                        String.Format("(&(&(&(ObjectClass={0})({1}=*{2}*))))",
-                                      LdapMembershipManager.UserObjectClass,
-                                      LdapMembershipManager.UserNameAttribute,
+                        String.Format("(&(ObjectClass={0})({1}=*{2}*))",
+                                      _ldapUserObjectClass,
+                                      _ldapUserNameAttribute,
                                       usernameToMatch),
-                    SearchScope = LdapMembershipManager.Scope,
+                    SearchScope = _ldapUserSearchScope,
                     PageSize = pageSize
                 };
                 var results = directorySearcher.FindAll();
@@ -296,7 +315,7 @@ namespace Nauplius.ADLDS.Provider
                                                       new SPDiagnosticsCategory("NaupliusADLDSProvider",
                                                                                 TraceSeverity.High, EventSeverity.Error,
                                                                                 0, 100), TraceSeverity.Unexpected,
-                                                      "Unexpected exception " +
+                                                      "Unexpected exception in FindUsersByName(sii) - " +
                                                       exception2.StackTrace);
             }
 
@@ -310,22 +329,24 @@ namespace Nauplius.ADLDS.Provider
 
             try
             {
-                var directoryEntry = LdapManager.Connect(LdapMembershipManager.Server, LdapMembershipManager.Port,
-                                                         LdapMembershipManager.UseSSL,
-                                                         LdapMembershipManager.UserContainer,
-                                                         LdapMembershipManager.UserName, LdapMembershipManager.Password,
-                                                         LdapMembershipManager.SimpleBind);
+                var directoryEntry = LdapManager.Connect(_ldapServer, _ldapPort,
+                                                         _ldapUseSsl,
+                                                         _ldapUserContainer,
+                                                         _ldapUserName, _ldapPassword,
+                                                         _ldapSimpleBind);
+
+                directoryEntry.Username = _ldapUserName;
+                directoryEntry.Password = _ldapPassword;
 
                 var directorySearcher = new DirectorySearcher(directoryEntry)
                 {
                     Filter =
                         String.Format(
-                            "(&(&(&(ObjectClass={0})(mail=*{1}*))))",
-                            LdapMembershipManager
-                                .UserObjectClass,
+                            "(&(ObjectClass={0})(mail=*{1}*))",
+                            _ldapUserObjectClass,
                             emailToMatch),
                     SearchScope =
-                        LdapMembershipManager.Scope,
+                        _ldapUserSearchScope,
                     PageSize = pageSize
                 };
                 var results = directorySearcher.FindAll();
@@ -363,7 +384,7 @@ namespace Nauplius.ADLDS.Provider
                                                       new SPDiagnosticsCategory("NaupliusADLDSProvider",
                                                                                 TraceSeverity.High, EventSeverity.Error,
                                                                                 0, 100), TraceSeverity.Unexpected,
-                                                      "Unexpected exception " +
+                                                      "Unexpected exception in FindUsersByEmail(sii) " +
                                                       exception2.StackTrace);
             }
 
@@ -373,6 +394,11 @@ namespace Nauplius.ADLDS.Provider
         public override bool ValidateUser(string username, string password)
         {
             bool isValid = false;
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                return isValid;
+            }
 
             string _server;
             var _port = 389;
@@ -387,10 +413,9 @@ namespace Nauplius.ADLDS.Provider
             var directoryEntry = StsManager.ProviderNode(Name, true, out _server, out _port, out _useSSL, out _path, out _username,
                                                          out _password, out _userNameAttribute, out _scope, out _simpleBind);
 
-            var connection = new LdapConnection(String.Format("{0}:{1}", _server, _port));
-
             var credential = new NetworkCredential(username, password);
-            connection.AuthType = AuthType.Basic;
+            var directoryIdentifier = new LdapDirectoryIdentifier(_server, Convert.ToInt32(_port));
+            var connection = new LdapConnection(directoryIdentifier, credential, AuthType.Basic);
 
             if (_useSSL)
             {
@@ -399,11 +424,12 @@ namespace Nauplius.ADLDS.Provider
             else
             {
                 connection.SessionOptions.Signing = true;
-                connection.SessionOptions.Sealing = true;                
+                connection.SessionOptions.Sealing = true;
             }
 
             try
             {
+
                 connection.Bind(credential);
                 isValid = true;
             }
@@ -426,7 +452,7 @@ namespace Nauplius.ADLDS.Provider
                                                       new SPDiagnosticsCategory("NaupliusADLDSProvider",
                                                                                 TraceSeverity.High, EventSeverity.Error,
                                                                                 0, 100), TraceSeverity.Unexpected,
-                                                      "Unexpected exception " +
+                                                      "Unexpected exception in ValidateUser(ss) " +
                                                       exception2.StackTrace);
             }
 
@@ -436,7 +462,7 @@ namespace Nauplius.ADLDS.Provider
         private MembershipUser GetUserFromSearchResult(DirectoryEntry result)
         {
             object providerUserKey = result.Path;
-            string userName = result.Properties[LdapMembershipManager.UserNameAttribute].Value.ToString();
+            string userName = result.Properties[_ldapUserNameAttribute].Value.ToString();
 
             var user = new MembershipUser(Name, userName, providerUserKey,
                 null, null, null, true, false, DateTime.UtcNow,
@@ -446,7 +472,110 @@ namespace Nauplius.ADLDS.Provider
             return user;
         }
 
-#region NotImplemented
+        public override void Initialize(string name, System.Collections.Specialized.NameValueCollection config)
+        {
+            base.Initialize(name, config);
+
+            _Name = name;
+            if (config == null)
+            {
+                throw new ArgumentNullException("config");
+            }
+
+            try
+            {
+                if (config["server"] != null)
+                {
+                    _ldapServer = config["server"];
+                }
+                if (config["port"] != null)
+                {
+                    _ldapPort = Convert.ToInt32(config["port"], CultureInfo.InvariantCulture);
+                }
+                if (config["useSSL"] != null)
+                {
+                    _ldapUseSsl = Convert.ToBoolean(config["useSSL"], CultureInfo.InvariantCulture);
+                }
+                if (config["userDNAttribute"] != null)
+                {
+                    _ldapUserDnAttribute = config["userDNAttribute"];
+                }
+                if (config["useDNAttribute"] != null)
+                {
+                    _ldapUseDnAttribute = Convert.ToBoolean(config["useDNAttribute"], CultureInfo.InvariantCulture);
+                }
+                if (config["userNameAttribute"] != null)
+                {
+                    _ldapUserNameAttribute = config["userNameAttribute"];
+                }
+                if (config["userContainer"] != null)
+                {
+                    _ldapUserContainer = config["userContainer"];
+                }
+                if (config["userObjectClass"] != null)
+                {
+                    _ldapUserObjectClass = config["userObjectClass"];
+                }
+                if (config["userFilter"] != null)
+                {
+                    _ldapUserFilter = config["userFilter"];
+                }
+                if (config["scope"] != null)
+                {
+                    _ldapUserSearchScope = (SearchScope)Enum.Parse(typeof(SearchScope), config["scope"]);
+                }
+                if (config["Username"] != null)
+                {
+                    _ldapUserName = config["Username"];
+                }
+                if (config["Password"] != null)
+                {
+                    _ldapPassword = config["Password"];
+                }
+                if (config["otherRequiredUserAttributes"] != null)
+                {
+                    string str = config["otherRequiredUserAttributes"];
+                    _ldapOtherRequiredUserAttributes = (str == null) ? null : str.Split(new char[] { ',' });
+                }
+                _ldapOtherRequiredUserAttributes = new[] { _ldapUserDnAttribute, _ldapUserNameAttribute, "mail", "cn" };
+            }
+            catch (Exception exception)
+            {
+                SPDiagnosticsService.Local.WriteTrace(100,
+                            new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                            TraceSeverity.Unexpected, EventSeverity.Error,
+                                            0, 100), TraceSeverity.Unexpected, "Error during Membership Initialization - " + exception.Message, exception.StackTrace);
+            }
+
+        }
+
+        #region Private Properties
+
+        #region PrivateUsedProps
+        private string _ldapServer = "localhost";
+        private int _ldapPort = 0x185;
+        private bool _ldapUseSsl;
+        private string _ldapUserDnAttribute = "distinguishedName";
+        private string _ldapUserNameAttribute = "userPrincipalName";
+        private string _ldapUserContainer;
+        private string _ldapUserObjectClass = "person";
+        private SearchScope _ldapUserSearchScope = SearchScope.Subtree;
+        private string _ldapUserName;
+        private string _ldapPassword;
+        private bool _ldapSimpleBind = false;
+        private string _Name = string.Empty;
+        private string[] _ldapOtherRequiredUserAttributes = new[] { "sn", "givenname", "cn" };
+        #endregion
+
+        #region PrivateUnusedProps
+
+        private bool _ldapUseDnAttribute = true;
+        private string _ldapUserFilter = "@(&(objectClass=*))";
+        #endregion
+
+        #endregion
+
+        #region NotImplemented
         public override bool DeleteUser(string username, bool deleteAllRelatedData)
         {
             throw new NotImplementedException();
@@ -510,7 +639,18 @@ namespace Nauplius.ADLDS.Provider
             get { throw new NotImplementedException(); }
         }
 
-        public override string ApplicationName { get; set; }
+        public override string ApplicationName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(AppName))
+                {
+                    AppName = SPContext.Current.Web.Site.WebApplication.ToString();
+                }
+                return AppName;
+            }
+            set { this.AppName = SPContext.Current.Web.Site.WebApplication.ToString(); }
+        }
 
         public override int MaxInvalidPasswordAttempts
         {
@@ -546,7 +686,7 @@ namespace Nauplius.ADLDS.Provider
         {
             get { throw new NotImplementedException(); }
         }
-#endregion
+        #endregion
     }
 
     public sealed class LdapRole : RoleProvider
@@ -564,12 +704,12 @@ namespace Nauplius.ADLDS.Provider
             var _scope = new SearchScope();
             var _simpleBind = false;
 
-            var directoryEntry = StsManager.ProviderNode(Name, false, out _server, out _port, out _useSSL, 
+            var directoryEntry = StsManager.ProviderNode(Name, false, out _server, out _port, out _useSSL,
                 out _path, out _username, out _password, out _userNameAttribute, out _scope, out _simpleBind);
 
             var directorySearcher = new DirectorySearcher(directoryEntry)
             {
-                Filter = String.Format("(&(&(&(ObjectClass=user)({0}={1}))))",
+                Filter = String.Format("(&(ObjectClass=user)({0}={1}))",
                                         _userNameAttribute,
                                         username),
                 SearchScope = _scope
@@ -587,15 +727,17 @@ namespace Nauplius.ADLDS.Provider
         }
 
         public override bool RoleExists(string roleName)
-        {         
-            var directoryEntry = LdapManager.Connect(LdapRoleManager.Server, LdapRoleManager.Port, 
-                LdapRoleManager.UseSSL, LdapRoleManager.GroupContainer,
-                LdapRoleManager.UserName, LdapRoleManager.Password, LdapRoleManager.SimpleBind);
+        {
+            var directoryEntry = LdapManager.Connect(_ldapServer, _ldapPort,
+                _ldapUseSsl, _ldapGroupContainer,
+                _ldapUserName, _ldapPassword, _ldapSimpleBind);
 
-            var directorySearcher = new DirectorySearcher(directoryEntry);
-            directorySearcher.Filter = String.Format("(&(&(&(ObjectClass=group)({0}={1}))))",
-                                                     LdapRoleManager.GroupNameAttribute, roleName);
-            directorySearcher.SearchScope = LdapRoleManager.Scope;
+            var directorySearcher = new DirectorySearcher(directoryEntry)
+            {
+                Filter = String.Format("(&(ObjectClass=group)({0}={1}))",
+                                       _ldapGroupNameAttribute, roleName),
+                SearchScope = _ldapUserSearchScope
+            };
 
             var result = directorySearcher.FindAll();
 
@@ -603,7 +745,7 @@ namespace Nauplius.ADLDS.Provider
             {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -611,14 +753,13 @@ namespace Nauplius.ADLDS.Provider
         {
             var users = new List<string>();
 
-            var directoryEntry = LdapManager.Connect(LdapRoleManager.Server, LdapRoleManager.Port,
-                LdapRoleManager.UseSSL, LdapRoleManager.GroupContainer,
-                LdapRoleManager.UserName, LdapRoleManager.Password, LdapRoleManager.SimpleBind);
+            var directoryEntry = LdapManager.Connect(_ldapServer, _ldapPort,
+                _ldapUseSsl, _ldapGroupContainer, _ldapUserName, _ldapPassword, _ldapSimpleBind);
 
             var directorySearcher = new DirectorySearcher(directoryEntry);
-            directorySearcher.Filter = String.Format("(&(&(&(ObjectClass=group)({0}={1}))))",
-                                                     LdapRoleManager.GroupNameAttribute, roleName);
-            directorySearcher.SearchScope = LdapRoleManager.Scope;
+            directorySearcher.Filter = String.Format("(&(ObjectClass=group)({0}={1}))",
+                                                     _ldapGroupNameAttribute, roleName);
+            directorySearcher.SearchScope = _ldapUserSearchScope;
 
             var result = directorySearcher.FindOne();
 
@@ -626,7 +767,7 @@ namespace Nauplius.ADLDS.Provider
             {
                 foreach (DirectoryEntry user in result.Properties["memberof"])
                 {
-                    users.Add(user.Properties[LdapMembershipManager.UserName].Value.ToString());
+                    users.Add(user.Properties[_ldapUserName].Value.ToString());
                 }
                 return users.ToArray();
             }
@@ -637,7 +778,7 @@ namespace Nauplius.ADLDS.Provider
         private MembershipUser GetUserFromSearchResult(DirectoryEntry result)
         {
             object providerUserKey = result.Path;
-            string userName = result.Properties[LdapMembershipManager.UserNameAttribute].Value.ToString();
+            string userName = result.Properties[_ldapUserNameAttribute].Value.ToString();
 
             var user = new MembershipUser(Name, userName, providerUserKey,
                 null, null, null, true, false, DateTime.UtcNow,
@@ -646,6 +787,113 @@ namespace Nauplius.ADLDS.Provider
 
             return user;
         }
+
+        public override void Initialize(string name, System.Collections.Specialized.NameValueCollection config)
+        {
+            base.Initialize(name, config);
+
+            _Name = name;
+            if (config == null)
+            {
+                throw new ArgumentNullException("config");
+            }
+
+            try
+            {
+                if (config["server"] != null)
+                {
+                    _ldapServer = config["server"];
+                }
+                if (config["port"] != null)
+                {
+                    _ldapPort = Convert.ToInt32(config["port"], CultureInfo.InvariantCulture);
+                }
+                if (config["useSSL"] != null)
+                {
+                    _ldapUseSsl = Convert.ToBoolean(config["useSSL"], CultureInfo.InvariantCulture);
+                }
+                if (config["groupNameAttribute"] != null)
+                {
+                    _ldapGroupNameAttribute = config["groupNameAttribute"];
+                }
+                if (config["groupContainer"] != null)
+                {
+                    _ldapGroupContainer = config["groupContainer"];
+                }
+                if (config["groupMemberAttribute"] != null)
+                {
+                    _ldapGroupMemberAttribute = config["groupMemberAttribute"];
+                }
+                if (config["userNameAttribute"] != null)
+                {
+                    _ldapUserNameAttribute = config["userNameAttribute"];
+                }
+                if (config["dnAttribute"] != null)
+                {
+                    _ldapdnAttribute = config["dnAttribute"];
+                }
+                if (config["useUserDNAttribute"] != null)
+                {
+                    _ldapUseUserDnAttribute = Convert.ToBoolean(config["useUserDNAttribute"], CultureInfo.InvariantCulture);
+                }
+                if (config["scope"] != null)
+                {
+                    _ldapUserSearchScope = (SearchScope)Enum.Parse(typeof(SearchScope), config["scope"]);
+                }
+                if (config["Username"] != null)
+                {
+                    _ldapUserName = config["Username"];
+                }
+                if (config["Password"] != null)
+                {
+                    _ldapPassword = config["Password"];
+                }
+                if (config["userFilter"] != null)
+                {
+                    _ldapUserFilter = config["userFilter"];
+                }
+                if (config["groupFilter"] != null)
+                {
+                    _ldapUserFilter = config["groupFilter"];
+                }
+            }
+            catch (Exception exception)
+            {
+                SPDiagnosticsService.Local.WriteTrace(100,
+                            new SPDiagnosticsCategory("NaupliusADLDSProvider",
+                                            TraceSeverity.Unexpected, EventSeverity.Error,
+                                            0, 100), TraceSeverity.Unexpected, "Error during Role Initialization - " + exception.Message, exception.StackTrace);
+            }
+
+        }
+
+        #region Private Properties
+        #region PrivateUsedProps
+        private string _ldapServer = "localhost";
+        private int _ldapPort = 0x185;
+        private bool _ldapUseSsl;
+        private SearchScope _ldapUserSearchScope = SearchScope.Subtree;
+        private string _ldapUserName;
+        private string _ldapPassword;
+        private bool _ldapSimpleBind = false;
+        private string _ldapGroupNameAttribute;
+        private string _ldapGroupContainer;
+        private string _ldapUserNameAttribute = "userPrincipalName";
+        private string _Name = string.Empty;
+        #endregion
+
+        #region PrivateUnusedProps
+        private string _ldapdnAttribute;
+        private string _ldapGroupMemberAttribute;
+        private bool _ldapUseUserDnAttribute = true;
+        private string[] _ldapOtherRequiredUserAttributes = new[] { "sn", "givenname", "cn" };
+        private string _ldapUserDnAttribute = "distinguishedName";
+        private bool _ldapUseDnAttribute = true;
+        private string _ldapUserContainer = string.Empty;
+        private string _ldapUserObjectClass = "person";
+        private string _ldapUserFilter = "@(&(objectClass=*))";
+        #endregion
+        #endregion
 
         #region NotImplemented
 
@@ -688,660 +936,6 @@ namespace Nauplius.ADLDS.Provider
         #endregion
     }
 
-    class LdapMembershipManager
-    {
-        public static XmlNode MembershipProviderNode()
-        {
-            XmlNode membershipProvider = new XmlDocument();
-
-            if (SPContext.Current != null)
-            {
-                var webApp = SPContext.Current.Web.Site.WebApplication;
-                var zone = SPContext.Current.Site.Zone;
-                var settings = webApp.IisSettings[zone];
-                DirectoryInfo directoryInfo = settings.Path;
-                var webConfig = directoryInfo.FullName + "\\web.config";
-                var xmlDocument = new XmlDocument();
-                xmlDocument.Load(webConfig);
-
-                membershipProvider =
-                    xmlDocument.SelectSingleNode((String.Format("configuration/system.web/membership/providers/add[@name='{0}']",
-                                                                settings.FormsClaimsAuthenticationProvider.MembershipProvider)));
-
-                return membershipProvider;
-            }
-
-            return null;
-        }
-
-        public static string Server
-        {
-            get
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _server = "localhost";
-
-                try
-                {
-                    _server = (membershipProvider.Attributes["server"].Value == null) ? "localhost" :
-                        membershipProvider.Attributes["server"].Value;
-                    return _server;
-                }
-                catch (NullReferenceException)
-                {
-                    return _server;
-                }
-            }
-        }
-
-        public static int Port
-        {
-            get
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _port = "389";
-
-                try
-                {
-                    _port = (membershipProvider.Attributes["port"].Value == null) ? "389" :
-                        membershipProvider.Attributes["port"].Value;
-                    return Convert.ToInt32(_port);
-                }
-                catch (NullReferenceException)
-                {
-                    return Convert.ToInt32(_port);
-                }
-
-            }
-        }
-
-        public static bool UseSSL
-        {
-            get 
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _useSsl = false;
-
-                try
-                {
-                    _useSsl = (membershipProvider.Attributes["useSSL"].Value == null) ? false : 
-                        membershipProvider.Attributes["useSSL"].Value == null;
-                    return Convert.ToBoolean(_useSsl);
-                }
-                catch (NullReferenceException)
-                {
-                    return Convert.ToBoolean(_useSsl);
-                }
-            }
-        }
-
-        public static string UserDNAttribute
-        {
-            get 
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _userDnAttribute = "distinguishedName";
-
-                try
-                {
-                    _userDnAttribute = (membershipProvider.Attributes["userDNAttribute"].Value == null) ? "distinguishedName" : 
-                        membershipProvider.Attributes["userDNAttribute"].Value;
-                    return _userDnAttribute;
-                }
-                catch (NullReferenceException)
-                {
-                    return _userDnAttribute;
-                }
-            }
-        }
-
-        public static bool UseDNAttribute
-        {
-            get 
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _useDnAttribute = "true";
-
-                try
-                {
-                    _useDnAttribute = (membershipProvider.Attributes["useDNAttribute"].Value == null) ? "true" : 
-                        membershipProvider.Attributes["useDNAttribute"].Value;
-                    return Convert.ToBoolean(_useDnAttribute);
-                }
-                catch (NullReferenceException)
-                {
-                    return Convert.ToBoolean(_useDnAttribute);
-                }
-            }
-        }
-
-
-        public static string UserNameAttribute
-        {
-            get 
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _userNameAttribute = "userPrincipalName";
-
-                try
-                {
-                    _userNameAttribute = (membershipProvider.Attributes["userNameAttribute"].Value == null) ? "userPrincipalName" :
-                        membershipProvider.Attributes["userNameAttribute"].Value;
-                    return _userNameAttribute;
-                }
-                catch (NullReferenceException)
-                {
-                    return _userNameAttribute;
-                }
-            }
-        }
-
-        public static string UserContainer
-        {
-            get 
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _userContainer = string.Empty;
-
-                try
-                {
-                    _userContainer = (membershipProvider.Attributes["userContainer"].Value == null) ? string.Empty :
-                        membershipProvider.Attributes["userContainer"].Value;
-                    return _userContainer;
-                }
-                catch (NullReferenceException)
-                {
-                    return _userContainer;
-                }
-            }
-        }
-
-        public static string UserObjectClass
-        {
-            get
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _userObjectClass = "person";
-
-                try
-                {
-                    _userObjectClass = (membershipProvider.Attributes["userObjectClass"].Value == null) ? "person" :
-                        membershipProvider.Attributes["userObjectClass"].Value;
-                    return _userObjectClass;
-                }
-                catch (NullReferenceException)
-                {
-                    return _userObjectClass;
-                }
-            }
-        }
-
-        public static string UserFilter
-        {
-            get
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _userFilter = @"(ObjectClass=*)";
-
-                try
-                {
-                    _userFilter = (membershipProvider.Attributes["userFilter"].Value == null) ? @"(ObjectClass=*)" :
-                        membershipProvider.Attributes["userFilter"].Value;
-                    return _userFilter;
-                }
-                catch (NullReferenceException)
-                {
-                    return _userFilter;
-                }
-            }
-        }
-
-        public static SearchScope Scope
-        {
-            get 
-            {
-                var membershipProvider = MembershipProviderNode();
-
-                try
-                {
-                    var _scope = (membershipProvider.Attributes["scope"].Value.ToUpper() == null) ? "SUBTREE" :
-                        membershipProvider.Attributes["scope"].Value.ToUpper();
-                    if (_scope == "BASE")
-                    {
-                        return SearchScope.Base;
-                    }
-                    if (_scope == "ONELEVEL")
-                    {
-                        return SearchScope.OneLevel;
-                    }
-                    return SearchScope.Subtree;
-                }
-                catch (NullReferenceException)
-                {
-                    return SearchScope.Subtree;
-                }
-            }
-        }
-
-        public static string OtherRequiredUserAttributes
-        {
-            get
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _otherRequiredUserAttributes = "sn,givenname,cn";
-
-                try
-                {
-                    _otherRequiredUserAttributes =
-                        (membershipProvider.Attributes["otherRequiredUserAttributes"].Value == null)
-                            ? "sn,givenname,cn"
-                            : membershipProvider.Attributes["otherRequiredUserAttributes"].Value;
-                    return _otherRequiredUserAttributes;
-                }
-                catch (NullReferenceException)
-                {
-                    return _otherRequiredUserAttributes;
-                }
-            }
-        }
-
-        public static string UserName
-        {
-            get 
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _userName = string.Empty;
-
-                try
-                {
-                    _userName = membershipProvider.Attributes["Username"].Value;
-                    return _userName;
-                }
-                catch (NullReferenceException)
-                {
-                    //Attribute does not exist
-                    return _userName;
-                }  
-            }
-        }
-
-        public static string Password
-        {
-            get 
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _password = string.Empty;
-
-                try
-                {
-                    _password = membershipProvider.Attributes["Password"].Value;
-                    return _password;
-                }
-                catch (NullReferenceException)
-                {
-                    //Attribute does not exist
-                    return _password;
-                }
-            }
-        }
-
-        public static bool SimpleBind
-        {
-            get
-            {
-                var membershipProvider = MembershipProviderNode();
-                var _simpleBind = "true";
-
-                try
-                {
-                    _simpleBind = (membershipProvider.Attributes["simpleBind"].Value == null) ? "true" :
-                        membershipProvider.Attributes["simpleBind"].Value;
-                    return Convert.ToBoolean(_simpleBind);
-                }
-                catch (NullReferenceException)
-                {
-                    return Convert.ToBoolean(_simpleBind);
-                }
-            }
-        }
-    }
-
-    class LdapRoleManager
-    {
-        public static XmlNode RoleProviderNode()
-        {
-            XmlNode roleProvider = new XmlDocument();
-
-            if (SPContext.Current != null)
-            {
-                var webApp = SPContext.Current.Web.Site.WebApplication;
-                var zone = SPContext.Current.Site.Zone;
-                var settings = webApp.IisSettings[zone];
-                DirectoryInfo directoryInfo = settings.Path;
-                var webConfig = directoryInfo.FullName + "\\web.config";
-                var xmlDocument = new XmlDocument();
-                xmlDocument.Load(webConfig);
-
-                roleProvider =
-                    xmlDocument.SelectSingleNode((String.Format("configuration/system.web/roleManager/providers/add[@name='{0}']",
-                                                                settings.FormsClaimsAuthenticationProvider.RoleProvider)));
-
-                return roleProvider;
-            }
-
-            return null;
-        }
-
-        public static string Server
-        {
-            get
-            {
-                var roleProvider = RoleProviderNode();
-                var _server = "localhost";
-
-                try
-                {
-                    _server = (roleProvider.Attributes["server"].Value == null) ? "localhost" : 
-                        roleProvider.Attributes["server"].Value;
-                    return _server;
-                }
-                catch (NullReferenceException)
-                {
-                    return _server;
-                }
-            }
-        }
-
-        public static int Port
-        {
-            get
-            {
-                var roleProvider = RoleProviderNode();
-                var _port = "389";
-
-                try
-                {
-                    _port = (roleProvider.Attributes["port"].Value == null)
-                                ? "389"
-                                : roleProvider.Attributes["port"].Value;
-                    return Convert.ToInt32(_port);
-                }
-                catch (NullReferenceException)
-                {
-                    return Convert.ToInt32(_port);
-                }
-            }
-        }
-
-        public static bool UseSSL
-        {
-            get 
-            {
-                var roleProvider = RoleProviderNode();
-                var _useSsl = "false";
-
-                try
-                {
-                    _useSsl = (roleProvider.Attributes["useSSL"].Value == null) ? "false" :
-                        roleProvider.Attributes["useSSL"].Value;
-                    return Convert.ToBoolean(_useSsl);
-                }
-                catch (NullReferenceException)
-                {
-                    return Convert.ToBoolean(_useSsl);
-                }
-            }
-        }
-
-        public static string GroupNameAttribute
-        {
-            get 
-            { 
-                var roleProvider = RoleProviderNode();
-                var _groupNameAttribute = "cn";
-
-                try
-                {
-                    _groupNameAttribute = (roleProvider.Attributes["groupNameAttribute"].Value == null) ? "cn" : 
-                    roleProvider.Attributes["groupNameAttribute"].Value;
-                    return _groupNameAttribute;
-                }
-                catch (NullReferenceException)
-                {
-                    return _groupNameAttribute;
-                }
-            }
-        }
-
-        public static string GroupContainer
-        {
-            get 
-            { 
-                var roleProvider = RoleProviderNode();
-                var _groupContainer = string.Empty;
-
-                try
-                {
-                    _groupContainer = (roleProvider.Attributes["groupContainer"].Value == null) ? string.Empty :
-                    roleProvider.Attributes["groupContainer"].Value;
-                    return _groupContainer;
-                }
-                catch (NullReferenceException)
-                {
-                    return _groupContainer;
-                }
-            }
-        }
-
-        public static string GroupMemberAttribute
-        {
-            get 
-            { 
-                var roleProvider = RoleProviderNode();
-                var _groupMemberAttribute = "member";
-
-                try
-                {
-                    _groupMemberAttribute = (roleProvider.Attributes["groupMemberAttribute"].Value == null) ? "member" :
-                    roleProvider.Attributes["groupMemberAttribute"].Value;
-                    return _groupMemberAttribute;
-                }
-                catch (NullReferenceException)
-                {
-                    return _groupMemberAttribute;
-                }
-            }
-        }
-
-        public static string UserNameAttribute
-        {
-            get 
-            { 
-                var roleProvider = RoleProviderNode();
-                var _userNameAttribute = "userPrincipalName";
-
-                try
-                {
-                    _userNameAttribute = (roleProvider.Attributes["userNameAttribute"].Value == null) ? "userPrincipalName" :
-                        roleProvider.Attributes["userNameAttribute"].Value;
-                    return _userNameAttribute;
-                }
-                catch (NullReferenceException)
-                {
-                    return _userNameAttribute;
-                }
-            }
-        }
-
-        public static string DnAttribute
-        {
-            get 
-            { 
-                var roleProvider = RoleProviderNode();
-                var _dnAttribute = "distinguishedName";
-
-                try
-                {
-                    _dnAttribute = (roleProvider.Attributes["dnAttribute"].Value == null) ? "distinguishedName" :
-                        roleProvider.Attributes["dnAttribute"].Value;
-                    return _dnAttribute;
-                }
-                catch (NullReferenceException)
-                {
-                    return _dnAttribute;
-                }
-            }
-        }
-
-        public static bool UseUserDnAttribute
-        {
-            get 
-            { 
-                var roleProvider = RoleProviderNode();
-                var _useUserDnAttribute = "true";
-
-                try
-                {
-                    _useUserDnAttribute = (roleProvider.Attributes["useUserDNAttribute"].Value == null) ? "true" : 
-                        roleProvider.Attributes["useUserDNAttribute"].Value;
-                    return Convert.ToBoolean(_useUserDnAttribute);
-                }
-                catch (NullReferenceException)
-                {
-                    return Convert.ToBoolean(_useUserDnAttribute);
-                }
-            }
-        }
-
-        public static SearchScope Scope
-        {
-            get 
-            {
-                var roleProvider = RoleProviderNode();
-
-                try
-                {
-                    var _scope = (roleProvider.Attributes["scope"].Value.ToUpper() == null) ? "SUBTREE" :
-                    roleProvider.Attributes["scope"].Value.ToUpper();
-
-                if (_scope == "BASE")
-                {
-                    return SearchScope.Base;
-                }
-                if (_scope == "ONELEVEL")
-                {
-                    return SearchScope.OneLevel;
-                }
-                return SearchScope.Subtree;
-                }
-                catch (NullReferenceException)
-                {
-                    return SearchScope.Subtree;
-                }
-            }
-        }
-
-        public static string UserFilter
-        {
-            get 
-            { 
-                var roleProvider = RoleProviderNode();
-                var _userFilter = @"&(ObjectClass=User)(ObjectCategory=person)";
-
-                try
-                {
-                    _userFilter = (roleProvider.Attributes["userFilter"].Value == null) ? @"&(objectClass=user)(objectCategory=person)" :
-                        roleProvider.Attributes["userFilter"].Value;
-                    return _userFilter;
-                }
-                catch (NullReferenceException)
-                {
-                    return _userFilter;
-                }
-            }
-        }
-
-        public static string GroupFilter
-        {
-            get 
-            { 
-                var roleProvider = RoleProviderNode();
-                var _groupFilter = @"&(ObjectClass=group)(ObjectCategory=group)";
-
-                try
-                {
-                    _groupFilter = (roleProvider.Attributes["groupFilter"].Value == null) ? @"&(objectClass=group)(objectCategory=group)" :
-                        roleProvider.Attributes["groupFilter"].Value;
-                    return _groupFilter;
-                }
-                catch (NullReferenceException)
-                {
-                    return _groupFilter;
-                }
-            }
-        }
-
-        public static string UserName
-        {
-            get
-            {
-                var roleProvider = RoleProviderNode();
-                var _userName = string.Empty;
-
-                try
-                {
-                    _userName = roleProvider.Attributes["Username"].Value;
-                    return _userName;
-                }
-                catch (NullReferenceException)
-                {
-                    //Attribute does not exist
-                    return _userName;
-                }
-            }
-        }
-
-        public static string Password
-        {
-            get
-            {
-                var roleProvider = RoleProviderNode();
-                var _password = string.Empty;
-
-                try
-                {
-                    _password = roleProvider.Attributes["Password"].Value;
-                    return _password;
-                }
-                catch (NullReferenceException)
-                {
-                    //Attribute does not exist
-                    return _password;
-                }
-            }
-        }
-
-        public static bool SimpleBind
-        {
-            get
-            {
-                var roleProvider = RoleProviderNode();
-                var _simpleBind = "true";
-
-                try
-                {
-                    _simpleBind = (roleProvider.Attributes["simpleBind"].Value == null) ? "true" :
-                        roleProvider.Attributes["simpleBind"].Value;
-                    return Convert.ToBoolean(_simpleBind);
-                }
-                catch (NullReferenceException)
-                {
-                    return Convert.ToBoolean(_simpleBind);
-                }
-            }
-        }
-    }
-
     class StsManager
     {
         public static DirectoryEntry ProviderNode(string providerName, bool IsProviderMembership, out string _server, out int _port, out bool _useSSL, out string _path,
@@ -1364,7 +958,7 @@ namespace Nauplius.ADLDS.Provider
             {
                 provider =
                     xmlDocument.SelectSingleNode(
-                        (String.Format("configuration/system.web/roleManager/providers/add[@name='{0}']", providerName)));                
+                        (String.Format("configuration/system.web/roleManager/providers/add[@name='{0}']", providerName)));
             }
 
             try
@@ -1497,7 +1091,7 @@ namespace Nauplius.ADLDS.Provider
 
     class LdapManager
     {
-        public static DirectoryEntry Connect(string server, int port, bool useSSL, 
+        public static DirectoryEntry Connect(string server, int port, bool useSSL,
             string dn, string username, string password, bool simpleBind)
         {
             var ldapPath = LdapPath(server, port, dn);
@@ -1552,4 +1146,3 @@ namespace Nauplius.ADLDS.Provider
         }
     }
 }
-  
