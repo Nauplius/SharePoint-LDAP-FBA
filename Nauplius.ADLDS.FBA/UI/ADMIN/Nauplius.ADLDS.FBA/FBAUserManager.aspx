@@ -62,20 +62,23 @@
 			</wssuc:InputFormSection>
 		</td>
 	</tr>
-    <!-- Current User Table -->
-    <tr>
-        <td>
-            <asp:Table runat="server" ID="table1" style="margin:0 auto" CellSpacing="15" Width="100%">
-                <asp:TableHeaderRow id="th1" runat="server">
-                    <asp:TableHeaderCell Text="Display Name" />
-                    <asp:TableHeaderCell Text="First Name" />
-                    <asp:TableHeaderCell Text="Last Name" />
-                    <asp:TableHeaderCell Text="Work Phone" />
-                </asp:TableHeaderRow>    
-            </asp:Table>
-            <hr id="hr1" runat="server"/>
-        </td>
-    </tr>
+	<!-- Current User Table -->
+	<tr>
+		<td>
+			<asp:Table runat="server" ID="table1" style="margin:0 auto" CellSpacing="15" Width="100%">
+				<asp:TableHeaderRow id="th1" runat="server">
+					<asp:TableHeaderCell Text="Display Name" />
+					<asp:TableHeaderCell Text="First Name" />
+					<asp:TableHeaderCell Text="Last Name" />
+					<asp:TableHeaderCell Text="Work Phone" />
+				    <asp:TableHeaderCell Text="Job Title" />
+				    <asp:TableHeaderCell Text="Office Location" />
+				    <asp:TableHeaderCell Text="Password" />
+				</asp:TableHeaderRow>    
+			</asp:Table>
+			<hr id="hr1" runat="server"/>
+		</td>
+	</tr>
 </asp:Content>
 
 <asp:Content ID="PageTitle" ContentPlaceHolderID="PlaceHolderPageTitle" runat="server">
